@@ -6,7 +6,7 @@
     "build": "webpack --mode production",
     "lint": "eslint src/**/*",
     "prettier": "prettier",
-    "prettier-check": "prettier --check",
+    "prettier-check": "pretty-quick --check",
     "typescript": "tsc",
     "test": "jest --config jest.config.json"
   },
