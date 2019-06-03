@@ -19,6 +19,7 @@ deploy:
   cache-control: "max-age=31536000"
   local_dir: dist
   skip_cleanup: true
+  acl: public_read
   on:
     branch: master
 after_deploy:
