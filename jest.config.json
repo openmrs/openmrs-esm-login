@@ -1,0 +1,6 @@
+{
+  "transform": {
+    "^.+\\.tsx?$": "babel-jest"
+  },
+  "setupFilesAfterEnv": ["<rootDir>/src/setup-tests.tsx"]
+}
