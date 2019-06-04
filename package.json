@@ -28,6 +28,7 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
+    "@emotion/babel-preset-css-prop": "^10.0.9",
     "@types/jest": "^24.0.13",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.8.0",
@@ -48,8 +49,13 @@
     "webpack-dev-server": "^3.5.1"
   },
   "dependencies": {
+    "@emotion/core": "^10.0.10",
+    "@types/react": "^16.8.19",
+    "@types/react-dom": "^16.8.4",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-router": "^5.0.0",
+    "react-router-dom": "^5.0.0",
     "single-spa-react": "^2.10.2"
   }
 }
