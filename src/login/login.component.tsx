@@ -1,5 +1,6 @@
 import React from "react";
 import { css } from "@emotion/core";
+import { performLogin } from "./login.resource";
 
 export default function Login(props: LoginProps) {
   const [username, setUsername] = React.useState("");
@@ -8,24 +9,7 @@ export default function Login(props: LoginProps) {
 
   React.useEffect(() => {
     if (isLoggingIn) {
-      const token = window.btoa(`${username}:${password}`);
-      window
-        .fetch(`/openmrs/ws/rest/v1/session`, {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Basic ${token}`
-          }
-        })
-        .then(resp => {
-          if (resp.ok) {
-            return resp.json();
-          } else {
-            throw Error(
-              `Could not login. Server responded with status ${resp.status}`
-            );
-          }
-        })
+      performLogin(username, password)
         .then(data => {
           alert("We got the user! " + JSON.stringify(data));
         })
@@ -58,6 +42,7 @@ export default function Login(props: LoginProps) {
               <span>Username</span>
               <input
                 type="text"
+                name="username"
                 value={username}
                 onChange={evt => setUsername(evt.target.value)}
                 autoFocus
@@ -69,6 +54,7 @@ export default function Login(props: LoginProps) {
               <span>Password</span>
               <input
                 type="password"
+                name="password"
                 value={password}
                 onChange={evt => setPassword(evt.target.value)}
               />
