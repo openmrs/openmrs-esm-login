@@ -4,7 +4,7 @@ import Login from "./login/login.component";
 
 export default function Root(props: RootProps) {
   return (
-    <BrowserRouter basename="/openmrs">
+    <BrowserRouter basename="/openmrs/spa">
       <Route to="login" component={Login} />
     </BrowserRouter>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import { css } from "@emotion/core";
 import { performLogin } from "./login.resource";
+import { Redirect } from "react-router-dom";
 
 export default function Login(props: LoginProps) {
   const [username, setUsername] = React.useState("");
@@ -11,7 +12,7 @@ export default function Login(props: LoginProps) {
     if (isLoggingIn) {
       performLogin(username, password)
         .then(data => {
-          alert("We got the user! " + JSON.stringify(data));
+          props.history.push("/patient-dashboard");
         })
         .finally(() => {
           setIsLoggingIn(false);
@@ -162,4 +163,8 @@ export default function Login(props: LoginProps) {
   }
 }
 
-type LoginProps = {};
+type LoginProps = {
+  history?: {
+    push(newUrl: String): void;
+  };
+};
