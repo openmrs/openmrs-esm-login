@@ -3,6 +3,7 @@
   "description": "The login microfrontend for the OpenMRS SPA",
   "scripts": {
     "start": "webpack-dev-server",
+    "start-https": "webpack-dev-server --https",
     "build": "webpack --mode production",
     "lint": "eslint src/**/*",
     "prettier": "prettier",
