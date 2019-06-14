@@ -12,7 +12,7 @@ export default function Login(props: LoginProps) {
     if (isLoggingIn) {
       performLogin(username, password)
         .then(data => {
-          props.history.push("/patient-dashboard");
+          props.history.push("/patient-search");
         })
         .finally(() => {
           setIsLoggingIn(false);
