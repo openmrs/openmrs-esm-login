@@ -6,8 +6,7 @@ import Root from "./root.component";
 const lifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: Root,
-  suppressComponentDidCatchWarning: true
+  rootComponent: Root
 });
 
 export const bootstrap = lifecycles.bootstrap;
