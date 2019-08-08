@@ -1,5 +1,6 @@
 {
-  "name": "openmrs-esm-login",
+  "name": "@openmrs/esm-login",
+  "version": "1.0.0",
   "description": "The login microfrontend for the OpenMRS SPA",
   "scripts": {
     "start": "webpack-dev-server",
@@ -8,6 +9,7 @@
     "lint": "eslint src --ext tsx",
     "prettier": "prettier",
     "typescript": "tsc",
+    "prepublishOnly": "npm run build",
     "test": "jest --config jest.config.json"
   },
   "husky": {

@@ -2,9 +2,9 @@ const path = require("path");
 const CleanWebpackPlugin = require("clean-webpack-plugin").CleanWebpackPlugin;
 
 module.exports = {
-  entry: path.resolve(__dirname, "src/login.tsx"),
+  entry: path.resolve(__dirname, "src/openmrs-esm-login.tsx"),
   output: {
-    filename: "login.js",
+    filename: "openmrs-esm-login.js",
     libraryTarget: "system",
     path: path.resolve(__dirname, "dist")
   },

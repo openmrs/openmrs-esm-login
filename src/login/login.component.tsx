@@ -1,7 +1,6 @@
 import React from "react";
 import { css } from "@emotion/core";
 import { performLogin } from "./login.resource";
-import { Redirect } from "react-router-dom";
 
 export default function Login(props: LoginProps) {
   const [username, setUsername] = React.useState("");
