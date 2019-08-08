@@ -69,11 +69,8 @@ export default function Login(props: LoginProps) {
       `}
     >
       <div
+        className="omrs-card omrs-padding-16"
         css={css`
-          padding: 16px;
-          border: 1px solid lightgray;
-          border-radius: 5px;
-          background: white;
           width: 300px;
         `}
       >
