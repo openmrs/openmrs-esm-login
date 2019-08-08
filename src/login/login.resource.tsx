@@ -1,7 +1,7 @@
 export function performLogin(username, password) {
   const token = window.btoa(`${username}:${password}`);
   return window
-    .fetch(`/openmrs/ws/rest/v1/session`, {
+    .fetch(window.getOpenmrsSpaBase +`/openmrs/ws/rest/v1/session`, {
       method: "GET",
       headers: {
         Accept: "application/json",
