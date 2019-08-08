@@ -1,5 +1,6 @@
 const path = require("path");
 const CleanWebpackPlugin = require("clean-webpack-plugin").CleanWebpackPlugin;
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 module.exports = {
   entry: path.resolve(__dirname, "src/openmrs-esm-login.tsx"),
@@ -32,7 +33,7 @@ module.exports = {
     disableHostCheck: true
   },
   externals: ["react", "react-dom"],
-  plugins: [new CleanWebpackPlugin()],
+  plugins: [new ForkTsCheckerWebpackPlugin(), new CleanWebpackPlugin()],
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js"]
   }
