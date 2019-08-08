@@ -12,6 +12,9 @@
     "prepublishOnly": "npm run build",
     "test": "jest --config jest.config.json"
   },
+  "browserslist": [
+    "extends browserslist-config-openmrs"
+  ],
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged && npm run lint && npm test && npm run typescript"
@@ -36,6 +39,7 @@
     "babel-eslint": "^10.0.2",
     "babel-jest": "^24.8.0",
     "babel-loader": "^8.0.6",
+    "browserslist-config-openmrs": "^1.0.0",
     "clean-webpack-plugin": "^3.0.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
