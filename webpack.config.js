@@ -32,7 +32,7 @@ module.exports = {
     },
     disableHostCheck: true
   },
-  externals: ["react", "react-dom"],
+  externals: ["react", "react-dom", /^@openmrs\//],
   plugins: [new ForkTsCheckerWebpackPlugin(), new CleanWebpackPlugin()],
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js"]
