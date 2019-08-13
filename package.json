@@ -46,7 +46,7 @@
     "enzyme-adapter-react-16": "^1.14.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.3.0",
-    "eslint-config-react-important-stuff": "^1.1.0",
+    "eslint-config-ts-react-important-stuff": "^1.0.0",
     "eslint-plugin-prettier": "^3.1.0",
     "fork-ts-checker-webpack-plugin": "^1.5.0",
     "husky": "^2.7.0",
@@ -57,7 +57,7 @@
     "typescript": "^3.5.3",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6",
-    "webpack-dev-server": "^3.7.2"
+    "webpack-dev-server": "^3.8.0"
   },
   "dependencies": {
     "@emotion/core": "^10.0.15",
