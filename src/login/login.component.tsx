@@ -25,29 +25,6 @@ export default function Login(props: LoginProps) {
       "https://implementation-assets.sfo2.digitaloceanspaces.com/openmrs_logo_white_large.png"
   };
 
-  const btn = css`
-    background: #1a73e8;
-    border-radius: 4px;
-    padding: 12px 28px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    color: white;
-    border: none;
-    float: right;
-    &:focus,
-    &:hover {
-      box-shadow: 1px 4px 5px 1px rgba(0, 0, 0, 0.1);
-    }
-
-    &:active {
-      background-color: #e5e5e5;
-      box-shadow: none;
-      transition-duration: 10ms;
-    }
-  `;
-
   const input = css`
     width: 100%;
     padding: 10px 5px;
@@ -126,18 +103,10 @@ export default function Login(props: LoginProps) {
             </label>
           </div>
           <div>
-            <small
-              css={css`
-                color: #1a73e8;
-              `}
-            >
-              Forgot Password?
-            </small>
-          </div>
-          <div>
             <button
+              className="omrs-btn omrs-filled-action"
               css={css`
-                ${btn}
+                width: 100%;
               `}
               type="submit"
             >
