@@ -2,5 +2,8 @@
   "transform": {
     "^.+\\.tsx?$": "babel-jest"
   },
+  "moduleNameMapper": {
+    "@openmrs/esm-api": "<rootDir>/__mocks__/openmrs-esm-api.mock.tsx"
+  },
   "setupFilesAfterEnv": ["<rootDir>/src/setup-tests.tsx"]
 }
