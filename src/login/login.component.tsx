@@ -19,12 +19,6 @@ export default function Login(props: LoginProps) {
     }
   }, [isLoggingIn]);
 
-  //TODO replace this with ESM
-  const implementationConfig = {
-    logoUrl:
-      "https://implementation-assets.sfo2.digitaloceanspaces.com/openmrs_logo_white_large.png"
-  };
-
   const input = css`
     width: 100%;
     padding: 10px 5px;
@@ -51,22 +45,9 @@ export default function Login(props: LoginProps) {
           width: 300px;
         `}
       >
-        <div
-          css={css`
-            margin: 20px;
-          `}
-        >
-          <img
-            src={getLogoURL()}
-            alt="openmrs-logo"
-            css={css`
-              max-width: 85%;
-              max-height: 100%;
-              display: block;
-              margin: auto;
-            `}
-          />
-        </div>
+        <svg role="img">
+          <use xlinkHref="#omrs-logo-full-color" />
+        </svg>
         <form
           onSubmit={handleSubmit}
           css={css`
@@ -121,10 +102,6 @@ export default function Login(props: LoginProps) {
   function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
     setIsLoggingIn(true);
-  }
-
-  function getLogoURL() {
-    return implementationConfig["logoUrl"];
   }
 }
 
