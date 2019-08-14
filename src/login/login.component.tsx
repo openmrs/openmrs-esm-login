@@ -32,7 +32,7 @@ export default function Login(props: LoginProps) {
     if (document.activeElement !== usernameInputRef.current) {
       passwordInputRef.current.focus();
     }
-  }, [showPassword, passwordInputRef.current]);
+  }, [showPassword, passwordInputRef.current, usernameInputRef.current]);
 
   const input = css`
     width: 100%;
@@ -121,6 +121,9 @@ export default function Login(props: LoginProps) {
               type="button"
               aria-label="Toggle view password text"
               onClick={() => setShowPassword(!showPassword)}
+              css={css`
+                cursor: pointer;
+              `}
             >
               <svg
                 className="omrs-icon"
