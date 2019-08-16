@@ -6,6 +6,9 @@ export default function Login(props: LoginProps) {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isLoggingIn, setIsLoggingIn] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const passwordInputRef = React.useRef<HTMLInputElement>(null);
+  const usernameInputRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
     if (isLoggingIn) {
@@ -18,6 +21,12 @@ export default function Login(props: LoginProps) {
         });
     }
   }, [isLoggingIn]);
+
+  React.useEffect(() => {
+    if (document.activeElement !== usernameInputRef.current) {
+      passwordInputRef.current.focus();
+    }
+  }, [showPassword, passwordInputRef.current, usernameInputRef.current]);
 
   const input = css`
     width: 100%;
@@ -65,23 +74,50 @@ export default function Login(props: LoginProps) {
                 value={username}
                 onChange={evt => setUsername(evt.target.value)}
                 placeholder="Username"
+                ref={usernameInputRef}
                 autoFocus
               />
             </label>
           </div>
-          <div>
+          <div
+            css={css`
+              position: relative;
+            `}
+          >
             <label>
               <input
                 css={css`
                   ${input}
                 `}
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 value={password}
                 onChange={evt => setPassword(evt.target.value)}
                 placeholder="Password"
+                ref={passwordInputRef}
               />
             </label>
+            <button
+              className="omrs-unstyled"
+              type="button"
+              aria-label="Toggle view password text"
+              onClick={() => setShowPassword(!showPassword)}
+              css={css`
+                cursor: pointer;
+              `}
+            >
+              <svg
+                className="omrs-icon"
+                role="img"
+                css={css`
+                  top: calc(50% - 0.75rem);
+                  right: 0.75rem;
+                  position: absolute;
+                `}
+              >
+                <use xlinkHref="#omrs-icon-visibility" />
+              </svg>
+            </button>
           </div>
           <div>
             <button
