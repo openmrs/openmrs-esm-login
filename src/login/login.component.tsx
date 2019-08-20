@@ -1,22 +1,38 @@
 import React from "react";
 import { css } from "@emotion/core";
 import { performLogin } from "./login.resource";
+import { always, maybe } from "kremling";
 
 export default function Login(props: LoginProps) {
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [authenticated, setAuthenticated] = React.useState(null);
+  const [errorMessage, setErrorMessage] = React.useState("");
   const [isLoggingIn, setIsLoggingIn] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
   const passwordInputRef = React.useRef<HTMLInputElement>(null);
   const usernameInputRef = React.useRef<HTMLInputElement>(null);
+  const formRef = React.useRef<HTMLFormElement>(null);
 
   React.useEffect(() => {
     if (isLoggingIn) {
       performLogin(username, password)
         .then(data => {
-          props.history.push("/patient-search");
+          // workaround for now, @openmrs/esm-api response.json() not working!
+          const authData = data["data"];
+          if (authData) {
+            const { authenticated } = authData;
+            if (authenticated) {
+              props.history.push("/patient-search");
+            } else {
+              setAuthenticated(authenticated);
+              setErrorMessage("Incorrect username or password");
+              passwordInputRef.current.focus();
+            }
+          }
         })
-        .finally(() => {
+        .catch(error => setErrorMessage(error.message))
+        .then(() => {
           setIsLoggingIn(false);
         });
     }
@@ -28,75 +44,64 @@ export default function Login(props: LoginProps) {
     }
   }, [showPassword, passwordInputRef.current, usernameInputRef.current]);
 
-  const input = css`
-    width: 100%;
-    padding: 10px 5px;
-    box-sizing: border-box;
-    font-size: 14px;
-    margin: 10px 0px 10px 0px;
-    border-radius: 4px;
-  `;
-
   return (
     <div
+      className="canvas"
       css={css`
         display: flex;
         justify-content: center;
         align-items: center;
         width: 100vw;
         height: 100vh;
-        background: #fafbfc;
       `}
     >
-      <div
-        className="omrs-card omrs-padding-16"
-        css={css`
-          width: 300px;
-        `}
-      >
-        <svg role="img">
-          <use xlinkHref="#omrs-logo-full-color" />
-        </svg>
-        <form
-          onSubmit={handleSubmit}
+      <div className="omrs-card omrs-padding-16">
+        <div
           css={css`
-            margin: 10px;
+            text-align: center;
           `}
         >
-          <div>
-            <label>
-              <input
-                css={css`
-                  ${input}
-                `}
-                type="text"
-                name="username"
-                value={username}
-                onChange={evt => setUsername(evt.target.value)}
-                placeholder="Username"
-                ref={usernameInputRef}
-                autoFocus
-              />
-            </label>
+          <svg role="img">
+            <use xlinkHref="#omrs-logo-full-color"></use>
+          </svg>
+        </div>
+        <form
+          onSubmit={handleSubmit}
+          className="omrs-margin-top-32"
+          ref={formRef}
+        >
+          <div className="omrs-input-group">
+            <input
+              id="username"
+              className={always("omrs-input-outlined").maybe(
+                "omrs-input-danger",
+                authenticated === false
+              )}
+              type="text"
+              name="username"
+              value={username}
+              onChange={evt => setUsername(evt.target.value)}
+              ref={usernameInputRef}
+              autoFocus
+              required
+            />
+            <label htmlFor="username">Username</label>
           </div>
-          <div
-            css={css`
-              position: relative;
-            `}
-          >
-            <label>
-              <input
-                css={css`
-                  ${input}
-                `}
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={password}
-                onChange={evt => setPassword(evt.target.value)}
-                placeholder="Password"
-                ref={passwordInputRef}
-              />
-            </label>
+          <div className="omrs-input-group">
+            <input
+              id="password"
+              className={always("omrs-input-outlined").maybe(
+                "omrs-input-danger",
+                authenticated === false
+              )}
+              type={showPassword ? "text" : "password"}
+              name="password"
+              value={password}
+              onChange={evt => setPassword(evt.target.value)}
+              ref={passwordInputRef}
+              required
+            />
+            <label htmlFor="password">Password</label>
             <button
               className="omrs-unstyled"
               type="button"
@@ -106,26 +111,38 @@ export default function Login(props: LoginProps) {
                 cursor: pointer;
               `}
             >
-              <svg
-                className="omrs-icon"
-                role="img"
-                css={css`
-                  top: calc(50% - 0.75rem);
-                  right: 0.75rem;
-                  position: absolute;
-                `}
-              >
+              <svg className="omrs-icon" role="img">
                 <use xlinkHref="#omrs-icon-visibility" />
               </svg>
             </button>
           </div>
+          <div
+            css={css`
+              text-align: center;
+            `}
+          >
+            <p
+              css={css`
+                color: var(--omrs-color-danger);
+              `}
+            >
+              {errorMessage}
+            </p>
+          </div>
           <div>
             <button
-              className="omrs-btn omrs-filled-action"
+              className={always(
+                "omrs-margin-top-24 omrs-btn omrs-btn-lg"
+              ).toggle(
+                "omrs-filled-disabled",
+                "omrs-filled-action",
+                !password || !username
+              )}
+              type="submit"
               css={css`
                 width: 100%;
               `}
-              type="submit"
+              disabled={!password || !username}
             >
               Login
             </button>
