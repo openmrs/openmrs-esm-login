@@ -1,7 +1,8 @@
 import React from "react";
 import { css } from "@emotion/core";
 import { performLogin } from "./login.resource";
-import { always, maybe } from "kremling";
+import { always } from "kremling";
+import styles from "./login.component.css";
 
 export default function Login(props: LoginProps) {
   const [username, setUsername] = React.useState("");
@@ -18,7 +19,6 @@ export default function Login(props: LoginProps) {
     if (isLoggingIn) {
       performLogin(username, password)
         .then(data => {
-          // workaround for now, @openmrs/esm-api response.json() not working!
           const authData = data["data"];
           if (authData) {
             const { authenticated } = authData;
@@ -49,27 +49,28 @@ export default function Login(props: LoginProps) {
       className="canvas"
       css={css`
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        width: 100vw;
         height: 100vh;
       `}
     >
-      <div className="omrs-card omrs-padding-16">
+      <div className={`omrs-card ${styles.login_card}`}>
         <div
           css={css`
             text-align: center;
           `}
         >
-          <svg role="img">
+          <svg
+            role="img"
+            css={css`
+              margin-bottom: 3rem;
+            `}
+          >
             <use xlinkHref="#omrs-logo-full-color"></use>
           </svg>
         </div>
-        <form
-          onSubmit={handleSubmit}
-          className="omrs-margin-top-32"
-          ref={formRef}
-        >
+        <form onSubmit={handleSubmit} ref={formRef}>
           <div className="omrs-input-group">
             <input
               id="username"
@@ -148,6 +149,27 @@ export default function Login(props: LoginProps) {
             </button>
           </div>
         </form>
+      </div>
+      <div className="omrs-margin-top-32">
+        <p
+          css={css`
+            text-align: center;
+            color: var(--omrs-color-ink-low-contrast);
+          `}
+        >
+          Powered by
+        </p>
+        <div>
+          <svg
+            role="img"
+            css={css`
+              height: 2.5625rem;
+              width: 8.5rem;
+            `}
+          >
+            <use xlinkHref="#omrs-logo-partial-mono"></use>
+          </svg>
+        </div>
       </div>
     </div>
   );
