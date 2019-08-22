@@ -1,5 +1,4 @@
 import React from "react";
-import { css } from "@emotion/core";
 import { performLogin } from "./login.resource";
 import { always } from "kremling";
 import styles from "./login.component.css";
@@ -45,28 +44,10 @@ export default function Login(props: LoginProps) {
   }, [showPassword, passwordInputRef.current, usernameInputRef.current]);
 
   return (
-    <div
-      className="canvas"
-      css={css`
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-      `}
-    >
-      <div className={`omrs-card ${styles.login_card}`}>
-        <div
-          css={css`
-            text-align: center;
-          `}
-        >
-          <svg
-            role="img"
-            css={css`
-              margin-bottom: 3rem;
-            `}
-          >
+    <div className={`canvas ${styles["container"]}`}>
+      <div className={`omrs-card ${styles["login-card"]}`}>
+        <div className={styles["center"]}>
+          <svg role="img" className={styles["logo"]}>
             <use xlinkHref="#omrs-logo-full-color"></use>
           </svg>
         </div>
@@ -104,45 +85,29 @@ export default function Login(props: LoginProps) {
             />
             <label htmlFor="password">Password</label>
             <button
-              className="omrs-unstyled"
+              className={`omrs-unstyled ${styles["icon-btn"]}`}
               type="button"
               aria-label="Toggle view password text"
               onClick={() => setShowPassword(!showPassword)}
-              css={css`
-                cursor: pointer;
-              `}
             >
               <svg className="omrs-icon" role="img">
                 <use xlinkHref="#omrs-icon-visibility" />
               </svg>
             </button>
           </div>
-          <div
-            css={css`
-              text-align: center;
-            `}
-          >
-            <p
-              css={css`
-                color: var(--omrs-color-danger);
-              `}
-            >
-              {errorMessage}
-            </p>
+          <div className={styles["center"]}>
+            <p className={styles["error-msg"]}>{errorMessage}</p>
           </div>
           <div>
             <button
               className={always(
-                "omrs-margin-top-24 omrs-btn omrs-btn-lg"
+                `omrs-margin-top-24 omrs-btn omrs-btn-lg ${styles["submit-btn"]}`
               ).toggle(
                 "omrs-filled-disabled",
                 "omrs-filled-action",
                 !password || !username
               )}
               type="submit"
-              css={css`
-                width: 100%;
-              `}
               disabled={!password || !username}
             >
               Login
@@ -151,22 +116,9 @@ export default function Login(props: LoginProps) {
         </form>
       </div>
       <div className="omrs-margin-top-32">
-        <p
-          css={css`
-            text-align: center;
-            color: var(--omrs-color-ink-low-contrast);
-          `}
-        >
-          Powered by
-        </p>
+        <p className={styles["powered-by-txt"]}>Powered by</p>
         <div>
-          <svg
-            role="img"
-            css={css`
-              height: 2.5625rem;
-              width: 8.5rem;
-            `}
-          >
+          <svg role="img" className={styles["powered-by-logo"]}>
             <use xlinkHref="#omrs-logo-partial-mono"></use>
           </svg>
         </div>

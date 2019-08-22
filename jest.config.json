@@ -4,7 +4,7 @@
   },
   "moduleNameMapper": {
     "@openmrs/esm-api": "<rootDir>/__mocks__/openmrs-esm-api.mock.tsx",
-    "\\.(css)$": "<rootDir>/__mocks__/styles.mock.tsx"
+    "\\.(css)$": "identity-obj-proxy"
   },
   "setupFilesAfterEnv": ["<rootDir>/src/setup-tests.tsx"]
 }
