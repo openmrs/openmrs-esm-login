@@ -1,0 +1,52 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.center {
+  text-align: center;
+}
+
+.logo {
+  margin-bottom: 3rem;
+}
+
+.submit-btn {
+  width: 100%;
+}
+
+.icon-btn {
+  cursor: pointer;
+}
+
+.error-msg {
+  color: var(--omrs-color-danger);
+}
+
+.powered-by-txt {
+  text-align: center;
+  color: var(--omrs-color-ink-low-contrast);
+}
+
+.powered-by-logo {
+  height: 2.5625rem;
+  width: 8.5rem;
+}
+
+@media only screen and (min-width: 481px) {
+  .login-card {
+    padding: 3rem;
+    width: 20.375rem;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .login-card {
+    border: none;
+    width: 95%;
+    padding: 1rem;
+  }
+}

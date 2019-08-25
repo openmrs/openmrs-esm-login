@@ -1,7 +1,7 @@
 import React from "react";
-import { css } from "@emotion/core";
 import { performLogin } from "./login.resource";
-import { always, maybe } from "kremling";
+import { always } from "kremling";
+import styles from "./login.component.css";
 
 export default function Login(props: LoginProps) {
   const [username, setUsername] = React.useState("");
@@ -18,7 +18,6 @@ export default function Login(props: LoginProps) {
     if (isLoggingIn) {
       performLogin(username, password)
         .then(data => {
-          // workaround for now, @openmrs/esm-api response.json() not working!
           const authData = data["data"];
           if (authData) {
             const { authenticated } = authData;
@@ -45,31 +44,14 @@ export default function Login(props: LoginProps) {
   }, [showPassword, passwordInputRef.current, usernameInputRef.current]);
 
   return (
-    <div
-      className="canvas"
-      css={css`
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100vw;
-        height: 100vh;
-      `}
-    >
-      <div className="omrs-card omrs-padding-16">
-        <div
-          css={css`
-            text-align: center;
-          `}
-        >
-          <svg role="img">
+    <div className={`canvas ${styles["container"]}`}>
+      <div className={`omrs-card ${styles["login-card"]}`}>
+        <div className={styles["center"]}>
+          <svg role="img" className={styles["logo"]}>
             <use xlinkHref="#omrs-logo-full-color"></use>
           </svg>
         </div>
-        <form
-          onSubmit={handleSubmit}
-          className="omrs-margin-top-32"
-          ref={formRef}
-        >
+        <form onSubmit={handleSubmit} ref={formRef}>
           <div className="omrs-input-group">
             <input
               id="username"
@@ -103,51 +85,43 @@ export default function Login(props: LoginProps) {
             />
             <label htmlFor="password">Password</label>
             <button
-              className="omrs-unstyled"
+              className={`omrs-unstyled ${styles["icon-btn"]}`}
               type="button"
               aria-label="Toggle view password text"
               onClick={() => setShowPassword(!showPassword)}
-              css={css`
-                cursor: pointer;
-              `}
             >
               <svg className="omrs-icon" role="img">
                 <use xlinkHref="#omrs-icon-visibility" />
               </svg>
             </button>
           </div>
-          <div
-            css={css`
-              text-align: center;
-            `}
-          >
-            <p
-              css={css`
-                color: var(--omrs-color-danger);
-              `}
-            >
-              {errorMessage}
-            </p>
+          <div className={styles["center"]}>
+            <p className={styles["error-msg"]}>{errorMessage}</p>
           </div>
           <div>
             <button
               className={always(
-                "omrs-margin-top-24 omrs-btn omrs-btn-lg"
+                `omrs-margin-top-24 omrs-btn omrs-btn-lg ${styles["submit-btn"]}`
               ).toggle(
                 "omrs-filled-disabled",
                 "omrs-filled-action",
                 !password || !username
               )}
               type="submit"
-              css={css`
-                width: 100%;
-              `}
               disabled={!password || !username}
             >
               Login
             </button>
           </div>
         </form>
+      </div>
+      <div className="omrs-margin-top-32">
+        <p className={styles["powered-by-txt"]}>Powered by</p>
+        <div>
+          <svg role="img" className={styles["powered-by-logo"]}>
+            <use xlinkHref="#omrs-logo-partial-mono"></use>
+          </svg>
+        </div>
       </div>
     </div>
   );
