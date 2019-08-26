@@ -22,7 +22,7 @@ export default function Login(props: LoginProps) {
           if (authData) {
             const { authenticated } = authData;
             if (authenticated) {
-              props.history.push("/patient-search");
+              props.history.push("/home");
             } else {
               setAuthenticated(authenticated);
               setErrorMessage("Incorrect username or password");
