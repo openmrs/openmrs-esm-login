@@ -1,28 +1,13 @@
 import React from "react";
+import openmrsRootDecorator from "@openmrs/react-root-decorator";
 import { BrowserRouter, Route } from "react-router-dom";
 import Login from "./login/login.component";
 
-export default class Root extends React.Component {
-  state = {
-    catastrophicError: false
-  };
-  render() {
-    return this.state.catastrophicError
-      ? this.errorHasOccurred()
-      : this.loginPages();
-  }
-  componentDidCatch() {
-    this.setState({ catastrophicError: true });
-  }
-  errorHasOccurred = () => {
-    // TO-DO have a good UX for catastrophic errors
-    return null;
-  };
-  loginPages = () => {
-    return (
-      <BrowserRouter basename="/openmrs/spa">
-        <Route to="login" component={Login} />
-      </BrowserRouter>
-    );
-  };
+function Root(props) {
+  return (
+    <BrowserRouter basename={window["getOpenmrsSpaBase"]()}>
+      <Route path="/login" component={Login} />
+    </BrowserRouter>
+  );
 }
+export default openmrsRootDecorator({ featureName: "login" })(Root);
