@@ -70,6 +70,7 @@
     "react-dom": "^16.8.6",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
+    "rxjs": "^6.5.3",
     "single-spa-react": "^2.10.2"
   }
 }
