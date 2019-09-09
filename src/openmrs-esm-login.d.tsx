@@ -3,7 +3,7 @@
 
 declare module "@openmrs/esm-api" {
   export function openmrsFetch(url: string, fetchInit: any): any;
-  export function getCurrentUser(): any;
+  export function getCurrentUser({  }: any): any;
 }
 
 declare module "*.css";
