@@ -62,10 +62,17 @@ export default function Login(props: LoginProps) {
   }, [isLoggingIn]);
 
   React.useEffect(() => {
-    if (document.activeElement !== usernameInputRef.current) {
+    if (
+      document.activeElement !== usernameInputRef.current &&
+      !checkingIfLoggedIn
+    ) {
       passwordInputRef.current.focus();
     }
   }, [showPassword, passwordInputRef.current, usernameInputRef.current]);
+
+  if (checkingIfLoggedIn) {
+    return null;
+  }
 
   return (
     <div className={`canvas ${styles["container"]}`}>
