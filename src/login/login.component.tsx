@@ -2,6 +2,7 @@ import React from "react";
 import { performLogin } from "./login.resource";
 import { always } from "kremling";
 import styles from "./login.component.css";
+import { getCurrentUser } from "@openmrs/esm-api";
 
 export default function Login(props: LoginProps) {
   const [username, setUsername] = React.useState("");
@@ -10,9 +11,32 @@ export default function Login(props: LoginProps) {
   const [errorMessage, setErrorMessage] = React.useState("");
   const [isLoggingIn, setIsLoggingIn] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
+  const [checkingIfLoggedIn, setCheckingIfLogged] = React.useState(true);
   const passwordInputRef = React.useRef<HTMLInputElement>(null);
   const usernameInputRef = React.useRef<HTMLInputElement>(null);
   const formRef = React.useRef<HTMLFormElement>(null);
+
+  React.useEffect(() => {
+    if (checkingIfLoggedIn) {
+      const subscription = getCurrentUser({
+        includeAuthStatus: true
+      }).subscribe(
+        authResult => {
+          if (authResult.authenticated) {
+            props.history.push("/home");
+          }
+        },
+        err => {
+          throw err;
+        },
+        () => {
+          setCheckingIfLogged(false);
+        }
+      );
+
+      return () => subscription.unsubscribe();
+    }
+  }, [checkingIfLoggedIn]);
 
   React.useEffect(() => {
     if (isLoggingIn) {
