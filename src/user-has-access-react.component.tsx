@@ -1,13 +1,8 @@
 import React from "react";
-import { getCurrentUser } from "@openmrs/esm-api";
+import { getCurrentUser, userHasAccess } from "@openmrs/esm-api";
 
 export default function UserHasAccessReact(props) {
   const [user, setUser] = React.useState(null);
-
-  function hasAccess(requiredPrivilege) {
-    //@ts-ignore
-    return user.privileges.find(p => requiredPrivilege === p.display);
-  }
 
   React.useEffect(() => {
     const subscription = getCurrentUser({ includeAuthStatus: false }).subscribe(
@@ -20,11 +15,9 @@ export default function UserHasAccessReact(props) {
     };
   }, []);
 
-  try {
-    if (user && hasAccess(props.privilege)) {
-      return props.children;
-    }
-  } catch (e) {}
-
-  return null;
+  if (user) {
+    return userHasAccess(props.privilege, user) && props.children;
+  } else {
+    return null;
+  }
 }
