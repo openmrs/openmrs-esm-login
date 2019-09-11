@@ -22,15 +22,14 @@ export default function Login(props: LoginProps) {
         includeAuthStatus: true
       }).subscribe(
         authResult => {
+          setCheckingIfLogged(false);
           if (authResult.authenticated) {
             props.history.push("/home");
           }
         },
         err => {
-          throw err;
-        },
-        () => {
           setCheckingIfLogged(false);
+          throw err;
         }
       );
 
