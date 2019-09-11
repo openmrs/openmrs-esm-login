@@ -3,7 +3,6 @@ import { performLogin } from "./login.resource";
 import { always } from "kremling";
 import styles from "./login.component.css";
 import { getCurrentUser } from "@openmrs/esm-api";
-import { tap } from "rxjs/operators";
 
 export default function Login(props: LoginProps) {
   const [username, setUsername] = React.useState("");
@@ -21,18 +20,18 @@ export default function Login(props: LoginProps) {
     if (checkingIfLoggedIn) {
       const subscription = getCurrentUser({
         includeAuthStatus: true
-      })
-        .pipe(tap(() => setCheckingIfLogged(false)))
-        .subscribe(
-          authResult => {
-            if (authResult.authenticated) {
-              props.history.push("/home");
-            }
-          },
-          err => {
-            throw err;
+      }).subscribe(
+        authResult => {
+          setCheckingIfLogged(false);
+          if (authResult.authenticated) {
+            props.history.push("/home");
           }
-        );
+        },
+        err => {
+          setCheckingIfLogged(false);
+          throw err;
+        }
+      );
 
       return () => subscription.unsubscribe();
     }
