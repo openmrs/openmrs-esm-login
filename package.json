@@ -21,6 +21,7 @@
       "pre-commit": "pretty-quick --staged && npm run lint && npm test && npm run typescript"
     }
   },
+  "types": "src/openmrs-esm-login.d.tsx",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/openmrs/openmrs-esm-login.git"
@@ -56,13 +57,13 @@
     "prettier": "^1.18.2",
     "pretty-quick": "^1.11.1",
     "style-loader": "^1.0.0",
-    "systemjs-webpack-interop": "^1.1.0",
     "typescript": "^3.5.3",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6",
     "webpack-dev-server": "^3.8.0"
   },
   "dependencies": {
+    "@openmrs/esm-api": "^1.0.2",
     "@openmrs/react-root-decorator": "^1.0.0",
     "@types/react": "^16.8.25",
     "@types/react-dom": "^16.8.5",
@@ -72,6 +73,7 @@
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
     "rxjs": "^6.5.3",
-    "single-spa-react": "^2.10.2"
+    "single-spa-react": "^2.10.2",
+    "systemjs-webpack-interop": "^1.1.0"
   }
 }
