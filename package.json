@@ -1,6 +1,6 @@
 {
   "name": "@openmrs/esm-login",
-  "version": "1.0.0",
+  "version": "1.0.1-alpha.0",
   "description": "The login microfrontend for the OpenMRS SPA",
   "main": "dist/openmrs-esm-login.js",
   "scripts": {
