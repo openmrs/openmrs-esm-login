@@ -3,6 +3,9 @@
   "version": "1.0.1-alpha.0",
   "description": "The login microfrontend for the OpenMRS SPA",
   "main": "dist/openmrs-esm-login.js",
+  "directories": {
+    "lib": "dist"
+  },
   "scripts": {
     "start": "webpack-dev-server",
     "start-https": "webpack-dev-server --https",
