@@ -44,7 +44,7 @@ module.exports = {
     },
     disableHostCheck: true
   },
-  externals: ["react", "react-dom", /^@openmrs\/esm/],
+  externals: ["react", "react-dom", /^@openmrs\/esm(?!(-root-config)\/).*/],
   plugins: [new ForkTsCheckerWebpackPlugin(), new CleanWebpackPlugin()],
   resolve: {
     extensions: [".tsx", ".ts", ".jsx", ".js"]
