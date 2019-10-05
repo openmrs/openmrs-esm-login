@@ -4,7 +4,7 @@ import ReactDOM from "react-dom";
 import singleSpaReact from "single-spa-react";
 import Root from "./root.component";
 // import { loadConfig } from "@openmrs/esm-root-config";
-import { defineConfigSchema } from "@openmrs/esm-root-config/dist/openmrs-esm-root-config.lib.js";
+import { defineConfigSchema } from "@openmrs/esm-config";
 
 defineConfigSchema("@openmrs/esm-login", {
   logoImgSrc: {
