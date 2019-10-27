@@ -3,10 +3,12 @@ import { performLogin } from "./login.resource";
 import { always } from "kremling";
 import styles from "./login.component.css";
 import { getCurrentUser } from "@openmrs/esm-api";
-import { getConfig } from "@openmrs/esm-module-config";
+import { useConfig } from "@openmrs/esm-module-config";
+
+window.React1 = require("react");
 
 export default function Login(props: LoginProps) {
-  const config = getConfig("@openmrs/esm-login");
+  const config = useConfig();
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [authenticated, setAuthenticated] = React.useState(null);

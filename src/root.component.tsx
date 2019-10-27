@@ -22,4 +22,7 @@ function Root(props) {
     </BrowserRouter>
   );
 }
-export default openmrsRootDecorator({ featureName: "login" })(Root);
+export default openmrsRootDecorator({
+  featureName: "login",
+  moduleName: "@openmrs/esm-login"
+})(Root);
