@@ -2,7 +2,7 @@ import React from "react";
 import openmrsRootDecorator from "@openmrs/react-root-decorator";
 import { BrowserRouter, Route } from "react-router-dom";
 import Login from "./login/login.component";
-import { defineConfigSchema, UseConfig } from "@openmrs/esm-module-config";
+import { defineConfigSchema } from "@openmrs/esm-module-config";
 
 defineConfigSchema("@openmrs/esm-login", {
   logoImgSrc: {
