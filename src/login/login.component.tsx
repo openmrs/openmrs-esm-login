@@ -75,8 +75,12 @@ export default function Login(props: LoginProps) {
     return null;
   }
 
-  const logo = config.logoImgSrc ? (
-    <img src={config.logoImgSrc} alt={config.logoAlt} />
+  const logo = config.logo.src ? (
+    <img
+      src={config.logo.src}
+      alt={config.logo.alt}
+      className={styles["logo-img"]}
+    />
   ) : (
     <svg role="img" className={styles["logo"]}>
       <use xlinkHref="#omrs-logo-full-color"></use>

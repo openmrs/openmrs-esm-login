@@ -5,11 +5,13 @@ import Login from "./login/login.component";
 import { defineConfigSchema } from "@openmrs/esm-module-config";
 
 defineConfigSchema("@openmrs/esm-login", {
-  logoImgSrc: {
-    default: null // defaults to an SVG Sprite
-  },
-  logoAlt: {
-    default: "Logo"
+  logo: {
+    src: {
+      default: null // defaults to an SVG Sprite
+    },
+    alt: {
+      default: "Logo"
+    }
   }
 });
 
