@@ -3,7 +3,7 @@ import { performLogin } from "./login.resource";
 import { always } from "kremling";
 import styles from "./login.component.css";
 import { getCurrentUser } from "@openmrs/esm-api";
-import { getConfig } from "@openmrs/esm-config";
+import { getConfig } from "@openmrs/esm-module-config";
 
 export default function Login(props: LoginProps) {
   const config = getConfig("@openmrs/esm-login");
@@ -76,7 +76,7 @@ export default function Login(props: LoginProps) {
   }
 
   const logo = config.logoImgSrc ? (
-    <img src={config.logoImgSrc} alt="Partners in Health" />
+    <img src={config.logoImgSrc} alt={config.logoAlt} />
   ) : (
     <svg role="img" className={styles["logo"]}>
       <use xlinkHref="#omrs-logo-full-color"></use>
