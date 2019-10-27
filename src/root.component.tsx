@@ -16,9 +16,7 @@ defineConfigSchema("@openmrs/esm-login", {
 function Root(props) {
   return (
     <BrowserRouter basename={window["getOpenmrsSpaBase"]()}>
-      <UseConfig moduleName="@openmrs/esm-login">
-        <Route path="/login" component={Login} />
-      </UseConfig>
+      <Route path="/login" component={Login} />
     </BrowserRouter>
   );
 }
