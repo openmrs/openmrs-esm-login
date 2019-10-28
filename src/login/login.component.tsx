@@ -5,8 +5,6 @@ import styles from "./login.component.css";
 import { getCurrentUser } from "@openmrs/esm-api";
 import { useConfig } from "@openmrs/esm-module-config";
 
-window.React1 = require("react");
-
 export default function Login(props: LoginProps) {
   const config = useConfig();
   const [username, setUsername] = React.useState("");
