@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "webpack-dev-server",
-    "start-https": "webpack-dev-server --https  --mode development",
+    "start-https": "webpack-dev-server --https",
     "build": "webpack --mode production",
     "lint": "eslint src --ext tsx",
     "prettier": "prettier",
