@@ -21,7 +21,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged && npm run lint && npm test && npm run typescript"
+      "pre-commit": "pretty-quick --staged && concurrently 'npm:lint' 'npm:test' 'npm:typescript'"
     }
   },
   "types": "src/openmrs-esm-login.d.tsx",
@@ -46,6 +46,7 @@
     "babel-loader": "^8.0.6",
     "browserslist-config-openmrs": "^1.0.0",
     "clean-webpack-plugin": "^3.0.0",
+    "concurrently": "^5.0.0",
     "css-loader": "^3.2.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
