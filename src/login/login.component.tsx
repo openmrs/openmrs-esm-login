@@ -3,8 +3,10 @@ import { performLogin } from "./login.resource";
 import { always } from "kremling";
 import styles from "./login.component.css";
 import { getCurrentUser } from "@openmrs/esm-api";
+import { useConfig } from "@openmrs/esm-module-config";
 
 export default function Login(props: LoginProps) {
+  const config = useConfig();
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [authenticated, setAuthenticated] = React.useState(null);
@@ -73,14 +75,21 @@ export default function Login(props: LoginProps) {
     return null;
   }
 
+  const logo = config.logo.src ? (
+    <img
+      src={config.logo.src}
+      alt={config.logo.alt}
+      className={styles["logo-img"]}
+    />
+  ) : (
+    <svg role="img" className={styles["logo"]}>
+      <use xlinkHref="#omrs-logo-full-color"></use>
+    </svg>
+  );
   return (
     <div className={`canvas ${styles["container"]}`}>
       <div className={`omrs-card ${styles["login-card"]}`}>
-        <div className={styles["center"]}>
-          <svg role="img" className={styles["logo"]}>
-            <use xlinkHref="#omrs-logo-full-color"></use>
-          </svg>
-        </div>
+        <div className={styles["center"]}>{logo}</div>
         <form onSubmit={handleSubmit} ref={formRef}>
           <div className="omrs-input-group">
             <input

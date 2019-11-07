@@ -14,6 +14,11 @@
   margin-bottom: 3rem;
 }
 
+.logo-img {
+  margin-bottom: 3rem;
+  max-width: 100%;
+}
+
 .submit-btn {
   width: 100%;
 }
