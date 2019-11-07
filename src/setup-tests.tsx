@@ -4,6 +4,7 @@ import Adapter from "enzyme-adapter-react-16";
 // @ts-ignore
 Enzyme.configure({ adapter: new Adapter() });
 
+// @ts-ignore
 window.System = {
   import: jest
     .fn()

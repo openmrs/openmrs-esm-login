@@ -39,7 +39,7 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
-    "@openmrs/react-root-decorator": "file:../openmrs-react-root-decorator",
+    "@openmrs/react-root-decorator": "^2.0.0",
     "@types/jest": "^24.0.17",
     "babel-eslint": "^10.0.2",
     "babel-jest": "^24.8.0",
@@ -76,6 +76,7 @@
     "@openmrs/esm-module-config": "^1.0.0",
     "@types/react": "^16.8.25",
     "@types/react-dom": "^16.8.5",
+    "@types/systemjs": "^6.1.0",
     "react": "^16.11.0",
     "react-dom": "^16.8.6",
     "rxjs": "^6.5.3"
