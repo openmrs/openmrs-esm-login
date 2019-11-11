@@ -12,6 +12,16 @@ defineConfigSchema("@openmrs/esm-login", {
     alt: {
       default: "Logo"
     }
+  },
+  links: {
+    loginSuccess: {
+      url: {
+        default: "/home"
+      },
+      spa: {
+        default: true
+      }
+    }
   }
 });
 
