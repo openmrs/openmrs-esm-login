@@ -26,7 +26,7 @@ export default function Login(props: LoginProps) {
         authResult => {
           setCheckingIfLogged(false);
           if (authResult.authenticated) {
-            props.history.push("/home");
+            navigate(props, config.links.loginSuccess);
           }
         },
         err => {
@@ -47,7 +47,7 @@ export default function Login(props: LoginProps) {
           if (authData) {
             const { authenticated } = authData;
             if (authenticated) {
-              props.history.push("/home");
+              navigate(props, config.links.loginSuccess);
             } else {
               setAuthenticated(authenticated);
               setErrorMessage("Incorrect username or password");
@@ -171,8 +171,21 @@ export default function Login(props: LoginProps) {
   }
 }
 
+function navigate(props, urlConfig: UrlConfig) {
+  if (urlConfig.spa) {
+    props.history.push(urlConfig.url);
+  } else {
+    window.location.href = urlConfig.url;
+  }
+}
+
 type LoginProps = {
   history?: {
     push(newUrl: String): void;
   };
+};
+
+type UrlConfig = {
+  spa: boolean;
+  url: string;
 };
