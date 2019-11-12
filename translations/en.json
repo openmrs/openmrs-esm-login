@@ -1,3 +1,4 @@
 {
-  "hello": "Hello!"
+  "hello": "Hello!",
+  "pluralTest": "{count, plural, one {You have {count} file.} other {You have {count} files.}}"
 }
