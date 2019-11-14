@@ -154,7 +154,7 @@ export default function Login(props: LoginProps) {
               type="submit"
               disabled={!password || !username}
             >
-              Login
+              <Trans i18nKey="login">Login</Trans>
             </button>
           </div>
         </form>
