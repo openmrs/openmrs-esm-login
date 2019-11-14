@@ -1,4 +1,6 @@
 {
   "hello": "Hola!",
-  "pluralTest": "{count, plural, one {Tienes {count} archivo.} other {Tienes {count} archivos.}}"
+  "pluralTest": "{count, plural, one {Tienes {count} archivo.} other {Tienes {count} archivos.}}",
+  "username": "Nombre de usuario",
+  "password": "Contraseña"
 }

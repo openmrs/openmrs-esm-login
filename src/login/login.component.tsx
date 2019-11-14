@@ -4,6 +4,7 @@ import { always } from "kremling";
 import styles from "./login.component.css";
 import { getCurrentUser } from "@openmrs/esm-api";
 import { useConfig } from "@openmrs/esm-module-config";
+import { Trans } from "react-i18next";
 
 export default function Login(props: LoginProps) {
   const config = useConfig();
@@ -106,7 +107,9 @@ export default function Login(props: LoginProps) {
               autoFocus
               required
             />
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">
+              <Trans i18nKey="username">Username</Trans>
+            </label>
           </div>
           <div className="omrs-input-group">
             <input
@@ -122,7 +125,9 @@ export default function Login(props: LoginProps) {
               ref={passwordInputRef}
               required
             />
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">
+              <Trans i18nKey="password">Password</Trans>
+            </label>
             <button
               className={`omrs-unstyled ${styles["icon-btn"]}`}
               type="button"
