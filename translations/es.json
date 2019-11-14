@@ -1,4 +1,1 @@
-{
-  "hello": "Hola!",
-  "pluralTest": "{count, plural, one {Tienes {count} archivo.} other {Tienes {count} archivos.}}"
-}
+{}
