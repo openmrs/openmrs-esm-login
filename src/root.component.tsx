@@ -1,8 +1,9 @@
 import React from "react";
 import openmrsRootDecorator from "@openmrs/react-root-decorator";
+import { defineConfigSchema } from "@openmrs/esm-module-config";
 import { BrowserRouter, Route } from "react-router-dom";
 import Login from "./login/login.component";
-import { defineConfigSchema } from "@openmrs/esm-module-config";
+import ChooseLocation from "./choose-location/choose-location.component";
 
 defineConfigSchema("@openmrs/esm-login", {
   logo: {
@@ -26,9 +27,11 @@ defineConfigSchema("@openmrs/esm-login", {
 });
 
 function Root(props) {
+  const [user, setUser] = React.useState(null);
   return (
     <BrowserRouter basename={window["getOpenmrsSpaBase"]()}>
-      <Route path="/login" component={Login} />
+      <Route exact path="/login" component={Login} />
+      <Route exact path="/login/location" component={ChooseLocation} />
     </BrowserRouter>
   );
 }
