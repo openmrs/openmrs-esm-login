@@ -11,10 +11,7 @@ import styles from "../styles.css";
 
 export default function ChooseLocation(props: ChooseLocationProps) {
   const config = useConfig();
-  const [loginLocations, setLoginLocations]: [
-    Array<Object>,
-    (locations: Array<Object>) => void
-  ] = React.useState([]);
+  const [loginLocations, setLoginLocations] = React.useState([]);
   const [location, setLocation] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
