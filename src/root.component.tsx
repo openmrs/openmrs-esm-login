@@ -6,13 +6,8 @@ import Login from "./login/login.component";
 import ChooseLocation from "./choose-location/choose-location.component";
 
 defineConfigSchema("@openmrs/esm-login", {
-  logo: {
-    src: {
-      default: null // defaults to an SVG Sprite
-    },
-    alt: {
-      default: "Logo"
-    }
+  chooseLocation: {
+    enabled: true
   },
   links: {
     loginSuccess: {
@@ -22,6 +17,14 @@ defineConfigSchema("@openmrs/esm-login", {
       spa: {
         default: true
       }
+    }
+  },
+  logo: {
+    src: {
+      default: null // defaults to an SVG Sprite
+    },
+    alt: {
+      default: "Logo"
     }
   }
 });
