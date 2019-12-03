@@ -39,16 +39,16 @@ export default function ChooseLocation(props: ChooseLocationProps) {
   }, [isSubmitting]);
 
   const RadioInput = (option: RadioInputOption) => (
-    <React.Fragment>
+    <React.Fragment key={option.uuid}>
       <div>
         <label>
           <input
-            key={option.uuid}
             type="radio"
             name="location"
             value={option.uuid}
             onChange={evt => setLocation(evt.target.value)}
             ref={locationInputRef}
+            className={`omrs-margin-8`}
           />
           {option.display}
         </label>
