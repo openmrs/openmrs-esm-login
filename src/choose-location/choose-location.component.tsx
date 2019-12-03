@@ -76,7 +76,7 @@ export default function ChooseLocation(props: ChooseLocationProps) {
         <div>
           <button
             className={always(
-              `omrs-margin-top-24 omrs-btn omrs-btn-lg ${styles["submit-btn"]}`
+              `omrs-margin-16 omrs-btn omrs-rounded omrs-btn-lg ${styles["location-submit-btn"]}`
             ).toggle("omrs-filled-disabled", "omrs-filled-action", !location)}
             type="submit"
             disabled={!location}
