@@ -96,7 +96,7 @@ export default function ChooseLocation(props: ChooseLocationProps) {
 
 const CardHeader: React.FunctionComponent = props => (
   <div className={styles["card-header"]}>
-    <h2 className={`omrs-margin-0`}>{props.children}</h2>
+    <h2 className={`omrs-margin-8 omrs-margin-left-12`}>{props.children}</h2>
   </div>
 );
 
