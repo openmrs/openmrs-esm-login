@@ -1,10 +1,10 @@
 import React from "react";
 import { performLogin } from "./login.resource";
 import { always } from "kremling";
-import styles from "./login.component.css";
 import { getCurrentUser } from "@openmrs/esm-api";
 import { useConfig } from "@openmrs/esm-module-config";
 import { Trans } from "react-i18next";
+import styles from "../styles.css";
 
 export default function Login(props: LoginProps) {
   const config = useConfig();
@@ -48,7 +48,11 @@ export default function Login(props: LoginProps) {
           if (authData) {
             const { authenticated } = authData;
             if (authenticated) {
-              navigate(props, config.links.loginSuccess);
+              if (config.chooseLocation.enabled) {
+                props.history.push("/login/location");
+              } else {
+                navigate(props, config.links.loginSuccess);
+              }
             } else {
               setAuthenticated(authenticated);
               setErrorMessage("Incorrect username or password");

@@ -55,3 +55,27 @@
     padding: 1rem;
   }
 }
+
+.card-header {
+  background-color: var(--omrs-color-bg-medium-contrast);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--omrs-color-bg-low-contrast);
+  border-radius: 0.25rem 0.25rem 0 0;
+}
+
+.card-content {
+  border: none;
+  padding: 0.625rem 0.25rem 0.625rem 1rem;
+  border-radius: 0;
+}
+
+.card {
+  width: 21.75rem;
+  margin: 0.5rem 1rem;
+}
+
+.location-submit-btn {
+  width: 21.75rem;
+}

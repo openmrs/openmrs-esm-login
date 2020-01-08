@@ -40,6 +40,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
     "@openmrs/react-root-decorator": "^3.0.0",
+    "@testing-library/react": "^9.3.2",
     "@types/jest": "^24.0.17",
     "babel-eslint": "^10.0.2",
     "babel-jest": "^24.8.0",
@@ -77,6 +78,7 @@
   },
   "dependencies": {
     "@openmrs/esm-api": "^1.2.2",
+    "@openmrs/esm-error-handling": "^1.1.0",
     "@openmrs/esm-module-config": "^1.0.0",
     "@types/react": "^16.8.25",
     "@types/react-dom": "^16.8.5",
