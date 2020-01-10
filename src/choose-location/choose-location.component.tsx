@@ -40,7 +40,7 @@ export default function ChooseLocation(props: ChooseLocationProps) {
 
   const RadioInput = (option: RadioInputOption) => (
     <React.Fragment key={option.uuid}>
-      <div>
+      <div className="omrs-radio-button">
         <label>
           <input
             type="radio"
@@ -50,7 +50,7 @@ export default function ChooseLocation(props: ChooseLocationProps) {
             ref={locationInputRef}
             className={`omrs-margin-8`}
           />
-          {option.display}
+          <span>{option.display}</span>
         </label>
       </div>
     </React.Fragment>
