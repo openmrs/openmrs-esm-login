@@ -3,28 +3,16 @@ import { always } from "kremling";
 import { useConfig } from "@openmrs/esm-module-config";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { Trans } from "react-i18next";
-import {
-  getLoginLocations,
-  setSessionLocation
-} from "./choose-location.resource";
+import { setSessionLocation } from "./choose-location.resource";
 import styles from "../styles.css";
 
 export default function ChooseLocation(props: ChooseLocationProps) {
   const config = useConfig();
-  const [loginLocations, setLoginLocations] = React.useState([]);
   const [location, setLocation] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
   const locationInputRef = React.useRef<HTMLInputElement>(null);
   const formRef = React.useRef<HTMLFormElement>(null);
-
-  React.useEffect(() => {
-    const sub = getLoginLocations().subscribe(
-      locations => setLoginLocations(locations),
-      createErrorHandler()
-    );
-    return () => sub.unsubscribe();
-  }, []);
 
   React.useEffect(() => {
     const abortController = new AbortController();
@@ -67,7 +55,7 @@ export default function ChooseLocation(props: ChooseLocationProps) {
             <Trans i18nKey="location">Location</Trans>
           </CardHeader>
           <div className={styles["card-content"]}>
-            {loginLocations.map(RadioInput)}
+            {props.loginLocations.map(RadioInput)}
           </div>
           <div className={styles["center"]}>
             <p className={styles["error-msg"]}>{errorMessage}</p>
@@ -104,6 +92,7 @@ type ChooseLocationProps = {
   history?: {
     push(newUrl: String): void;
   };
+  loginLocations: Array<RadioInputOption>;
 };
 
 function navigate(props, urlConfig: UrlConfig) {
@@ -119,4 +108,7 @@ type UrlConfig = {
   url: string;
 };
 
-type RadioInputOption = any;
+type RadioInputOption = {
+  uuid: string;
+  display: string;
+};

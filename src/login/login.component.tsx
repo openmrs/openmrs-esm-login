@@ -48,7 +48,10 @@ export default function Login(props: LoginProps) {
           if (authData) {
             const { authenticated } = authData;
             if (authenticated) {
-              if (config.chooseLocation.enabled) {
+              if (
+                config.chooseLocation.enabled &&
+                props.loginLocations.length > 1
+              ) {
                 props.history.push("/login/location");
               } else {
                 navigate(props, config.links.loginSuccess);
@@ -192,6 +195,7 @@ type LoginProps = {
   history?: {
     push(newUrl: String): void;
   };
+  loginLocations: Array<any>;
 };
 
 type UrlConfig = {

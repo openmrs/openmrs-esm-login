@@ -12,24 +12,22 @@ import { act } from "react-dom/test-utils";
 const historyMock = { push: jest.fn() };
 
 jest.mock("./choose-location.resource");
-const mockedGetLoginLocations = getLoginLocations as jest.Mock;
 const mockedSetSessionLocation = setSessionLocation as jest.Mock;
 
-mockedGetLoginLocations.mockReturnValue(
-  of([{ uuid: "111", display: "Earth" }, { uuid: "222", display: "Mars" }])
-);
+const loginLocations = [
+  { uuid: "111", display: "Earth" },
+  { uuid: "222", display: "Mars" }
+];
 
 describe(`<ChooseLocation />`, () => {
   beforeEach(() => {
-    mockedGetLoginLocations.mockReset();
     mockedSetSessionLocation.mockReset();
-    mockedGetLoginLocations.mockReturnValue(
-      of([{ uuid: "111", display: "Earth" }, { uuid: "222", display: "Mars" }])
-    );
     mockedSetSessionLocation.mockResolvedValue({});
   });
 
-  const wrapper = mount(<ChooseLocation history={historyMock} />);
+  const wrapper = mount(
+    <ChooseLocation history={historyMock} loginLocations={loginLocations} />
+  );
 
   it(`renders a location picker`, () => {
     expect(
