@@ -4,15 +4,11 @@ import { useConfig } from "@openmrs/esm-module-config";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { getCurrentUser } from "@openmrs/esm-api";
 import { Trans } from "react-i18next";
-import {
-  getLoginLocations,
-  setSessionLocation
-} from "./choose-location.resource";
+import { setSessionLocation } from "./choose-location.resource";
 import styles from "../styles.css";
 
 export default function ChooseLocation(props: ChooseLocationProps) {
   const config = useConfig();
-  const [loginLocations, setLoginLocations] = React.useState([]);
   const [location, setLocation] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
@@ -21,30 +17,10 @@ export default function ChooseLocation(props: ChooseLocationProps) {
   const [currentUser, setCurrentUser] = React.useState(null);
 
   React.useEffect(() => {
-    const sub = getLoginLocations().subscribe(
-      locations => setLoginLocations(locations),
-      createErrorHandler()
-    );
-    return () => sub.unsubscribe();
-  }, []);
-
-  React.useEffect(() => {
-    const sub = getCurrentUser({ includeAuthStatus: true }).subscribe(
-      response => {
-        if (response.authenticated) {
-          setCurrentUser(response.user.username || response.user.systemId);
-        }
-        createErrorHandler();
-      }
-    );
-    return () => sub.unsubscribe();
-  }, []);
-
-  React.useEffect(() => {
     const abortController = new AbortController();
     if (isSubmitting) {
       setSessionLocation(location, abortController)
-        .then(data => {
+        .then(() => {
           navigate(props, config.links.loginSuccess);
         })
         .catch(createErrorHandler());
@@ -80,7 +56,7 @@ export default function ChooseLocation(props: ChooseLocationProps) {
             <Trans i18nKey="location">Location</Trans>
           </CardHeader>
           <div className={styles["location-radio-group"]}>
-            {loginLocations.map(RadioInput)}
+            {props.loginLocations.map(RadioInput)}
           </div>
           <div className={styles["center"]}>
             <p className={styles["error-msg"]}>{errorMessage}</p>
@@ -117,6 +93,7 @@ type ChooseLocationProps = {
   history?: {
     push(newUrl: String): void;
   };
+  loginLocations: Array<RadioInputOption>;
 };
 
 function navigate(props, urlConfig: UrlConfig) {
@@ -132,4 +109,7 @@ type UrlConfig = {
   url: string;
 };
 
-type RadioInputOption = any;
+type RadioInputOption = {
+  uuid: string;
+  display: string;
+};
