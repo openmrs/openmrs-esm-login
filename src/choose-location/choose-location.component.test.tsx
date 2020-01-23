@@ -62,7 +62,9 @@ describe(`<ChooseLocation />`, () => {
       .find('input[name="location"][value="222"]')
       .simulate("change", { target: { checked: "true" } });
     wrapper.find("form").simulate("submit", { preventDefault() {} });
-    expect(setSessionLocation).toHaveBeenCalled();
+    setImmediate(() => {
+      expect(setSessionLocation).toHaveBeenCalled();
+    });
   });
 
   it(`send the user to the target page on submit`, () => {
