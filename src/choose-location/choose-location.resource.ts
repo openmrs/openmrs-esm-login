@@ -12,13 +12,11 @@ export function setSessionLocation(
   abortController: AbortController
 ): Promise<any> {
   return openmrsFetch("/ws/rest/v1/appui/session", {
-    signal: abortController.signal
-  });
-  return openmrsFetch("/ws/rest/v1/appui/session", {
     method: "POST",
-    body: { location },
+    body: { location: locationUuid },
     headers: {
       "Content-Type": "application/json"
-    }
+    },
+    signal: abortController.signal
   });
 }
