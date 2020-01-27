@@ -80,17 +80,17 @@
 }
 
 .location-card {
-  max-width: 850px;
+  max-width: 60rem;
 }
 
 .location-radio-group {
   margin: 0 auto;
   background-color: var(--omrs-color-bg-high-contrast);
-  border: 2px solid rgba(249, 249, 249, 0.94);
   list-style: none;
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
+  margin-left: 0.5rem;
 }
 
 .location-radio-group input[type="radio"] {
@@ -102,21 +102,19 @@
 .location-radio-group label {
   display: flex;
   background-color: var(--omrs-color-bg-high-contrast);
-  color: var(--omrs-color-primary-blue);
-  padding: 5px;
-  font-family: sans-serif, Arial;
-  font-size: 12.8px;
-  border-top: 1px solid rgb(239, 239, 239);
-  border-radius: 4px;
-  width: 275px;
+  color: var(--omrs-color-ink-high-contrast);
+  padding: 0.25rem;
+  border-bottom: 1px solid var(--omrs-color-bg-low-contrast);
+  border-radius: 0.25rem;
+  width: 19.5rem;
 }
 
 .location-radio-group label:hover {
-  background-color: var(--omrs-color-primary-blue);
+  background-color: var(--omrs-color-interaction);
   color: var(--omrs-color-ink-white);
 }
 
 .location-radio-group input[type="radio"]:checked + label {
-  background-color: var(--omrs-color-primary-blue);
+  background-color: var(--omrs-color-interaction-plus-one);
   color: var(--omrs-color-ink-white);
 }
