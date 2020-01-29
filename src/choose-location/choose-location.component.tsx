@@ -2,6 +2,7 @@ import React from "react";
 import { always } from "kremling";
 import { useConfig } from "@openmrs/esm-module-config";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { getCurrentUser } from "@openmrs/esm-api";
 import { Trans } from "react-i18next";
 import {
   getLoginLocations,
@@ -17,11 +18,24 @@ export default function ChooseLocation(props: ChooseLocationProps) {
   const [errorMessage, setErrorMessage] = React.useState("");
   const locationInputRef = React.useRef<HTMLInputElement>(null);
   const formRef = React.useRef<HTMLFormElement>(null);
+  const [currentUser, setCurrentUser] = React.useState(null);
 
   React.useEffect(() => {
     const sub = getLoginLocations().subscribe(
       locations => setLoginLocations(locations),
       createErrorHandler()
+    );
+    return () => sub.unsubscribe();
+  }, []);
+
+  React.useEffect(() => {
+    const sub = getCurrentUser({ includeAuthStatus: true }).subscribe(
+      response => {
+        if (response.authenticated) {
+          setCurrentUser(response.user.username || response.user.systemId);
+        }
+        createErrorHandler();
+      }
     );
     return () => sub.unsubscribe();
   }, []);
@@ -41,17 +55,16 @@ export default function ChooseLocation(props: ChooseLocationProps) {
   const RadioInput = (option: RadioInputOption) => (
     <React.Fragment key={option.uuid}>
       <div className="omrs-radio-button">
-        <label>
-          <input
-            type="radio"
-            name="location"
-            value={option.uuid}
-            onChange={evt => setLocation(evt.target.value)}
-            ref={locationInputRef}
-            className={`omrs-margin-8`}
-          />
-          <span>{option.display}</span>
-        </label>
+        <input
+          id={option.uuid}
+          type="radio"
+          name="location"
+          value={option.uuid}
+          onChange={evt => setLocation(evt.target.value)}
+          ref={locationInputRef}
+          className={`omrs-margin-8`}
+        />
+        <label htmlFor={option.uuid}>{option.display}</label>
       </div>
     </React.Fragment>
   );
@@ -59,24 +72,24 @@ export default function ChooseLocation(props: ChooseLocationProps) {
   return (
     <div className={`canvas ${styles["container"]}`}>
       <h1>
-        <Trans i18nKey="welcome">Welcome!</Trans>
+        <Trans i18nKey="welcome">Welcome {currentUser}</Trans>
       </h1>
       <form onSubmit={handleSubmit} ref={formRef}>
-        <div className={`omrs-card ${styles.card}`}>
+        <div className={`${styles["location-card"]} omrs-card`}>
           <CardHeader>
             <Trans i18nKey="location">Location</Trans>
           </CardHeader>
-          <div className={styles["card-content"]}>
+          <div className={styles["location-radio-group"]}>
             {loginLocations.map(RadioInput)}
           </div>
           <div className={styles["center"]}>
             <p className={styles["error-msg"]}>{errorMessage}</p>
           </div>
         </div>
-        <div>
+        <div className={styles["center"]}>
           <button
             className={always(
-              `omrs-margin-16 omrs-btn omrs-rounded omrs-btn-lg ${styles["location-submit-btn"]}`
+              `omrs-margin-16 omrs-btn omrs-rounded ${styles["location-submit-btn"]}`
             ).toggle("omrs-filled-disabled", "omrs-filled-action", !location)}
             type="submit"
             disabled={!location}
