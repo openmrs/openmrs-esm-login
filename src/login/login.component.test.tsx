@@ -1,8 +1,9 @@
+import "@testing-library/jest-dom";
 import React from "react";
-import { mount } from "enzyme";
 import Login from "./login.component";
 import { performLogin } from "./login.resource";
-import { act } from "react-dom/test-utils";
+import { cleanup, fireEvent, wait } from "@testing-library/react";
+import renderWithRouter from "../test-helpers/render-with-router";
 
 const historyMock = { push: jest.fn() };
 const mockedLogin = performLogin as jest.Mock;
@@ -12,58 +13,58 @@ jest.mock("./login.resource", () => ({
 }));
 
 describe(`<Login />`, () => {
+  let wrapper;
   beforeEach(() => {
     mockedLogin.mockReset();
+    wrapper = renderWithRouter(<Login history={historyMock} />);
   });
-  const wrapper = mount(<Login history={historyMock} />);
+
+  afterEach(cleanup);
 
   it(`renders a login form`, () => {
-    expect(wrapper.find('input[type="text"][name="username"]').exists()).toBe(
-      true
-    );
-    expect(wrapper.find('input[type="password"]').exists()).toBe(true);
-    expect(wrapper.find('button[type="submit"]').exists()).toBe(true);
+    wrapper.getByLabelText("Username");
+    wrapper.getByLabelText("Password");
+    wrapper.getByText("Login", { selector: "button" });
   });
 
   it(`disables/enables the submit button when input is invalid/valid`, () => {
-    expect(wrapper.find('button[type="submit"]').prop("disabled")).toBeTruthy();
-    wrapper
-      .find('input[type="text"][name="username"]')
-      .simulate("change", { target: { value: "yoshi" } });
-    expect(wrapper.find('button[type="submit"]').prop("disabled")).toBeTruthy();
-    wrapper
-      .find('input[type="password"]')
-      .simulate("change", { target: { value: "no-tax-fraud" } });
-    expect(wrapper.find('button[type="submit"]').prop("disabled")).toBeFalsy();
+    expect(wrapper.getByText("Login")).toHaveAttribute("disabled");
+    fireEvent.change(wrapper.getByLabelText("Username"), {
+      target: { value: "yoshi" }
+    });
+    expect(wrapper.getByText("Login")).toHaveAttribute("disabled");
+    fireEvent.change(wrapper.getByLabelText("Password"), {
+      target: { value: "no-tax-fraud" }
+    });
+    expect(wrapper.getByText("Login")).not.toHaveAttribute("disabled");
   });
 
   it(`makes an API request when you submit the form`, () => {
     mockedLogin.mockReturnValue(Promise.resolve({ some: "data" }));
     expect(performLogin).not.toHaveBeenCalled();
-    wrapper
-      .find('input[type="text"][name="username"]')
-      .simulate("change", { target: { value: "yoshi" } });
-    wrapper
-      .find('input[type="password"]')
-      .simulate("change", { target: { value: "no-tax-fraud" } });
-    wrapper.find("form").simulate("submit", { preventDefault() {} });
+    fireEvent.change(wrapper.getByLabelText("Username"), {
+      target: { value: "yoshi" }
+    });
+    fireEvent.change(wrapper.getByLabelText("Password"), {
+      target: { value: "no-tax-fraud" }
+    });
+    fireEvent.click(wrapper.getByText("Login"));
     expect(performLogin).toHaveBeenCalled();
   });
 
-  it(`send the user to the location select page on login`, () => {
+  it(`send the user to the location select page on login`, async () => {
     mockedLogin.mockReturnValue(
       Promise.resolve({ data: { authenticated: true } })
     );
-    wrapper
-      .find('input[type="text"][name="username"]')
-      .simulate("change", { target: { value: "yoshi" } });
-    wrapper
-      .find('input[type="password"]')
-      .simulate("change", { target: { value: "no-tax-fraud" } });
-    wrapper.find("form").simulate("submit", { preventDefault() {} });
-    setImmediate(() => {
-      expect(historyMock.push.mock.calls.length).toBe(1);
-      expect(historyMock.push.mock.calls[0][0]).toBe("/login/location");
+    fireEvent.change(wrapper.getByLabelText("Username"), {
+      target: { value: "yoshi" }
     });
+    fireEvent.change(wrapper.getByLabelText("Password"), {
+      target: { value: "no-tax-fraud" }
+    });
+    fireEvent.click(wrapper.getByText("Login"));
+    await wait(() =>
+      expect(historyMock.push.mock.calls[0][0]).toBe("/login/location")
+    );
   });
 });

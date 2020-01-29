@@ -1,9 +1,10 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { render, cleanup } from "@testing-library/react";
 import Root from "./root.component";
 
 describe(`<Root />`, () => {
+  afterEach(cleanup);
   it(`renders without dying`, () => {
-    const wrapper = shallow(<Root />);
+    render(<Root />);
   });
 });
