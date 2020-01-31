@@ -27,7 +27,15 @@ export default function Login(props: LoginProps) {
         authResult => {
           setCheckingIfLogged(false);
           if (authResult.authenticated) {
-            navigate(props, config.links.loginSuccess);
+            if (
+              props.location &&
+              props.location.state &&
+              props.location.state.referrer
+            ) {
+              props.history.push(props.location.state.referrer);
+            } else {
+              navigate(props, config.links.loginSuccess);
+            }
           }
         },
         err => {
@@ -49,9 +57,20 @@ export default function Login(props: LoginProps) {
             const { authenticated } = authData;
             if (authenticated) {
               if (config.chooseLocation.enabled) {
-                props.history.push("/login/location");
+                props.history.push(
+                  "/login/location",
+                  props.location ? props.location.state : undefined
+                );
               } else {
-                navigate(props, config.links.loginSuccess);
+                if (
+                  props.location &&
+                  props.location.state &&
+                  props.location.state.referrer
+                ) {
+                  props.history.push(props.location.state.referrer);
+                } else {
+                  navigate(props, config.links.loginSuccess);
+                }
               }
             } else {
               setAuthenticated(authenticated);
@@ -189,8 +208,9 @@ function navigate(props, urlConfig: UrlConfig) {
 }
 
 type LoginProps = {
+  location?: any;
   history?: {
-    push(newUrl: String): void;
+    push(newUrl: String, state?: object): void;
   };
 };
 

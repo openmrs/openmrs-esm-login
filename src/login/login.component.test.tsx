@@ -5,7 +5,15 @@ import { performLogin } from "./login.resource";
 import { cleanup, fireEvent, wait } from "@testing-library/react";
 import renderWithRouter from "../test-helpers/render-with-router";
 
-const historyMock = { push: jest.fn() };
+const historyMock = {
+  push: jest.fn().mockImplementationOnce(location => location)
+};
+const locationMock = {
+  state: {
+    referrer: "/home/patient-search"
+  }
+};
+
 const mockedLogin = performLogin as jest.Mock;
 
 jest.mock("./login.resource", () => ({
@@ -16,7 +24,9 @@ describe(`<Login />`, () => {
   let wrapper;
   beforeEach(() => {
     mockedLogin.mockReset();
-    wrapper = renderWithRouter(<Login history={historyMock} />);
+    wrapper = renderWithRouter(
+      <Login history={historyMock} location={locationMock} />
+    );
   });
 
   afterEach(cleanup);
@@ -63,8 +73,8 @@ describe(`<Login />`, () => {
       target: { value: "no-tax-fraud" }
     });
     fireEvent.click(wrapper.getByText("Login"));
-    await wait(() =>
-      expect(historyMock.push.mock.calls[0][0]).toBe("/login/location")
-    );
+    await wait(() => {
+      expect(historyMock.push.mock.calls[0][0]).toBe("/login/location");
+    });
   });
 });
