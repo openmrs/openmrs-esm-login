@@ -11,26 +11,24 @@ import {
 const historyMock = { push: jest.fn() };
 
 jest.mock("./choose-location.resource");
-const mockedGetLoginLocations = getLoginLocations as jest.Mock;
 const mockedSetSessionLocation = setSessionLocation as jest.Mock;
 
-mockedGetLoginLocations.mockReturnValue(
-  of([{ uuid: "111", display: "Earth" }, { uuid: "222", display: "Mars" }])
-);
+const loginLocations = [
+  { uuid: "111", display: "Earth" },
+  { uuid: "222", display: "Mars" }
+];
 
 describe(`<ChooseLocation />`, () => {
   let earthInput, marsInput, submitButton, wrapper;
   beforeEach(() => {
     // reset mocks
-    mockedGetLoginLocations.mockReset();
-    mockedSetSessionLocation.mockReset();
-    mockedGetLoginLocations.mockReturnValue(
-      of([{ uuid: "111", display: "Earth" }, { uuid: "222", display: "Mars" }])
-    );
-    mockedSetSessionLocation.mockResolvedValue({});
     historyMock.push.mockReset();
+    mockedSetSessionLocation.mockReset();
+    mockedSetSessionLocation.mockResolvedValue(null);
     // prepare components
-    wrapper = render(<ChooseLocation history={historyMock} />);
+    wrapper = render(
+      <ChooseLocation history={historyMock} loginLocations={loginLocations} />
+    );
     earthInput = wrapper.getByLabelText("Earth", { selector: "input" });
     marsInput = wrapper.getByLabelText("Mars", { selector: "input" });
     submitButton = wrapper.getByText("Confirm", { selector: "button" });
@@ -53,7 +51,9 @@ describe(`<ChooseLocation />`, () => {
     expect(setSessionLocation).not.toHaveBeenCalled();
     fireEvent.click(marsInput);
     fireEvent.click(submitButton);
-    await wait(() => expect(historyMock.push.mock.calls.length).toBe(1));
-    await wait(() => expect(historyMock.push.mock.calls[0][0]).toBe("/home"));
+    await wait(() => {
+      expect(historyMock.push.mock.calls.length).toBe(1);
+      expect(historyMock.push.mock.calls[0][0]).toBe("/home");
+    });
   });
 });
