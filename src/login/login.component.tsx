@@ -1,9 +1,11 @@
 import React from "react";
-import { performLogin } from "./login.resource";
 import { always } from "kremling";
-import { getCurrentUser } from "@openmrs/esm-api";
-import { useConfig } from "@openmrs/esm-module-config";
 import { Trans } from "react-i18next";
+import { getCurrentUser } from "@openmrs/esm-api";
+import { createErrorHandler } from "@openmrs/esm-error-handling";
+import { useConfig } from "@openmrs/esm-module-config";
+import { performLogin } from "./login.resource";
+import { setSessionLocation } from "../choose-location/choose-location.resource";
 import styles from "../styles.css";
 
 export default function Login(props: LoginProps) {
@@ -41,29 +43,42 @@ export default function Login(props: LoginProps) {
   }, [checkingIfLoggedIn]);
 
   React.useEffect(() => {
-    if (isLoggingIn) {
-      performLogin(username, password)
-        .then(data => {
-          const authData = data["data"];
-          if (authData) {
-            const { authenticated } = authData;
-            if (authenticated) {
-              if (config.chooseLocation.enabled) {
-                props.history.push("/login/location");
-              } else {
-                navigate(props, config.links.loginSuccess);
-              }
+    async function tryLoggingIn() {
+      const abortController = new AbortController();
+      try {
+        const loginRes = await performLogin(username, password);
+        const authData = loginRes["data"];
+        if (authData) {
+          const { authenticated } = authData;
+          if (authenticated) {
+            if (
+              config.chooseLocation.enabled &&
+              props.loginLocations.length > 1
+            ) {
+              props.history.push("/login/location");
             } else {
-              setAuthenticated(authenticated);
-              setErrorMessage("Incorrect username or password");
-              passwordInputRef.current.focus();
+              if (props.loginLocations.length == 1) {
+                await setSessionLocation(
+                  props.loginLocations[0].uuid,
+                  abortController
+                );
+              }
+              navigate(props, config.links.loginSuccess);
             }
+          } else {
+            setAuthenticated(authenticated);
+            setErrorMessage("Incorrect username or password");
+            passwordInputRef.current.focus();
           }
-        })
-        .catch(error => setErrorMessage(error.message))
-        .then(() => {
-          setIsLoggingIn(false);
-        });
+        }
+      } catch (error) {
+        setErrorMessage(error.message);
+      }
+      setIsLoggingIn(false);
+    }
+
+    if (isLoggingIn) {
+      tryLoggingIn();
     }
   }, [isLoggingIn]);
 
@@ -74,7 +89,7 @@ export default function Login(props: LoginProps) {
     ) {
       passwordInputRef.current.focus();
     }
-  }, [showPassword, passwordInputRef.current, usernameInputRef.current]);
+  }, [showPassword, checkingIfLoggedIn]);
 
   if (checkingIfLoggedIn) {
     return null;
@@ -188,10 +203,16 @@ function navigate(props, urlConfig: UrlConfig) {
   }
 }
 
+type Location = {
+  uuid: string;
+  display: string;
+};
+
 type LoginProps = {
   history?: {
     push(newUrl: String): void;
   };
+  loginLocations: Array<Location>;
 };
 
 type UrlConfig = {
