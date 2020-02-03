@@ -9,11 +9,6 @@ import renderWithRouter from "../test-helpers/render-with-router";
 const historyMock = {
   push: jest.fn().mockImplementationOnce(location => location)
 };
-const locationMock = {
-  state: {
-    referrer: "/home/patient-search"
-  }
-};
 
 const mockedLogin = performLogin as jest.Mock;
 jest.mock("./login.resource", () => ({
@@ -102,5 +97,31 @@ describe(`<Login />`, () => {
     fireEvent.click(wrapper.getByText("Login"));
     await wait();
     expect(wrapper.history.location.pathname).toBe("/home");
+  });
+
+  it(`after login with exactly one login location due to timeout it should return back to the current location`, async () => {
+    const locationMock = {
+      state: {
+        referrer: "/home/patient-search"
+      }
+    };
+    cleanup();
+    wrapper = renderWithRouter(Login, {
+      loginLocations: [loginLocations[0]],
+      location: locationMock
+    });
+    expect(setSessionLocation).not.toHaveBeenCalled();
+    mockedLogin.mockReturnValue(
+      Promise.resolve({ data: { authenticated: true } })
+    );
+    fireEvent.change(wrapper.getByLabelText("Username"), {
+      target: { value: "yoshi" }
+    });
+    fireEvent.change(wrapper.getByLabelText("Password"), {
+      target: { value: "no-tax-fraud" }
+    });
+    fireEvent.click(wrapper.getByText("Login"));
+    await wait();
+    expect(wrapper.history.location.pathname).toBe(locationMock.state.referrer);
   });
 });

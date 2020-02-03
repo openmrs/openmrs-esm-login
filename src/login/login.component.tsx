@@ -208,7 +208,11 @@ export default function Login(props: LoginProps) {
 
 function navigate(props, urlConfig: UrlConfig) {
   if (urlConfig.spa) {
-    props.history.push(urlConfig.url);
+    props.history.push(
+      props.location && props.location.state && props.location.state.referrer
+        ? props.location.state.referrer
+        : urlConfig.url
+    );
   } else {
     window.location.href = urlConfig.url;
   }
