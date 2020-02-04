@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import React from "react";
 import { of } from "rxjs";
-import { fireEvent, render, wait } from "@testing-library/react";
+import { cleanup, fireEvent, render, wait } from "@testing-library/react";
 import ChooseLocation from "./choose-location.component";
 import {
   getLoginLocations,
@@ -34,6 +34,8 @@ describe(`<ChooseLocation />`, () => {
     submitButton = wrapper.getByText("Confirm", { selector: "button" });
   });
 
+  afterEach(cleanup);
+
   it(`disables/enables the submit button when input is invalid/valid`, () => {
     expect(submitButton).toHaveAttribute("disabled");
     fireEvent.click(marsInput);
@@ -47,13 +49,42 @@ describe(`<ChooseLocation />`, () => {
     await wait(() => expect(setSessionLocation).toHaveBeenCalled());
   });
 
-  it(`send the user to the target page on submit`, async () => {
+  it(`send the user to the home page on submit`, async () => {
     expect(setSessionLocation).not.toHaveBeenCalled();
     fireEvent.click(marsInput);
     fireEvent.click(submitButton);
     await wait(() => {
       expect(historyMock.push.mock.calls.length).toBe(1);
       expect(historyMock.push.mock.calls[0][0]).toBe("/home");
+    });
+  });
+
+  it(`send the user to the redirect page on submit`, async () => {
+    cleanup();
+    const locationMock = {
+      state: {
+        referrer: "/home/patient-search"
+      }
+    };
+    wrapper = render(
+      <ChooseLocation
+        history={historyMock}
+        loginLocations={loginLocations}
+        location={locationMock}
+      />
+    );
+
+    marsInput = wrapper.getByLabelText("Mars", { selector: "input" });
+    submitButton = wrapper.getByText("Confirm", { selector: "button" });
+
+    expect(setSessionLocation).not.toHaveBeenCalled();
+    fireEvent.click(marsInput);
+    fireEvent.click(submitButton);
+    await wait(() => {
+      expect(historyMock.push.mock.calls.length).toBe(1);
+      expect(historyMock.push.mock.calls[0][0]).toBe(
+        locationMock.state.referrer
+      );
     });
   });
 });

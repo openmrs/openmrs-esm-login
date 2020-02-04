@@ -6,6 +6,10 @@ import { setSessionLocation } from "../choose-location/choose-location.resource"
 import { cleanup, fireEvent, wait } from "@testing-library/react";
 import renderWithRouter from "../test-helpers/render-with-router";
 
+const historyMock = {
+  push: jest.fn().mockImplementationOnce(location => location)
+};
+
 const mockedLogin = performLogin as jest.Mock;
 jest.mock("./login.resource", () => ({
   performLogin: jest.fn()
@@ -93,5 +97,31 @@ describe(`<Login />`, () => {
     fireEvent.click(wrapper.getByText("Login"));
     await wait();
     expect(wrapper.history.location.pathname).toBe("/home");
+  });
+
+  it(`should redirect back to referring page on successful login when there is only one location`, async () => {
+    const locationMock = {
+      state: {
+        referrer: "/home/patient-search"
+      }
+    };
+    cleanup();
+    wrapper = renderWithRouter(Login, {
+      loginLocations: [loginLocations[0]],
+      location: locationMock
+    });
+    expect(setSessionLocation).not.toHaveBeenCalled();
+    mockedLogin.mockReturnValue(
+      Promise.resolve({ data: { authenticated: true } })
+    );
+    fireEvent.change(wrapper.getByLabelText("Username"), {
+      target: { value: "yoshi" }
+    });
+    fireEvent.change(wrapper.getByLabelText("Password"), {
+      target: { value: "no-tax-fraud" }
+    });
+    fireEvent.click(wrapper.getByText("Login"));
+    await wait();
+    expect(wrapper.history.location.pathname).toBe(locationMock.state.referrer);
   });
 });

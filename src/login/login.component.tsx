@@ -29,7 +29,15 @@ export default function Login(props: LoginProps) {
         authResult => {
           setCheckingIfLogged(false);
           if (authResult.authenticated) {
-            navigate(props, config.links.loginSuccess);
+            if (
+              props.location &&
+              props.location.state &&
+              props.location.state.referrer
+            ) {
+              props.history.push(props.location.state.referrer);
+            } else {
+              navigate(props, config.links.loginSuccess);
+            }
           }
         },
         err => {
@@ -55,7 +63,10 @@ export default function Login(props: LoginProps) {
               config.chooseLocation.enabled &&
               props.loginLocations.length > 1
             ) {
-              props.history.push("/login/location");
+              props.history.push(
+                "/login/location",
+                props.location ? props.location.state : undefined
+              );
             } else {
               if (props.loginLocations.length == 1) {
                 await setSessionLocation(
@@ -63,7 +74,15 @@ export default function Login(props: LoginProps) {
                   abortController
                 );
               }
-              navigate(props, config.links.loginSuccess);
+              if (
+                props.location &&
+                props.location.state &&
+                props.location.state.referrer
+              ) {
+                props.history.push(props.location.state.referrer);
+              } else {
+                navigate(props, config.links.loginSuccess);
+              }
             }
           } else {
             setAuthenticated(authenticated);
@@ -209,8 +228,9 @@ type Location = {
 };
 
 type LoginProps = {
+  location?: any;
   history?: {
-    push(newUrl: String): void;
+    push(newUrl: String, state?: object): void;
   };
   loginLocations: Array<Location>;
 };

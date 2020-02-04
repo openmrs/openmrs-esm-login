@@ -21,7 +21,15 @@ export default function ChooseLocation(props: ChooseLocationProps) {
     if (isSubmitting) {
       setSessionLocation(location, abortController)
         .then(() => {
-          navigate(props, config.links.loginSuccess);
+          if (
+            props.location &&
+            props.location.state &&
+            props.location.state.referrer
+          ) {
+            props.history.push(props.location.state.referrer);
+          } else {
+            navigate(props, config.links.loginSuccess);
+          }
         })
         .catch(createErrorHandler());
     }
@@ -90,6 +98,7 @@ const CardHeader: React.FunctionComponent = props => (
 );
 
 type ChooseLocationProps = {
+  location?: any;
   history?: {
     push(newUrl: String): void;
   };
