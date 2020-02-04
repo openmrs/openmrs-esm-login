@@ -74,7 +74,15 @@ export default function Login(props: LoginProps) {
                   abortController
                 );
               }
-              navigate(props, config.links.loginSuccess);
+              if (
+                props.location &&
+                props.location.state &&
+                props.location.state.referrer
+              ) {
+                props.history.push(props.location.state.referrer);
+              } else {
+                navigate(props, config.links.loginSuccess);
+              }
             }
           } else {
             setAuthenticated(authenticated);
@@ -208,11 +216,7 @@ export default function Login(props: LoginProps) {
 
 function navigate(props, urlConfig: UrlConfig) {
   if (urlConfig.spa) {
-    props.history.push(
-      props.location && props.location.state && props.location.state.referrer
-        ? props.location.state.referrer
-        : urlConfig.url
-    );
+    props.history.push(urlConfig.url);
   } else {
     window.location.href = urlConfig.url;
   }

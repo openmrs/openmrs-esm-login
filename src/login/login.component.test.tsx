@@ -99,7 +99,7 @@ describe(`<Login />`, () => {
     expect(wrapper.history.location.pathname).toBe("/home");
   });
 
-  it(`after login with exactly one login location due to timeout it should return back to the current location`, async () => {
+  it(`should redirect back to referring page on successful login when there is only one location`, async () => {
     const locationMock = {
       state: {
         referrer: "/home/patient-search"
