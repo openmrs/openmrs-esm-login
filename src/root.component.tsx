@@ -9,7 +9,9 @@ import { getLoginLocations } from "./choose-location/choose-location.resource";
 
 defineConfigSchema("@openmrs/esm-login", {
   chooseLocation: {
-    enabled: true
+    enabled: {
+      default: true
+    }
   },
   links: {
     loginSuccess: {
