@@ -46,9 +46,13 @@ export default function ChooseLocation(props: ChooseLocationProps) {
           value={option.uuid}
           onChange={evt => setLocation(evt.target.value)}
           ref={locationInputRef}
-          className={`omrs-margin-8`}
         />
-        <label htmlFor={option.uuid}>{option.display}</label>
+        <label
+          htmlFor={option.uuid}
+          className={`omrs-padding-4 ${styles["location-radio-button-label"]}`}
+        >
+          {option.display}
+        </label>
       </div>
     </React.Fragment>
   );
