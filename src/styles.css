@@ -88,7 +88,7 @@
   background-color: var(--omrs-color-bg-high-contrast);
   list-style: none;
   display: grid;
-  grid-auto-columns: 20rem;
+  grid-auto-columns: 21rem;
   grid-auto-flow: column;
   grid-template-rows: repeat(20, min-content);
   margin-left: 0.5rem;
@@ -107,7 +107,7 @@
   padding-bottom: 0.25rem;
   border-bottom: 1px solid var(--omrs-color-bg-low-contrast);
   border-radius: 0.25rem;
-  width: 19.5rem;
+  width: 20.5rem;
 }
 
 .location-radio-button-label {
