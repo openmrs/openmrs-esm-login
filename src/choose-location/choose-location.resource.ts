@@ -15,8 +15,8 @@ export function setSessionLocation(
     method: "POST",
     body: { location: locationUuid },
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    signal: abortController.signal
+    signal: abortController.signal,
   });
 }

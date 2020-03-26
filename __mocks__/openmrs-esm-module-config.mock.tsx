@@ -5,17 +5,17 @@ export function defineConfigSchema() {}
 export function useConfig() {
   return {
     chooseLocation: {
-      enabled: true
+      enabled: true,
     },
     logo: {
-      src: null
+      src: null,
     },
     links: {
       loginSuccess: {
         url: "/home",
-        spa: true
-      }
-    }
+        spa: true,
+      },
+    },
   };
 }
 

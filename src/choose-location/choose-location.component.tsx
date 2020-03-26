@@ -44,7 +44,7 @@ export default function ChooseLocation(props: ChooseLocationProps) {
           type="radio"
           name="location"
           value={option.uuid}
-          onChange={evt => setLocation(evt.target.value)}
+          onChange={(evt) => setLocation(evt.target.value)}
           ref={locationInputRef}
         />
         <label
@@ -95,7 +95,7 @@ export default function ChooseLocation(props: ChooseLocationProps) {
   }
 }
 
-const CardHeader: React.FunctionComponent = props => (
+const CardHeader: React.FunctionComponent = (props) => (
   <div className={styles["card-header"]}>
     <h2 className={`omrs-margin-8 omrs-margin-left-12`}>{props.children}</h2>
   </div>

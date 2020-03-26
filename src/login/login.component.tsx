@@ -24,9 +24,9 @@ export default function Login(props: LoginProps) {
   React.useEffect(() => {
     if (checkingIfLoggedIn) {
       const subscription = getCurrentUser({
-        includeAuthStatus: true
+        includeAuthStatus: true,
       }).subscribe(
-        authResult => {
+        (authResult) => {
           setCheckingIfLogged(false);
           if (authResult.authenticated) {
             if (
@@ -40,7 +40,7 @@ export default function Login(props: LoginProps) {
             }
           }
         },
-        err => {
+        (err) => {
           setCheckingIfLogged(false);
           throw err;
         }
@@ -140,7 +140,7 @@ export default function Login(props: LoginProps) {
               type="text"
               name="username"
               value={username}
-              onChange={evt => setUsername(evt.target.value)}
+              onChange={(evt) => setUsername(evt.target.value)}
               ref={usernameInputRef}
               autoFocus
               required
@@ -159,7 +159,7 @@ export default function Login(props: LoginProps) {
               type={showPassword ? "text" : "password"}
               name="password"
               value={password}
-              onChange={evt => setPassword(evt.target.value)}
+              onChange={(evt) => setPassword(evt.target.value)}
               ref={passwordInputRef}
               required
             />

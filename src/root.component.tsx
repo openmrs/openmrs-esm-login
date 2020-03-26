@@ -10,27 +10,27 @@ import { getLoginLocations } from "./choose-location/choose-location.resource";
 defineConfigSchema("@openmrs/esm-login", {
   chooseLocation: {
     enabled: {
-      default: true
-    }
+      default: true,
+    },
   },
   links: {
     loginSuccess: {
       url: {
-        default: "/home"
+        default: "/home",
       },
       spa: {
-        default: true
-      }
-    }
+        default: true,
+      },
+    },
   },
   logo: {
     src: {
-      default: null // defaults to an SVG Sprite
+      default: null, // defaults to an SVG Sprite
     },
     alt: {
-      default: "Logo"
-    }
-  }
+      default: "Logo",
+    },
+  },
 });
 
 function Root(props) {
@@ -39,7 +39,7 @@ function Root(props) {
 
   React.useEffect(() => {
     const sub = getLoginLocations().subscribe(
-      locations => setLoginLocations(locations),
+      (locations) => setLoginLocations(locations),
       createErrorHandler()
     );
     return () => sub.unsubscribe();
@@ -50,12 +50,12 @@ function Root(props) {
       <Route
         exact
         path="/login"
-        render={props => <Login {...props} loginLocations={loginLocations} />}
+        render={(props) => <Login {...props} loginLocations={loginLocations} />}
       />
       <Route
         exact
         path="/login/location"
-        render={props => (
+        render={(props) => (
           <ChooseLocation {...props} loginLocations={loginLocations} />
         )}
       />
@@ -64,5 +64,5 @@ function Root(props) {
 }
 export default openmrsRootDecorator({
   featureName: "login",
-  moduleName: "@openmrs/esm-login"
+  moduleName: "@openmrs/esm-login",
 })(Root);
