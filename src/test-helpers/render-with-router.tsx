@@ -8,7 +8,7 @@ export default function renderWithRouter(
   props,
   {
     route = "/",
-    history = createMemoryHistory({ initialEntries: [route] })
+    history = createMemoryHistory({ initialEntries: [route] }),
   } = {}
 ) {
   return {
@@ -17,6 +17,6 @@ export default function renderWithRouter(
         {<Component {...props} history={history} />}
       </Router>
     ),
-    history
+    history,
   };
 }

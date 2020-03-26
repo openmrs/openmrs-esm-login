@@ -7,22 +7,22 @@ import { cleanup, fireEvent, wait } from "@testing-library/react";
 import renderWithRouter from "../test-helpers/render-with-router";
 
 const historyMock = {
-  push: jest.fn().mockImplementationOnce(location => location)
+  push: jest.fn().mockImplementationOnce((location) => location),
 };
 
 const mockedLogin = performLogin as jest.Mock;
 jest.mock("./login.resource", () => ({
-  performLogin: jest.fn()
+  performLogin: jest.fn(),
 }));
 
 const mockedSetSessionLocation = setSessionLocation as jest.Mock;
 jest.mock("../choose-location/choose-location.resource", () => ({
-  setSessionLocation: jest.fn()
+  setSessionLocation: jest.fn(),
 }));
 
 const loginLocations = [
   { uuid: "111", display: "Earth" },
-  { uuid: "222", display: "Mars" }
+  { uuid: "222", display: "Mars" },
 ];
 
 describe(`<Login />`, () => {
@@ -44,11 +44,11 @@ describe(`<Login />`, () => {
   it(`disables/enables the submit button when input is invalid/valid`, () => {
     expect(wrapper.getByText("Login")).toHaveAttribute("disabled");
     fireEvent.change(wrapper.getByLabelText("Username"), {
-      target: { value: "yoshi" }
+      target: { value: "yoshi" },
     });
     expect(wrapper.getByText("Login")).toHaveAttribute("disabled");
     fireEvent.change(wrapper.getByLabelText("Password"), {
-      target: { value: "no-tax-fraud" }
+      target: { value: "no-tax-fraud" },
     });
     expect(wrapper.getByText("Login")).not.toHaveAttribute("disabled");
   });
@@ -57,10 +57,10 @@ describe(`<Login />`, () => {
     mockedLogin.mockReturnValue(Promise.resolve({ some: "data" }));
     expect(performLogin).not.toHaveBeenCalled();
     fireEvent.change(wrapper.getByLabelText("Username"), {
-      target: { value: "yoshi" }
+      target: { value: "yoshi" },
     });
     fireEvent.change(wrapper.getByLabelText("Password"), {
-      target: { value: "no-tax-fraud" }
+      target: { value: "no-tax-fraud" },
     });
     fireEvent.click(wrapper.getByText("Login"));
     expect(performLogin).toHaveBeenCalled();
@@ -71,10 +71,10 @@ describe(`<Login />`, () => {
       Promise.resolve({ data: { authenticated: true } })
     );
     fireEvent.change(wrapper.getByLabelText("Username"), {
-      target: { value: "yoshi" }
+      target: { value: "yoshi" },
     });
     fireEvent.change(wrapper.getByLabelText("Password"), {
-      target: { value: "no-tax-fraud" }
+      target: { value: "no-tax-fraud" },
     });
     fireEvent.click(wrapper.getByText("Login"));
     await wait();
@@ -89,10 +89,10 @@ describe(`<Login />`, () => {
       Promise.resolve({ data: { authenticated: true } })
     );
     fireEvent.change(wrapper.getByLabelText("Username"), {
-      target: { value: "yoshi" }
+      target: { value: "yoshi" },
     });
     fireEvent.change(wrapper.getByLabelText("Password"), {
-      target: { value: "no-tax-fraud" }
+      target: { value: "no-tax-fraud" },
     });
     fireEvent.click(wrapper.getByText("Login"));
     await wait();
@@ -102,23 +102,23 @@ describe(`<Login />`, () => {
   it(`should redirect back to referring page on successful login when there is only one location`, async () => {
     const locationMock = {
       state: {
-        referrer: "/home/patient-search"
-      }
+        referrer: "/home/patient-search",
+      },
     };
     cleanup();
     wrapper = renderWithRouter(Login, {
       loginLocations: [loginLocations[0]],
-      location: locationMock
+      location: locationMock,
     });
     expect(setSessionLocation).not.toHaveBeenCalled();
     mockedLogin.mockReturnValue(
       Promise.resolve({ data: { authenticated: true } })
     );
     fireEvent.change(wrapper.getByLabelText("Username"), {
-      target: { value: "yoshi" }
+      target: { value: "yoshi" },
     });
     fireEvent.change(wrapper.getByLabelText("Password"), {
-      target: { value: "no-tax-fraud" }
+      target: { value: "no-tax-fraud" },
     });
     fireEvent.click(wrapper.getByText("Login"));
     await wait();

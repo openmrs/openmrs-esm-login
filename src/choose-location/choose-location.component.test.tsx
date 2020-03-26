@@ -5,7 +5,7 @@ import { cleanup, fireEvent, render, wait } from "@testing-library/react";
 import ChooseLocation from "./choose-location.component";
 import {
   getLoginLocations,
-  setSessionLocation
+  setSessionLocation,
 } from "./choose-location.resource";
 
 const historyMock = { push: jest.fn() };
@@ -15,7 +15,7 @@ const mockedSetSessionLocation = setSessionLocation as jest.Mock;
 
 const loginLocations = [
   { uuid: "111", display: "Earth" },
-  { uuid: "222", display: "Mars" }
+  { uuid: "222", display: "Mars" },
 ];
 
 describe(`<ChooseLocation />`, () => {
@@ -63,8 +63,8 @@ describe(`<ChooseLocation />`, () => {
     cleanup();
     const locationMock = {
       state: {
-        referrer: "/home/patient-search"
-      }
+        referrer: "/home/patient-search",
+      },
     };
     wrapper = render(
       <ChooseLocation

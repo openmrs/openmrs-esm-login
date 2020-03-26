@@ -8,21 +8,21 @@ module.exports = {
     filename: "openmrs-esm-login.js",
     libraryTarget: "system",
     path: path.resolve(__dirname, "dist"),
-    jsonpFunction: "webpackJsonp_openmrs_esm_login"
+    jsonpFunction: "webpackJsonp_openmrs_esm_login",
   },
   module: {
     rules: [
       {
         parser: {
-          system: false
-        }
+          system: false,
+        },
       },
       {
         test: /\.m?(js|ts|tsx)$/,
         exclude: /(node_modules|bower_components)/,
         use: {
-          loader: "babel-loader"
-        }
+          loader: "babel-loader",
+        },
       },
       {
         test: /\.css$/,
@@ -31,29 +31,29 @@ module.exports = {
           {
             loader: "css-loader",
             options: {
-              modules: true
-            }
-          }
-        ]
-      }
-    ]
+              modules: true,
+            },
+          },
+        ],
+      },
+    ],
   },
   devtool: "sourcemap",
   devServer: {
     headers: {
-      "Access-Control-Allow-Origin": "*"
+      "Access-Control-Allow-Origin": "*",
     },
-    disableHostCheck: true
+    disableHostCheck: true,
   },
   externals: [
     "react",
     "react-dom",
     /^@openmrs\/esm.*/,
     "i18next",
-    "react-i18next"
+    "react-i18next",
   ],
   plugins: [new ForkTsCheckerWebpackPlugin(), new CleanWebpackPlugin()],
   resolve: {
-    extensions: [".tsx", ".ts", ".jsx", ".js"]
-  }
+    extensions: [".tsx", ".ts", ".jsx", ".js"],
+  },
 };
