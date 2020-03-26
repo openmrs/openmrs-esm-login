@@ -88,7 +88,7 @@
   background-color: var(--omrs-color-bg-high-contrast);
   list-style: none;
   display: grid;
-  grid-auto-columns: 21rem;
+  grid-auto-columns: 23rem;
   grid-auto-flow: column;
   grid-template-rows: repeat(20, min-content);
   margin-left: 0.5rem;
