@@ -13,6 +13,7 @@
     "lint": "eslint src --ext js,jsx,ts,tsx",
     "prettier": "prettier --write './**'",
     "typescript": "tsc",
+    "autodoc": "config-autodoc -e src/root.component.tsx",
     "prepublishOnly": "npm run build",
     "test": "jest --config jest.config.json"
   },
@@ -21,7 +22,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged && concurrently 'npm:lint' 'npm:test' 'npm:typescript'"
+      "pre-commit": "pretty-quick --staged && concurrently 'npm:lint' 'npm:test' 'npm:typescript' 'npm:autodoc' && git add README.md"
     }
   },
   "types": "src/openmrs-esm-login.d.tsx",
@@ -39,6 +40,7 @@
     "@babel/preset-env": "^7.9.0",
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
+    "@openmrs/config-cli": "^1.0.0",
     "@openmrs/react-root-decorator": "^3.2.0",
     "@testing-library/jest-dom": "^5.2.0",
     "@testing-library/react": "^9.5.0",
