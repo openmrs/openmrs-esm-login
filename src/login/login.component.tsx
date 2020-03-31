@@ -5,6 +5,7 @@ import { getCurrentUser } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useConfig } from "@openmrs/esm-module-config";
 import { performLogin } from "./login.resource";
+import navigate from "../navigate";
 import { setSessionLocation } from "../choose-location/choose-location.resource";
 import styles from "../styles.css";
 
@@ -36,7 +37,11 @@ export default function Login(props: LoginProps) {
             ) {
               props.history.push(props.location.state.referrer);
             } else {
-              navigate(props, config.links.loginSuccess);
+              navigate(
+                props,
+                config.links.loginSuccess.spa,
+                config.links.loginSuccess.url
+              );
             }
           }
         },
@@ -81,7 +86,11 @@ export default function Login(props: LoginProps) {
               ) {
                 props.history.push(props.location.state.referrer);
               } else {
-                navigate(props, config.links.loginSuccess);
+                navigate(
+                  props,
+                  config.links.loginSuccess.spa,
+                  config.links.loginSuccess.url
+                );
               }
             }
           } else {
@@ -214,14 +223,6 @@ export default function Login(props: LoginProps) {
   }
 }
 
-function navigate(props, urlConfig: UrlConfig) {
-  if (urlConfig.spa) {
-    props.history.push(urlConfig.url);
-  } else {
-    window.location.href = urlConfig.url;
-  }
-}
-
 type Location = {
   uuid: string;
   display: string;
@@ -233,9 +234,4 @@ type LoginProps = {
     push(newUrl: String, state?: object): void;
   };
   loginLocations: Array<Location>;
-};
-
-type UrlConfig = {
-  spa: boolean;
-  url: string;
 };

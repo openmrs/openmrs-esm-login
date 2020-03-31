@@ -5,6 +5,7 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { getCurrentUser } from "@openmrs/esm-api";
 import { Trans } from "react-i18next";
 import { setSessionLocation } from "./choose-location.resource";
+import navigate from "../navigate";
 import styles from "../styles.css";
 
 export default function ChooseLocation(props: ChooseLocationProps) {
@@ -28,7 +29,11 @@ export default function ChooseLocation(props: ChooseLocationProps) {
           ) {
             props.history.push(props.location.state.referrer);
           } else {
-            navigate(props, config.links.loginSuccess);
+            navigate(
+              props,
+              config.links.loginSuccess.spa,
+              config.links.loginSuccess.url
+            );
           }
         })
         .catch(createErrorHandler());
@@ -107,19 +112,6 @@ type ChooseLocationProps = {
     push(newUrl: String): void;
   };
   loginLocations: Array<RadioInputOption>;
-};
-
-function navigate(props, urlConfig: UrlConfig) {
-  if (urlConfig.spa) {
-    props.history.push(urlConfig.url);
-  } else {
-    window.location.href = urlConfig.url;
-  }
-}
-
-type UrlConfig = {
-  spa: boolean;
-  url: string;
 };
 
 type RadioInputOption = {
