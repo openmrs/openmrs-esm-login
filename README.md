@@ -11,12 +11,17 @@ See the [openmrs-esm-module-config docs](https://wiki.openmrs.org/display/projec
 for information about how to provide configuration files.
 
 - chooseLocation
-  - enabled (default: true)
+  - **enabled** *(default: true)*\
+    Whether to show a 'Choose Location' screen after login. If true, the user will be taken to the loginSuccess URL after they choose a location.\
+    *must be a boolean.*
 - links
-  - loginSuccess
-    - url (default: /home)
-    - spa (default: true)
+  - loginSuccess\
+    Where to take the user after they are logged in.
+    - **url** *(default: /home)*
+    - **spa** *(default: true)*
 - logo
-  - src (default: null)
-  - alt (default: Logo)
+  - **src** *(default: null)*\
+    A path or URL to an image. Defaults to the OpenMRS SVG sprite.
+  - **alt** *(default: Logo)*\
+    Alt text, shown on hover
 <!-- END OF GENERATED -->
