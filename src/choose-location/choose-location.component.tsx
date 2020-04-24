@@ -52,10 +52,7 @@ export default function ChooseLocation(props: ChooseLocationProps) {
           onChange={(evt) => setLocation(evt.target.value)}
           ref={locationInputRef}
         />
-        <label
-          htmlFor={option.uuid}
-          className={`omrs-padding-4 ${styles["location-radio-button-label"]}`}
-        >
+        <label htmlFor={option.uuid} className={`omrs-padding-4`}>
           {option.display}
         </label>
       </div>
