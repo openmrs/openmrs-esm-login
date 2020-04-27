@@ -18,6 +18,12 @@ export default function ChooseLocation(props: ChooseLocationProps) {
   const [currentUser, setCurrentUser] = React.useState(null);
 
   React.useEffect(() => {
+    getCurrentUser().subscribe((user) => {
+      setCurrentUser(user ? user.display : currentUser);
+    }, createErrorHandler());
+  });
+
+  React.useEffect(() => {
     const abortController = new AbortController();
     if (isSubmitting) {
       setSessionLocation(location, abortController)
@@ -61,8 +67,9 @@ export default function ChooseLocation(props: ChooseLocationProps) {
 
   return (
     <div className={`canvas ${styles["container"]}`}>
-      <h1>
-        <Trans i18nKey="welcome">Welcome {currentUser}</Trans>
+      <h1 className={styles["welcome-msg"]}>
+        <Trans i18nKey="welcome">Welcome </Trans>
+        {currentUser}
       </h1>
       <form onSubmit={handleSubmit} ref={formRef}>
         <div className={`${styles["location-card"]} omrs-card`}>
