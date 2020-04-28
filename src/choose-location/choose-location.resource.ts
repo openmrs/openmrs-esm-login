@@ -20,3 +20,8 @@ export function setSessionLocation(
     signal: abortController.signal,
   });
 }
+export function searchLocationsFhir(location: string) {
+  return openmrsFetch(`/ws/fhir2/Location?name=${location}`, {
+    method: "GET",
+  });
+}
