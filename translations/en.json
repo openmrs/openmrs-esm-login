@@ -3,5 +3,6 @@
   "location": "Location",
   "login": "Login",
   "password": "Password",
-  "username": "Username"
+  "username": "Username",
+  "welcome": "Welcome "
 }
