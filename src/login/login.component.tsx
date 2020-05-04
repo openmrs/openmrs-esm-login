@@ -30,11 +30,7 @@ export default function Login(props: LoginProps) {
         (authResult) => {
           setCheckingIfLogged(false);
           if (authResult.authenticated) {
-            if (
-              props.location &&
-              props.location.state &&
-              props.location.state.referrer
-            ) {
+            if (props.location?.state?.referrer) {
               props.history.push(props.location.state.referrer);
             } else {
               navigate(
@@ -79,11 +75,7 @@ export default function Login(props: LoginProps) {
                   abortController
                 );
               }
-              if (
-                props.location &&
-                props.location.state &&
-                props.location.state.referrer
-              ) {
+              if (props.location?.state?.referrer) {
                 props.history.push(props.location.state.referrer);
               } else {
                 navigate(
