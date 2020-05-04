@@ -68,7 +68,7 @@ export default function ChooseLocation(props: ChooseLocationProps) {
   return (
     <div className={`canvas ${styles["container"]}`}>
       <h1 className={styles["welcome-msg"]}>
-        <Trans i18nKey="welcome">Welcome </Trans>
+        <Trans i18nKey="welcome">Welcome</Trans>&nbsp;
         {currentUser}
       </h1>
       <form onSubmit={handleSubmit} ref={formRef}>
