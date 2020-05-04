@@ -53,7 +53,7 @@ describe(`<Login />`, () => {
     expect(wrapper.getByText("Login")).not.toHaveAttribute("disabled");
   });
 
-  it(`makes an API request when you submit the form`, () => {
+  it(`makes an API request when you submit the form`, async () => {
     mockedLogin.mockReturnValue(Promise.resolve({ some: "data" }));
     expect(performLogin).not.toHaveBeenCalled();
     fireEvent.change(wrapper.getByLabelText("Username"), {
@@ -63,6 +63,7 @@ describe(`<Login />`, () => {
       target: { value: "no-tax-fraud" },
     });
     fireEvent.click(wrapper.getByText("Login"));
+    await wait();
     expect(performLogin).toHaveBeenCalled();
   });
 
