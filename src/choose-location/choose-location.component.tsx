@@ -28,11 +28,7 @@ export default function ChooseLocation(props: ChooseLocationProps) {
     if (isSubmitting) {
       setSessionLocation(location, abortController)
         .then(() => {
-          if (
-            props.location &&
-            props.location.state &&
-            props.location.state.referrer
-          ) {
+          if (props.location?.state?.referrer) {
             props.history.push(props.location.state.referrer);
           } else {
             navigate(
