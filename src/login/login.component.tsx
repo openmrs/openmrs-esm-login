@@ -199,7 +199,9 @@ export default function Login(props: LoginProps) {
         </form>
       </div>
       <div className="omrs-margin-top-32">
-        <p className={styles["powered-by-txt"]}>Powered by</p>
+        <p className={styles["powered-by-txt"]}>
+          <Trans i18nKey="poweredBy">Powered by</Trans>
+        </p>
         <div>
           <svg role="img" className={styles["powered-by-logo"]}>
             <use xlinkHref="#omrs-logo-partial-mono"></use>

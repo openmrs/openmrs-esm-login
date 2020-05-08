@@ -4,5 +4,6 @@
   "login": "Login",
   "password": "Password",
   "username": "Username",
-  "welcome": "Welcome"
+  "welcome": "Welcome",
+  "poweredBy": "Powered by"
 }
