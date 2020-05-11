@@ -5,7 +5,7 @@ import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { BrowserRouter, Route } from "react-router-dom";
 import Login from "./login/login.component";
 import ChooseLocation from "./choose-location/choose-location.component";
-import { getLoginLocations } from "./choose-location/choose-location.resource";
+import { searchLocationsFhir } from "./choose-location/choose-location.resource";
 
 defineConfigSchema("@openmrs/esm-login", {
   chooseLocation: {
@@ -47,11 +47,12 @@ function Root(props) {
   const [loginLocations, setLoginLocations] = React.useState([]);
 
   React.useEffect(() => {
-    const sub = getLoginLocations().subscribe(
-      (locations) => setLoginLocations(locations),
+    const ac = new AbortController();
+    const sub = searchLocationsFhir("").then(
+      (locations) => setLoginLocations(locations.data.entry),
       createErrorHandler()
     );
-    return () => sub.unsubscribe();
+    return () => ac.abort();
   }, []);
 
   return (
