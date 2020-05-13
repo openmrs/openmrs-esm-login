@@ -1,13 +1,19 @@
 import React from "react";
+import { RouteComponentProps, StaticContext } from "react-router";
 import { always } from "kremling";
 import { Trans } from "react-i18next";
 import { getCurrentUser } from "@openmrs/esm-api";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { useConfig } from "@openmrs/esm-module-config";
 import { performLogin } from "./login.resource";
 import navigate from "../navigate";
-import { setSessionLocation } from "../choose-location/choose-location.resource";
 import styles from "../styles.css";
+
+interface LoginReferrer {
+  referrer?: string;
+}
+
+interface LoginProps
+  extends RouteComponentProps<{}, StaticContext, LoginReferrer> {}
 
 export default function Login(props: LoginProps) {
   const config = useConfig();
@@ -53,38 +59,16 @@ export default function Login(props: LoginProps) {
 
   React.useEffect(() => {
     async function tryLoggingIn() {
-      const abortController = new AbortController();
       try {
         const loginRes = await performLogin(username, password);
         const authData = loginRes["data"];
         if (authData) {
           const { authenticated } = authData;
           if (authenticated) {
-            if (
-              config.chooseLocation.enabled &&
-              props.loginLocations.length > 1
-            ) {
-              props.history.push(
-                "/login/location",
-                props.location ? props.location.state : undefined
-              );
-            } else {
-              if (props.loginLocations.length == 1) {
-                await setSessionLocation(
-                  props.loginLocations[0].uuid,
-                  abortController
-                );
-              }
-              if (props.location?.state?.referrer) {
-                props.history.push(props.location.state.referrer);
-              } else {
-                navigate(
-                  props,
-                  config.links.loginSuccess.spa,
-                  config.links.loginSuccess.url
-                );
-              }
-            }
+            props.history.push(
+              "/login/location",
+              props.location ? props.location.state : undefined
+            );
           } else {
             setAuthenticated(authenticated);
             setErrorMessage("Incorrect username or password");
@@ -94,6 +78,7 @@ export default function Login(props: LoginProps) {
       } catch (error) {
         setErrorMessage(error.message);
       }
+
       setIsLoggingIn(false);
     }
 
@@ -216,16 +201,3 @@ export default function Login(props: LoginProps) {
     setIsLoggingIn(true);
   }
 }
-
-type Location = {
-  uuid: string;
-  display: string;
-};
-
-type LoginProps = {
-  location?: any;
-  history?: {
-    push(newUrl: String, state?: object): void;
-  };
-  loginLocations: Array<Location>;
-};

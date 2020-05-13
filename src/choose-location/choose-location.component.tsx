@@ -7,25 +7,101 @@ import { Trans } from "react-i18next";
 import {
   setSessionLocation,
   searchLocationsFhir,
+  LocationEntry,
 } from "./choose-location.resource";
 import navigate from "../navigate";
 import styles from "../styles.css";
 import { debounce, isEmpty } from "lodash";
+import { RouteComponentProps, StaticContext } from "react-router";
+
+interface LoginReferrer {
+  referrer?: string;
+}
+
+interface ChooseLocationProps
+  extends RouteComponentProps<{}, StaticContext, LoginReferrer> {}
 
 export default function ChooseLocation(props: ChooseLocationProps) {
   const config = useConfig();
-  const [locationData, setLocationData] = React.useState({
+  const [loginLocations, setLoginLocations] = React.useState<
+    Array<LocationEntry>
+  >(undefined);
+  const [loading, setLoading] = React.useState(true);
+
+  const changeLocation = (locationUuid?: string) => {
+    const sessionDefined = locationUuid
+      ? setSessionLocation(locationUuid, new AbortController())
+      : Promise.resolve();
+
+    sessionDefined
+      .then(() => {
+        if (props.location?.state?.referrer) {
+          props.history.push(props.location.state.referrer);
+        } else {
+          navigate(
+            props,
+            config.links.loginSuccess.spa,
+            config.links.loginSuccess.url
+          );
+        }
+      })
+      .catch(createErrorHandler());
+  };
+
+  React.useEffect(() => {
+    const ac = new AbortController();
+
+    searchLocationsFhir("").then(
+      (locations) => setLoginLocations(locations.data.entry),
+      createErrorHandler()
+    );
+
+    return () => ac.abort();
+  }, []);
+
+  React.useEffect(() => {
+    if (loginLocations) {
+      if (!config.chooseLocation.enabled || loginLocations.length < 1) {
+        changeLocation(loginLocations[0]?.resource.id);
+      } else {
+        setLoading(false);
+      }
+    }
+  }, [loginLocations]);
+
+  if (!loading) {
+    return (
+      <LocationPicker
+        loginLocations={loginLocations}
+        onChangeLocation={changeLocation}
+      />
+    );
+  }
+
+  return <div>Loading ...</div>;
+}
+
+interface LocationPickerProps {
+  loginLocations: Array<LocationEntry>;
+  onChangeLocation(locationUuid: string): void;
+}
+
+interface LocationDataState {
+  activeLocation: string;
+  locationResult: Array<LocationEntry>;
+}
+
+const LocationPicker: React.FC<LocationPickerProps> = (props) => {
+  const [locationData, setLocationData] = React.useState<LocationDataState>({
     activeLocation: "",
-    locationResult: [],
-    emptyResult: false,
+    locationResult: props.loginLocations,
   });
   const [searchTerm, setSearchTerm] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState("");
-  const locationInputRef = React.useRef<HTMLInputElement>(null);
-  const formRef = React.useRef<HTMLFormElement>(null);
   const [currentUser, setCurrentUser] = React.useState(null);
+
   const searchTimeout = 300;
+
   React.useEffect(() => {
     getCurrentUser().subscribe((user) => {
       setCurrentUser(user ? user.display : currentUser);
@@ -33,69 +109,54 @@ export default function ChooseLocation(props: ChooseLocationProps) {
   });
 
   React.useEffect(() => {
-    const abortController = new AbortController();
+    const ac = new AbortController();
+
     if (isSubmitting) {
-      setSessionLocation(locationData.activeLocation, abortController)
-        .then(() => {
-          if (props.location?.state?.referrer) {
-            props.history.push(props.location.state.referrer);
-          } else {
-            navigate(
-              props,
-              config.links.loginSuccess.spa,
-              config.links.loginSuccess.url
-            );
-          }
-        })
-        .catch(createErrorHandler());
+      props.onChangeLocation(locationData.activeLocation);
     }
-    return () => abortController.abort();
+
+    return () => ac.abort();
   }, [isSubmitting]);
+
   React.useEffect(() => {
     const ac = new AbortController();
-    changeLocationData({ locationResult: props.loginLocations });
+
     if (props.loginLocations.length > 100) {
       if (searchTerm) {
         searchLocationsFhir(searchTerm).then((locs) => {
-          changeLocationData({ locationResult: locs.data.entry });
-          if (isEmpty(locs.data.entry)) {
-            changeLocationData({ emptyResult: true });
-          } else {
-            changeLocationData({ emptyResult: false });
-          }
+          changeLocationData({
+            locationResult: locs.data.entry,
+          });
         }, createErrorHandler());
       }
     } else if (searchTerm) {
       filterList(searchTerm);
-    } else {
-      changeLocationData({ emptyResult: false });
+    } else if (props.loginLocations !== locationData.locationResult) {
       changeLocationData({ locationResult: props.loginLocations });
     }
+
     return () => ac.abort();
   }, [searchTerm, props.loginLocations]);
 
-  const search = debounce((location) => {
-    setSearchTerm(location);
-  }, searchTimeout);
+  const search = debounce(
+    (location: string) => setSearchTerm(location),
+    searchTimeout
+  );
 
-  const filterList = (searchTerm) => {
+  const filterList = (searchTerm: string) => {
     if (searchTerm) {
-      const updatedList = locationData.locationResult.filter((item) => {
+      const updatedList = props.loginLocations.filter((item) => {
         return (
           item.resource.name.toLowerCase().search(searchTerm.toLowerCase()) !==
           -1
         );
       });
-      if (updatedList.length > 0) {
-        changeLocationData({ locationResult: updatedList });
-      } else {
-        changeLocationData({ locationResult: updatedList });
-        changeLocationData({ emptyResult: true });
-      }
+
+      changeLocationData({ locationResult: updatedList });
     }
   };
 
-  const changeLocationData = (data) => {
+  const changeLocationData = (data: Partial<LocationDataState>) => {
     if (data) {
       setLocationData((prevState) => ({
         ...prevState,
@@ -104,39 +165,24 @@ export default function ChooseLocation(props: ChooseLocationProps) {
     }
   };
 
-  const RadioInput = (option: RadioInputOption) => (
-    <React.Fragment key={option.resource.id}>
-      <div className="omrs-radio-button">
-        <input
-          id={option.resource.id}
-          type="radio"
-          name="location"
-          value={option.resource.id}
-          onChange={(evt) =>
-            changeLocationData({ activeLocation: evt.target.value })
-          }
-          ref={locationInputRef}
-        />
-        <label htmlFor={option.resource.id} className={`omrs-padding-4`}>
-          {option.resource.name}
-        </label>
-      </div>
-    </React.Fragment>
-  );
+  const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
+    setIsSubmitting(true);
+  };
 
   return (
     <div className={`canvas ${styles["container"]}`}>
       <h1 className={styles["welcome-msg"]}>
         <Trans i18nKey="welcome">Welcome</Trans> {currentUser}
       </h1>
-      <form onSubmit={handleSubmit} ref={formRef}>
+      <form onSubmit={handleSubmit}>
         <div className={`${styles["location-card"]} omrs-card`}>
           <CardHeader>
             <Trans i18nKey="location">Location</Trans>
           </CardHeader>
           <div className="omrs-input-group omrs-padding-12">
             <input
-              className={`omrs-input-underlined`}
+              className="omrs-input-underlined"
               placeholder="Search for location"
               aria-label="Search for location"
               onChange={($event) => search($event.target.value)}
@@ -144,18 +190,25 @@ export default function ChooseLocation(props: ChooseLocationProps) {
           </div>
           {!isEmpty(locationData.locationResult) && (
             <div className={styles["location-radio-group"]}>
-              {locationData.locationResult.map(RadioInput)}
+              {locationData.locationResult.map((entry) => (
+                <RadioInput
+                  key={entry.resource.id}
+                  current={locationData.activeLocation}
+                  option={entry}
+                  changeLocationData={changeLocationData}
+                />
+              ))}
             </div>
           )}
-          {locationData.emptyResult && (
-            <p className={`omrs-type-body-regular omrs-padding-8`}>
+          {locationData.locationResult.length === 0 && (
+            <p className="omrs-type-body-regular omrs-padding-8">
               <Trans i18nKey="locationNotFound">
                 Sorry, no location has been found
               </Trans>
             </p>
           )}
           <div className={styles["center"]}>
-            <p className={styles["error-msg"]}>{errorMessage}</p>
+            <p className={styles["error-msg"]} />
           </div>
         </div>
         <div className={styles["center"]}>
@@ -176,32 +229,38 @@ export default function ChooseLocation(props: ChooseLocationProps) {
       </form>
     </div>
   );
+};
 
-  function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
-    evt.preventDefault();
-    setIsSubmitting(true);
-  }
-}
-
-const CardHeader: React.FunctionComponent = (props) => (
+const CardHeader: React.FC = (props) => (
   <div className={styles["card-header"]}>
     <h2 className={`omrs-margin-8 omrs-margin-left-12`}>{props.children}</h2>
   </div>
 );
 
-type ChooseLocationProps = {
-  location?: any;
-  history?: {
-    push(newUrl: String): void;
-  };
-  loginLocations: Array<RadioInputOption>;
-};
+interface RadioInputProps {
+  option: LocationEntry;
+  current: string;
+  changeLocationData: (data: Partial<LocationDataState>) => void;
+}
 
-type RadioInputOption = {
-  resource: Resource;
-};
-
-type Resource = {
-  id: string;
-  name: string;
-};
+const RadioInput: React.FC<RadioInputProps> = ({
+  option,
+  current,
+  changeLocationData,
+}) => (
+  <div className="omrs-radio-button">
+    <input
+      id={option.resource.id}
+      type="radio"
+      name="location"
+      value={option.resource.id}
+      checked={current === option.resource.id}
+      onChange={(evt) =>
+        changeLocationData({ activeLocation: evt.target.value })
+      }
+    />
+    <label htmlFor={option.resource.id} className="omrs-padding-4">
+      {option.resource.name}
+    </label>
+  </div>
+);

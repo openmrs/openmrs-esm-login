@@ -1,14 +1,12 @@
 import "@testing-library/jest-dom";
 import React from "react";
-import { of } from "rxjs";
+import { act } from "react-dom/test-utils";
 import { cleanup, fireEvent, render, wait } from "@testing-library/react";
 import ChooseLocation from "./choose-location.component";
 import {
-  getLoginLocations,
   setSessionLocation,
   searchLocationsFhir,
 } from "./choose-location.resource";
-import { act } from "react-dom/test-utils";
 
 const historyMock = { push: jest.fn() };
 const mockedSetSessionLocation = setSessionLocation as jest.Mock;
@@ -55,7 +53,11 @@ describe(`<ChooseLocation />`, () => {
     mockedSetSessionLocation.mockResolvedValue(null);
     //prepare components
     wrapper = render(
-      <ChooseLocation history={historyMock} loginLocations={locationEntries} />
+      <ChooseLocation
+        history={historyMock as any}
+        location={undefined}
+        match={undefined}
+      />
     );
     searchInput = wrapper.container.querySelector("input");
     submitButton = wrapper.getByText("Confirm", { selector: "button" });
@@ -131,9 +133,9 @@ describe(`<ChooseLocation />`, () => {
     };
     wrapper = render(
       <ChooseLocation
-        history={historyMock}
-        loginLocations={locationEntries}
-        location={locationMock}
+        history={historyMock as any}
+        location={locationMock as any}
+        match={undefined}
       />
     );
     searchInput = wrapper.container.querySelector("input");
