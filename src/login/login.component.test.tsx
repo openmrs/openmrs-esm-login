@@ -81,48 +81,4 @@ describe(`<Login />`, () => {
     await wait();
     expect(wrapper.history.location.pathname).toBe("/login/location");
   });
-
-  it(`should set location and skip location select page if there is exactly one location`, async () => {
-    cleanup();
-    wrapper = renderWithRouter(Login, { loginLocations: [loginLocations[0]] });
-    expect(setSessionLocation).not.toHaveBeenCalled();
-    mockedLogin.mockReturnValue(
-      Promise.resolve({ data: { authenticated: true } })
-    );
-    fireEvent.change(wrapper.getByLabelText("Username"), {
-      target: { value: "yoshi" },
-    });
-    fireEvent.change(wrapper.getByLabelText("Password"), {
-      target: { value: "no-tax-fraud" },
-    });
-    fireEvent.click(wrapper.getByText("Login"));
-    await wait();
-    expect(wrapper.history.location.pathname).toBe("/home");
-  });
-
-  it(`should redirect back to referring page on successful login when there is only one location`, async () => {
-    const locationMock = {
-      state: {
-        referrer: "/home/patient-search",
-      },
-    };
-    cleanup();
-    wrapper = renderWithRouter(Login, {
-      loginLocations: [loginLocations[0]],
-      location: locationMock,
-    });
-    expect(setSessionLocation).not.toHaveBeenCalled();
-    mockedLogin.mockReturnValue(
-      Promise.resolve({ data: { authenticated: true } })
-    );
-    fireEvent.change(wrapper.getByLabelText("Username"), {
-      target: { value: "yoshi" },
-    });
-    fireEvent.change(wrapper.getByLabelText("Password"), {
-      target: { value: "no-tax-fraud" },
-    });
-    fireEvent.click(wrapper.getByText("Login"));
-    await wait();
-    expect(wrapper.history.location.pathname).toBe(locationMock.state.referrer);
-  });
 });
