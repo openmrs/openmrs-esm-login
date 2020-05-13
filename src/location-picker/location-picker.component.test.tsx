@@ -19,7 +19,13 @@ jest.mock("lodash", () => ({
 }));
 
 describe(`<LocationPicker />`, () => {
-  let searchInput, marsInput, submitButton, wrapper, locationEntries, onChangeLocation, searchLocations;
+  let searchInput,
+    marsInput,
+    submitButton,
+    wrapper,
+    locationEntries,
+    onChangeLocation,
+    searchLocations;
 
   beforeEach(async () => {
     // reset mocks

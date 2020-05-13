@@ -17,7 +17,7 @@ interface ChooseLocationProps
 
 export default function ChooseLocation(props: ChooseLocationProps) {
   const referrer = props.location?.state?.referrer;
-  
+
   const config = useConfig();
   const [loginLocations, setLoginLocations] = React.useState<
     Array<LocationEntry>
@@ -54,7 +54,7 @@ export default function ChooseLocation(props: ChooseLocationProps) {
       setCurrentUser(user ? user.display : currentUser);
     }, createErrorHandler());
 
-    queryLocations('', ac).then(
+    queryLocations("", ac).then(
       (locations) => setLoginLocations(locations),
       createErrorHandler()
     );
