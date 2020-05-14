@@ -23,7 +23,7 @@ export default function ChooseLocation(props: ChooseLocationProps) {
     Array<LocationEntry>
   >(null);
   const [currentUser, setCurrentUser] = React.useState(null);
-  const [loading, setLoading] = React.useState(true);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   const changeLocation = React.useCallback(
     (locationUuid?: string) => {
@@ -51,7 +51,9 @@ export default function ChooseLocation(props: ChooseLocationProps) {
   React.useEffect(() => {
     const ac = new AbortController();
     const sub = getCurrentUser().subscribe((user) => {
-      setCurrentUser(user ? user.display : currentUser);
+      if (user) {
+        setCurrentUser(user.display);
+      }
     }, createErrorHandler());
 
     queryLocations("", ac).then(
@@ -70,12 +72,12 @@ export default function ChooseLocation(props: ChooseLocationProps) {
       if (!config.chooseLocation.enabled || loginLocations.length < 2) {
         changeLocation(loginLocations[0]?.resource.id);
       } else {
-        setLoading(false);
+        setIsLoading(false);
       }
     }
-  }, [loginLocations, currentUser]);
+  }, [loginLocations, currentUser, changeLocation]);
 
-  if (!loading) {
+  if (!isLoading) {
     return (
       <LocationPicker
         currentUser={currentUser}

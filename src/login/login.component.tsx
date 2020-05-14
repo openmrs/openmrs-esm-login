@@ -62,6 +62,7 @@ export default function Login(props: LoginProps) {
       try {
         const loginRes = await performLogin(username, password);
         const authData = loginRes["data"];
+        
         if (authData) {
           const { authenticated } = authData;
           if (authenticated) {
