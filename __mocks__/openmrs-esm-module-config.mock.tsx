@@ -7,21 +7,23 @@ export const validators = {
   isString: jest.fn(),
 };
 
+export const config = {
+  chooseLocation: {
+    enabled: true,
+  },
+  logo: {
+    src: null,
+  },
+  links: {
+    loginSuccess: {
+      url: "/home",
+      spa: true,
+    },
+  },
+};
+
 export function useConfig() {
-  return {
-    chooseLocation: {
-      enabled: true,
-    },
-    logo: {
-      src: null,
-    },
-    links: {
-      loginSuccess: {
-        url: "/home",
-        spa: true,
-      },
-    },
-  };
+  return config;
 }
 
 export const ModuleNameContext = React.createContext("fake-module-config");

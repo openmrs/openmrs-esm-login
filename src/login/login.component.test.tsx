@@ -1,14 +1,9 @@
 import "@testing-library/jest-dom";
-import React from "react";
 import Login from "./login.component";
+import { cleanup, fireEvent, wait } from "@testing-library/react";
 import { performLogin } from "./login.resource";
 import { setSessionLocation } from "../choose-location/choose-location.resource";
-import { cleanup, fireEvent, wait } from "@testing-library/react";
 import renderWithRouter from "../test-helpers/render-with-router";
-
-const historyMock = {
-  push: jest.fn().mockImplementationOnce((location) => location),
-};
 
 const mockedLogin = performLogin as jest.Mock;
 jest.mock("./login.resource", () => ({
