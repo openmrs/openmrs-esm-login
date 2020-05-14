@@ -42,6 +42,7 @@
 
 @media only screen and (min-width: 481px) {
   .login-card {
+    margin-top: 2.5%;
     padding: 3rem;
     width: 26.375rem;
   }
@@ -49,6 +50,7 @@
 
 @media only screen and (max-width: 480px) {
   .login-card {
+    margin-top: 2.5%;
     border: none;
     width: 95%;
     padding: 1rem;
