@@ -1,5 +1,6 @@
 import { openmrsFetch, openmrsObservableFetch } from "@openmrs/esm-api";
 import { map } from "rxjs/operators";
+import { LocationResponse } from "../types";
 
 export function getLoginLocations(): Observable<Object[]> {
   return openmrsObservableFetch(
@@ -20,8 +21,22 @@ export function setSessionLocation(
     signal: abortController.signal,
   });
 }
-export function searchLocationsFhir(location: string) {
-  return openmrsFetch(`/ws/fhir2/Location?name=${location}`, {
+
+export function searchLocationsFhir(
+  location: string,
+  abortController: AbortController
+) {
+  return openmrsFetch<LocationResponse>(`/ws/fhir2/Location?name=${location}`, {
     method: "GET",
+    signal: abortController.signal,
   });
+}
+
+export function queryLocations(
+  location: string,
+  abortController = new AbortController()
+) {
+  return searchLocationsFhir(location, abortController).then(
+    (locs) => locs.data.entry
+  );
 }

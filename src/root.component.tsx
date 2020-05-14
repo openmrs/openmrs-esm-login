@@ -1,11 +1,9 @@
 import React from "react";
 import openmrsRootDecorator from "@openmrs/react-root-decorator";
 import { defineConfigSchema, validators } from "@openmrs/esm-module-config";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { BrowserRouter, Route } from "react-router-dom";
 import Login from "./login/login.component";
 import ChooseLocation from "./choose-location/choose-location.component";
-import { searchLocationsFhir } from "./choose-location/choose-location.resource";
 
 defineConfigSchema("@openmrs/esm-login", {
   chooseLocation: {
@@ -43,35 +41,14 @@ defineConfigSchema("@openmrs/esm-login", {
 });
 
 function Root(props) {
-  const [user, setUser] = React.useState(null);
-  const [loginLocations, setLoginLocations] = React.useState([]);
-
-  React.useEffect(() => {
-    const ac = new AbortController();
-    const sub = searchLocationsFhir("").then(
-      (locations) => setLoginLocations(locations.data.entry),
-      createErrorHandler()
-    );
-    return () => ac.abort();
-  }, []);
-
   return (
     <BrowserRouter basename={window["getOpenmrsSpaBase"]()}>
-      <Route
-        exact
-        path="/login"
-        render={(props) => <Login {...props} loginLocations={loginLocations} />}
-      />
-      <Route
-        exact
-        path="/login/location"
-        render={(props) => (
-          <ChooseLocation {...props} loginLocations={loginLocations} />
-        )}
-      />
+      <Route exact path="/login" component={Login} />
+      <Route exact path="/login/location" component={ChooseLocation} />
     </BrowserRouter>
   );
 }
+
 export default openmrsRootDecorator({
   featureName: "login",
   moduleName: "@openmrs/esm-login",
