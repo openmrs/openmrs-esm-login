@@ -1,5 +1,5 @@
 import React from "react";
-import { RouteComponentProps, StaticContext } from "react-router";
+import { RouteComponentProps } from "react-router-dom";
 import { useConfig } from "@openmrs/esm-module-config";
 import { getCurrentUser } from "@openmrs/esm-api";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
@@ -13,7 +13,7 @@ interface LoginReferrer {
 }
 
 interface ChooseLocationProps
-  extends RouteComponentProps<{}, StaticContext, LoginReferrer> {}
+  extends RouteComponentProps<{}, undefined, LoginReferrer> {}
 
 export default function ChooseLocation(props: ChooseLocationProps) {
   const referrer = props.location?.state?.referrer;
