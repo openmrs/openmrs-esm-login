@@ -12,7 +12,7 @@ const importTranslation = require.context(
 function setupOpenMRS() {
   return {
     lifecycle: () => import("./openmrs-esm-login"),
-    activate: (location) => routePrefix("login", location),
+    activate: "login"
   };
 }
 
