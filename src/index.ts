@@ -1,5 +1,4 @@
 import "./set-public-path";
-import { routePrefix } from "@openmrs/esm-root-config";
 import { backendDependencies } from "./openmrs-backend-dependencies";
 
 const importTranslation = require.context(
