@@ -1,7 +1,7 @@
 import {
   openmrsFetch,
   openmrsObservableFetch,
-  fhirConfig,
+  fhirBaseUrl,
 } from "@openmrs/esm-api";
 import { map } from "rxjs/operators";
 import { LocationResponse } from "../types";
@@ -31,7 +31,7 @@ export function searchLocationsFhir(
   abortController: AbortController
 ) {
   return openmrsFetch<LocationResponse>(
-    `${fhirConfig.baseUrl}/Location?name=${location}`,
+    `${fhirBaseUrl}/Location?name=${location}`,
     {
       method: "GET",
       signal: abortController.signal,
