@@ -5,7 +5,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import Login from "./login/login.component";
 import ChooseLocation from "./choose-location/choose-location.component";
 
-defineConfigSchema("@openmrs/esm-login", {
+defineConfigSchema("@openmrs/esm-login-app", {
   chooseLocation: {
     enabled: {
       default: true,
