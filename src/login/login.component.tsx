@@ -1,5 +1,5 @@
 import React from "react";
-import { RouteComponentProps, StaticContext } from "react-router";
+import { RouteComponentProps } from "react-router-dom";
 import { always } from "kremling";
 import { Trans } from "react-i18next";
 import { getCurrentUser } from "@openmrs/esm-api";
@@ -13,7 +13,7 @@ interface LoginReferrer {
 }
 
 interface LoginProps
-  extends RouteComponentProps<{}, StaticContext, LoginReferrer> {}
+  extends RouteComponentProps<{}, undefined, LoginReferrer> {}
 
 export default function Login(props: LoginProps) {
   const config = useConfig();
