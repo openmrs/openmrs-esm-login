@@ -51,5 +51,5 @@ function Root(props) {
 
 export default openmrsRootDecorator({
   featureName: "login",
-  moduleName: "@openmrs/esm-login",
+  moduleName: "@openmrs/esm-login-app",
 })(Root);
