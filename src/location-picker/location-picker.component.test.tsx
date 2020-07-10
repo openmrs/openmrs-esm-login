@@ -138,4 +138,10 @@ describe(`<LocationPicker />`, () => {
       expect(onChangeLocation).toHaveBeenCalled();
     });
   });
+
+  it("search term input should have autofocus on render", async () => {
+    expect(wrapper.getByPlaceholderText(/Search for location/)).toEqual(
+      document.activeElement
+    );
+  });
 });

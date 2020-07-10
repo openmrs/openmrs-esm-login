@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { always } from "kremling";
 import { debounce, isEmpty } from "lodash";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
@@ -61,6 +61,11 @@ export default function LocationPicker(props: LocationPickerProps) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const searchTimeout = 300;
+
+  const autoFocusSearchInput = useCallback(
+    (el: HTMLInputElement) => (el ? el.focus() : null),
+    []
+  );
 
   React.useEffect(() => {
     if (isSubmitting) {
@@ -136,6 +141,7 @@ export default function LocationPicker(props: LocationPickerProps) {
               placeholder="Search for location"
               aria-label="Search for location"
               onChange={(ev) => search(ev.target.value)}
+              ref={autoFocusSearchInput}
             />
           </div>
           {!isEmpty(locationData.locationResult) && (
