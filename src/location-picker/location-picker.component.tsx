@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useEffect, useRef, useCallback } from "react";
 import { always } from "kremling";
 import { debounce, isEmpty } from "lodash";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
@@ -50,6 +50,8 @@ interface LocationPickerProps {
   loginLocations: Array<LocationEntry>;
   onChangeLocation(locationUuid: string): void;
   searchLocations(query: string): Promise<Array<LocationEntry>>;
+  displayWelcomeMessage?: boolean;
+  currentLocationUuid?: string;
 }
 
 export default function LocationPicker(props: LocationPickerProps) {
@@ -59,6 +61,7 @@ export default function LocationPicker(props: LocationPickerProps) {
   });
   const [searchTerm, setSearchTerm] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const inputRef = useRef();
 
   const searchTimeout = 300;
 
@@ -70,6 +73,7 @@ export default function LocationPicker(props: LocationPickerProps) {
   React.useEffect(() => {
     if (isSubmitting) {
       props.onChangeLocation(locationData.activeLocation);
+      setIsSubmitting(false);
     }
   }, [isSubmitting, locationData]);
 
@@ -125,16 +129,40 @@ export default function LocationPicker(props: LocationPickerProps) {
     setIsSubmitting(true);
   };
 
+  useEffect(() => {
+    if (props.currentLocationUuid && props.displayWelcomeMessage) {
+      setLocationData((prevState) => ({
+        ...prevState,
+        ...{
+          activeLocation: props.currentLocationUuid,
+          locationResult: prevState.locationResult,
+        },
+      }));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isSubmitting && inputRef.current) {
+      let searchInput: HTMLInputElement = inputRef.current;
+      searchInput.value = "";
+      setSearchTerm(null);
+    }
+  }, [isSubmitting]);
+
   return (
     <div className={`canvas ${styles["container"]}`}>
-      <h1 className={styles["welcome-msg"]}>
-        <Trans i18nKey="welcome">Welcome</Trans> {props.currentUser}
-      </h1>
+      {!props.displayWelcomeMessage && (
+        <h1 className={styles["welcome-msg"]}>
+          <Trans i18nKey="welcome">Welcome</Trans> {props.currentUser}
+        </h1>
+      )}
       <form onSubmit={handleSubmit}>
         <div className={`${styles["location-card"]} omrs-card`}>
-          <CardHeader>
-            <Trans i18nKey="location">Location</Trans>
-          </CardHeader>
+          {!props.displayWelcomeMessage && (
+            <CardHeader>
+              <Trans i18nKey="location">Location</Trans>
+            </CardHeader>
+          )}
           <div className="omrs-input-group omrs-padding-12">
             <input
               className="omrs-input-underlined"
