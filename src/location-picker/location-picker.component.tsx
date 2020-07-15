@@ -50,7 +50,7 @@ interface LocationPickerProps {
   loginLocations: Array<LocationEntry>;
   onChangeLocation(locationUuid: string): void;
   searchLocations(query: string): Promise<Array<LocationEntry>>;
-  displayWelcomeMessage?: boolean;
+  hideWelcomeMessage?: boolean;
   currentLocationUuid?: string;
 }
 
@@ -130,7 +130,7 @@ export default function LocationPicker(props: LocationPickerProps) {
   };
 
   useEffect(() => {
-    if (props.currentLocationUuid && props.displayWelcomeMessage) {
+    if (props.currentLocationUuid && props.hideWelcomeMessage) {
       setLocationData((prevState) => ({
         ...prevState,
         ...{
@@ -151,14 +151,14 @@ export default function LocationPicker(props: LocationPickerProps) {
 
   return (
     <div className={`canvas ${styles["container"]}`}>
-      {!props.displayWelcomeMessage && (
+      {!props.hideWelcomeMessage && (
         <h1 className={styles["welcome-msg"]}>
           <Trans i18nKey="welcome">Welcome</Trans> {props.currentUser}
         </h1>
       )}
       <form onSubmit={handleSubmit}>
         <div className={`${styles["location-card"]} omrs-card`}>
-          {!props.displayWelcomeMessage && (
+          {!props.hideWelcomeMessage && (
             <CardHeader>
               <Trans i18nKey="location">Location</Trans>
             </CardHeader>
