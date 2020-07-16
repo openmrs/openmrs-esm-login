@@ -1,9 +1,10 @@
 import React from "react";
 import openmrsRootDecorator from "@openmrs/react-root-decorator";
-import { defineConfigSchema, validators } from "@openmrs/esm-module-config";
-import { BrowserRouter, Route } from "react-router-dom";
 import Login from "./login/login.component";
 import ChooseLocation from "./choose-location/choose-location.component";
+import { BrowserRouter, Route } from "react-router-dom";
+import { defineConfigSchema, validators } from "@openmrs/esm-module-config";
+import { CurrentUserContext } from "./CurrentUserContext";
 
 defineConfigSchema("@openmrs/esm-login-app", {
   chooseLocation: {
@@ -40,14 +41,14 @@ defineConfigSchema("@openmrs/esm-login-app", {
   },
 });
 
-function Root(props) {
-  return (
+const Root: React.FC = () => (
+  <CurrentUserContext>
     <BrowserRouter basename={window["getOpenmrsSpaBase"]()}>
       <Route exact path="/login" component={Login} />
       <Route exact path="/login/location" component={ChooseLocation} />
     </BrowserRouter>
-  );
-}
+  </CurrentUserContext>
+);
 
 export default openmrsRootDecorator({
   featureName: "login",

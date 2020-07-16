@@ -7,6 +7,14 @@ import renderWithRouter from "../test-helpers/render-with-router";
 
 const { config } = require("@openmrs/esm-module-config");
 
+jest.mock('../CurrentUserContext', () => ({
+  useCurrentUser() {
+    return {
+      display: "Demo",
+    };
+  },
+}))
+
 jest.mock("./choose-location.resource.ts", () => ({
   queryLocations: jest.fn(() =>
     Promise.resolve([
@@ -19,19 +27,6 @@ jest.mock("./choose-location.resource.ts", () => ({
     ])
   ),
   setSessionLocation: jest.fn(() => Promise.resolve()),
-}));
-
-jest.mock("@openmrs/esm-api", () => ({
-  getCurrentUser: jest.fn(() => ({
-    subscribe(cb: (user: any) => void) {
-      cb({
-        display: "Demo",
-      });
-      return {
-        unsubscribe() {},
-      };
-    },
-  })),
 }));
 
 describe(`<ChooseLocation />`, () => {
