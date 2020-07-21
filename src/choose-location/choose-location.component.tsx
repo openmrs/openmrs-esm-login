@@ -1,28 +1,45 @@
 import React from "react";
+import Loading from "../loading/loading.component";
+import LocationPicker from "../location-picker/location-picker.component";
+import { History } from "history";
 import { RouteComponentProps } from "react-router-dom";
 import { useConfig } from "@openmrs/esm-module-config";
-import { getCurrentUser } from "@openmrs/esm-api";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { setSessionLocation, queryLocations } from "./choose-location.resource";
+import { useCurrentUser } from "../CurrentUserContext";
 import { LocationEntry } from "../types";
-import LocationPicker from "../location-picker/location-picker.component";
-import navigate from "../navigate";
 
-interface LoginReferrer {
+const absoluteUrlRegex = new RegExp("^(?:[a-z]+:)?//", "i");
+
+declare global {
+  interface Window {
+    openmrsBase: string;
+  }
+}
+
+function navigate(history: History, spa: boolean, url: string) {
+  if (spa) {
+    history.push(url);
+  } else if (!spa && !url.match(absoluteUrlRegex)) {
+    window.location.href = window.openmrsBase + url;
+  } else {
+    window.location.href = url;
+  }
+}
+
+export interface LoginReferrer {
   referrer?: string;
 }
 
-interface ChooseLocationProps
+export interface ChooseLocationProps
   extends RouteComponentProps<{}, undefined, LoginReferrer> {}
 
-export default function ChooseLocation(props: ChooseLocationProps) {
+export const ChooseLocation: React.FC<ChooseLocationProps> = (props) => {
   const referrer = props.location?.state?.referrer;
-
   const config = useConfig();
+  const user = useCurrentUser();
   const [loginLocations, setLoginLocations] = React.useState<
     Array<LocationEntry>
   >(null);
-  const [currentUser, setCurrentUser] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(true);
 
   const changeLocation = React.useCallback(
@@ -31,56 +48,46 @@ export default function ChooseLocation(props: ChooseLocationProps) {
         ? setSessionLocation(locationUuid, new AbortController())
         : Promise.resolve();
 
-      sessionDefined
-        .then(() => {
-          if (referrer) {
-            props.history.push(referrer);
-          } else {
-            navigate(
-              props,
-              config.links.loginSuccess.spa,
-              config.links.loginSuccess.url
-            );
-          }
-        })
-        .catch(createErrorHandler());
+      sessionDefined.then(() => {
+        if (referrer && referrer !== "/") {
+          props.history.push(referrer);
+        } else {
+          navigate(
+            props.history,
+            config.links.loginSuccess.spa,
+            config.links.loginSuccess.url
+          );
+        }
+      });
     },
-    [referrer]
+    [
+      referrer,
+      config.links.loginSuccess.spa,
+      config.links.loginSuccess.url,
+      props.history,
+    ]
   );
 
   React.useEffect(() => {
     const ac = new AbortController();
-    const sub = getCurrentUser().subscribe((user) => {
-      if (user) {
-        setCurrentUser(user.display);
-      }
-    }, createErrorHandler());
-
-    queryLocations("", ac).then(
-      (locations) => setLoginLocations(locations),
-      createErrorHandler()
-    );
-
-    return () => {
-      ac.abort();
-      sub.unsubscribe();
-    };
+    queryLocations("", ac).then((locations) => setLoginLocations(locations));
+    return () => ac.abort();
   }, []);
 
   React.useEffect(() => {
-    if (loginLocations && currentUser) {
+    if (loginLocations) {
       if (!config.chooseLocation.enabled || loginLocations.length < 2) {
         changeLocation(loginLocations[0]?.resource.id);
       } else {
         setIsLoading(false);
       }
     }
-  }, [loginLocations, currentUser, changeLocation]);
+  }, [loginLocations, user, changeLocation, config.chooseLocation.enabled]);
 
   if (!isLoading) {
     return (
       <LocationPicker
-        currentUser={currentUser}
+        currentUser={user.display}
         loginLocations={loginLocations}
         onChangeLocation={changeLocation}
         searchLocations={queryLocations}
@@ -88,5 +95,7 @@ export default function ChooseLocation(props: ChooseLocationProps) {
     );
   }
 
-  return <div>Loading ...</div>;
-}
+  return <Loading />;
+};
+
+export default ChooseLocation;

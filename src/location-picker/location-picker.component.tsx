@@ -54,7 +54,7 @@ interface LocationPickerProps {
   currentLocationUuid?: string;
 }
 
-export default function LocationPicker(props: LocationPickerProps) {
+const LocationPicker: React.FC<LocationPickerProps> = (props) => {
   const [locationData, setLocationData] = React.useState<LocationDataState>({
     activeLocation: "",
     locationResult: props.loginLocations,
@@ -213,4 +213,6 @@ export default function LocationPicker(props: LocationPickerProps) {
       </form>
     </div>
   );
-}
+};
+
+export default LocationPicker;

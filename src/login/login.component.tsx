@@ -1,105 +1,61 @@
 import React from "react";
+import styles from "../styles.css";
 import { RouteComponentProps } from "react-router-dom";
 import { always } from "kremling";
 import { Trans } from "react-i18next";
-import { getCurrentUser } from "@openmrs/esm-api";
 import { useConfig } from "@openmrs/esm-module-config";
 import { performLogin } from "./login.resource";
-import navigate from "../navigate";
-import styles from "../styles.css";
+import { useCurrentUser } from "../CurrentUserContext";
 
-interface LoginReferrer {
+export interface LoginReferrer {
   referrer?: string;
 }
 
-interface LoginProps
+export interface LoginProps
   extends RouteComponentProps<{}, undefined, LoginReferrer> {}
 
-export default function Login(props: LoginProps) {
+const Login: React.FC<LoginProps> = (props: LoginProps) => {
   const config = useConfig();
+  const user = useCurrentUser();
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [authenticated, setAuthenticated] = React.useState(null);
   const [errorMessage, setErrorMessage] = React.useState("");
-  const [isLoggingIn, setIsLoggingIn] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
-  const [checkingIfLoggedIn, setCheckingIfLogged] = React.useState(true);
   const passwordInputRef = React.useRef<HTMLInputElement>(null);
   const usernameInputRef = React.useRef<HTMLInputElement>(null);
   const formRef = React.useRef<HTMLFormElement>(null);
 
   React.useEffect(() => {
-    if (checkingIfLoggedIn) {
-      const subscription = getCurrentUser({
-        includeAuthStatus: true,
-      }).subscribe(
-        (authResult) => {
-          setCheckingIfLogged(false);
-          if (authResult.authenticated) {
-            if (props.location?.state?.referrer) {
-              props.history.push(props.location.state.referrer);
-            } else {
-              navigate(
-                props,
-                config.links.loginSuccess.spa,
-                config.links.loginSuccess.url
-              );
-            }
-          }
-        },
-        (err) => {
-          setCheckingIfLogged(false);
-          throw err;
-        }
+    if (user) {
+      props.history.push(
+        "/login/location",
+        props.location ? props.location.state : undefined
       );
-
-      return () => subscription.unsubscribe();
     }
-  }, [checkingIfLoggedIn]);
+  }, [user, props.history, props.location]);
 
-  React.useEffect(() => {
-    async function tryLoggingIn() {
-      try {
-        const loginRes = await performLogin(username, password);
-        const authData = loginRes["data"];
+  async function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
+    evt.preventDefault();
 
-        if (authData) {
-          const { authenticated } = authData;
-          if (authenticated) {
-            props.history.push(
-              "/login/location",
-              props.location ? props.location.state : undefined
-            );
-          } else {
-            setAuthenticated(authenticated);
-            setErrorMessage("Incorrect username or password");
-            passwordInputRef.current.focus();
-          }
-        }
-      } catch (error) {
-        setErrorMessage(error.message);
+    try {
+      const loginRes = await performLogin(username, password);
+      const authData = loginRes.data;
+      const valid = authData && authData.authenticated;
+
+      if (!valid) {
+        throw new Error("Incorrect username or password");
       }
-
-      setIsLoggingIn(false);
-    }
-
-    if (isLoggingIn) {
-      tryLoggingIn();
-    }
-  }, [isLoggingIn]);
-
-  React.useEffect(() => {
-    if (
-      document.activeElement !== usernameInputRef.current &&
-      !checkingIfLoggedIn
-    ) {
+    } catch (error) {
+      setErrorMessage(error.message);
       passwordInputRef.current.focus();
     }
-  }, [showPassword, checkingIfLoggedIn]);
-
-  if (checkingIfLoggedIn) {
-    return null;
   }
+
+  React.useEffect(() => {
+    if (document.activeElement !== usernameInputRef.current) {
+      passwordInputRef.current.focus();
+    }
+  }, [showPassword]);
 
   const logo = config.logo.src ? (
     <img
@@ -122,7 +78,7 @@ export default function Login(props: LoginProps) {
               id="username"
               className={always("omrs-input-outlined").maybe(
                 "omrs-input-danger",
-                authenticated === false
+                errorMessage
               )}
               type="text"
               name="username"
@@ -141,7 +97,7 @@ export default function Login(props: LoginProps) {
               id="password"
               className={always("omrs-input-outlined").maybe(
                 "omrs-input-danger",
-                authenticated === false
+                errorMessage
               )}
               type={showPassword ? "text" : "password"}
               name="password"
@@ -196,9 +152,6 @@ export default function Login(props: LoginProps) {
       </div>
     </div>
   );
+};
 
-  function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
-    evt.preventDefault();
-    setIsLoggingIn(true);
-  }
-}
+export default Login;

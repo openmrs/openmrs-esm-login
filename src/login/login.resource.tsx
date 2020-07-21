@@ -1,4 +1,4 @@
-import { openmrsFetch } from "@openmrs/esm-api";
+import { openmrsFetch, refetchCurrentUser } from "@openmrs/esm-api";
 
 export function performLogin(username, password) {
   const token = window.btoa(`${username}:${password}`);
@@ -6,5 +6,8 @@ export function performLogin(username, password) {
     headers: {
       Authorization: `Basic ${token}`,
     },
+  }).then((res) => {
+    refetchCurrentUser();
+    return res;
   });
 }
