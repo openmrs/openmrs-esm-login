@@ -97,10 +97,10 @@ const LocationPicker: React.FC<LocationPickerProps> = (props) => {
     return () => ac.abort();
   }, [searchTerm, props.loginLocations]);
 
-  const search = debounce(
-    (location: string) => setSearchTerm(location),
-    searchTimeout
-  );
+  const search = debounce((location: string) => {
+    clearSelectedLocation();
+    setSearchTerm(location);
+  }, searchTimeout);
 
   const filterList = (searchTerm: string) => {
     if (searchTerm) {
@@ -148,6 +148,13 @@ const LocationPicker: React.FC<LocationPickerProps> = (props) => {
       setSearchTerm(null);
     }
   }, [isSubmitting]);
+
+  const clearSelectedLocation = (): void => {
+    setLocationData((prevState) => ({
+      activeLocation: "",
+      locationResult: prevState.locationResult,
+    }));
+  };
 
   return (
     <div className={`canvas ${styles["container"]}`}>
