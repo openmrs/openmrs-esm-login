@@ -144,4 +144,17 @@ describe(`<LocationPicker />`, () => {
       document.activeElement
     );
   });
+
+  it("should deselect active location when user searches for a location", async () => {
+    const locationRadioButton: HTMLElement = await wrapper.findByLabelText(
+      /Earth/
+    );
+    fireEvent.click(locationRadioButton);
+    expect(locationRadioButton).toHaveProperty("checked", true);
+    const searchInput: HTMLElement = await wrapper.findByPlaceholderText(
+      /Search for location/
+    );
+    fireEvent.change(searchInput, { target: { value: "Mar" } });
+    expect(locationRadioButton).toHaveProperty("checked", false);
+  });
 });
