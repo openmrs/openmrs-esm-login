@@ -50,13 +50,21 @@ describe(`<LocationPicker />`, () => {
   afterEach(cleanup);
 
   it("trigger search on typing", async () => {
-    act(() => {
-      fireEvent.change(searchInput, { target: { value: "Mars" } });
-    });
+    cleanup();
+    searchLocations = jest.fn(() => Promise.resolve(loginLocations));
+    wrapper = render(
+      <LocationPicker
+        loginLocations={locationEntries}
+        onChangeLocation={onChangeLocation}
+        searchLocations={searchLocations}
+        currentUser=""
+      />
+    );
+
+    fireEvent.change(searchInput, { target: { value: "mars" } });
 
     await wait(() => {
-      expect(wrapper.getByText("Mars")).not.toBeNull();
-      expect(submitButton).toHaveAttribute("disabled");
+      expect(wrapper.getByLabelText("Mars")).not.toBeNull();
     });
   });
 
@@ -156,5 +164,16 @@ describe(`<LocationPicker />`, () => {
     );
     fireEvent.change(searchInput, { target: { value: "Mar" } });
     expect(locationRadioButton).toHaveProperty("checked", false);
+  });
+  
+  it("shows no location found", async () => {
+    fireEvent.change(searchInput, { target: { value: "doof" } });
+
+    await wait(() => {
+      expect(
+        wrapper.getByText("Sorry, no location has been found")
+      ).not.toBeNull();
+    });
+    expect(submitButton).toHaveAttribute("disabled");
   });
 });
