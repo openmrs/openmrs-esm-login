@@ -28,6 +28,14 @@ describe(`<LocationPicker />`, () => {
     searchLocations;
 
   beforeEach(async () => {
+    Object.defineProperty(window, "localStorage", {
+      value: {
+        getItem: jest.fn(() => "111"),
+        setItem: jest.fn(),
+      },
+      writable: true,
+    });
+
     // reset mocks
     locationEntries = loginLocations.data.entry;
     onChangeLocation = jest.fn(() => {});
@@ -165,7 +173,7 @@ describe(`<LocationPicker />`, () => {
     fireEvent.change(searchInput, { target: { value: "Mar" } });
     expect(locationRadioButton).toHaveProperty("checked", false);
   });
-  
+
   it("shows no location found", async () => {
     fireEvent.change(searchInput, { target: { value: "doof" } });
 
@@ -175,5 +183,27 @@ describe(`<LocationPicker />`, () => {
       ).not.toBeNull();
     });
     expect(submitButton).toHaveAttribute("disabled");
+  });
+
+  it("should get user Default location on render and auto select the location", async () => {
+    expect(
+      window.localStorage.getItem("userDefaultLoginLocationKeyDemo")
+    ).toEqual("111");
+    const locationRadioButton: HTMLElement = await wrapper.findByLabelText(
+      /Earth/
+    );
+    expect(locationRadioButton).toHaveProperty("checked", true);
+  });
+
+  it("should set user Default location when location is changed", async () => {
+    const locationRadioButton: HTMLElement = await wrapper.findByLabelText(
+      /Earth/
+    );
+    fireEvent.click(locationRadioButton);
+    expect(window.localStorage.setItem).toHaveBeenCalled();
+    expect(window.localStorage.setItem).toHaveBeenCalledWith(
+      "userDefaultLoginLocationKey",
+      "111"
+    );
   });
 });

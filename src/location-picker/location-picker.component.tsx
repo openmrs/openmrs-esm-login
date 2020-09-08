@@ -4,6 +4,7 @@ import { debounce, isEmpty } from "lodash";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { Trans } from "react-i18next";
 import { LocationEntry } from "../types";
+import { useCurrentUser } from "../CurrentUserContext";
 import styles from "../styles.css";
 
 const CardHeader: React.FC = (props) => (
@@ -55,8 +56,18 @@ interface LocationPickerProps {
 }
 
 const LocationPicker: React.FC<LocationPickerProps> = (props) => {
+  const userDefaultLoginLocation: string = "userDefaultLoginLocationKey";
+  const getDefaultUserLoginLocation = (): string => {
+    const userLocation = window.localStorage.getItem(
+      `${userDefaultLoginLocation}${props.currentUser}`
+    );
+    const isValidLocation = props.loginLocations.some(
+      (location) => location.resource.id === userLocation
+    );
+    return isValidLocation ? userLocation : "";
+  };
   const [locationData, setLocationData] = React.useState<LocationDataState>({
-    activeLocation: "",
+    activeLocation: getDefaultUserLoginLocation() ?? "",
     locationResult: props.loginLocations,
   });
   const [searchTerm, setSearchTerm] = React.useState("");
@@ -128,6 +139,15 @@ const LocationPicker: React.FC<LocationPickerProps> = (props) => {
     evt.preventDefault();
     setIsSubmitting(true);
   };
+
+  useEffect(() => {
+    if (locationData.activeLocation) {
+      window.localStorage.setItem(
+        `${userDefaultLoginLocation}${props.currentUser}`,
+        locationData.activeLocation
+      );
+    }
+  }, [locationData.activeLocation, props.currentUser]);
 
   useEffect(() => {
     if (props.currentLocationUuid && props.hideWelcomeMessage) {
