@@ -5,7 +5,7 @@ import { queryLocations } from "./choose-location.resource";
 import ChooseLocation from "./choose-location.component";
 import renderWithRouter from "../test-helpers/render-with-router";
 
-const { config } = require("@openmrs/esm-module-config");
+const { config } = require("@openmrs/esm-config");
 
 jest.mock('../CurrentUserContext', () => ({
   useCurrentUser() {
