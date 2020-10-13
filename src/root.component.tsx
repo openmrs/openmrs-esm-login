@@ -3,7 +3,7 @@ import openmrsRootDecorator from "@openmrs/react-root-decorator";
 import Login from "./login/login.component";
 import ChooseLocation from "./choose-location/choose-location.component";
 import { BrowserRouter, Route } from "react-router-dom";
-import { defineConfigSchema, validators } from "@openmrs/esm-module-config";
+import { defineConfigSchema, validators } from "@openmrs/esm-config";
 import { CurrentUserContext } from "./CurrentUserContext";
 
 defineConfigSchema("@openmrs/esm-login-app", {

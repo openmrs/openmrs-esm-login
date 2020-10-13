@@ -3,7 +3,7 @@ import styles from "../styles.css";
 import { RouteComponentProps } from "react-router-dom";
 import { always } from "kremling";
 import { Trans } from "react-i18next";
-import { useConfig } from "@openmrs/esm-module-config";
+import { useConfig } from "@openmrs/esm-config";
 import { performLogin } from "./login.resource";
 import { useCurrentUser } from "../CurrentUserContext";
 

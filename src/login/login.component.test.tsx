@@ -63,7 +63,7 @@ describe(`<Login />`, () => {
 
   it(`makes an API request when you submit the form`, async () => {
     mockedLogin.mockReturnValue(Promise.resolve({ some: "data" }));
-    
+
     const wrapper = renderWithRouter(Login, { loginLocations: loginLocations });
 
     expect(performLogin).not.toHaveBeenCalled();
@@ -82,7 +82,7 @@ describe(`<Login />`, () => {
     let refreshUser = (user: any) => {};
     mockedLogin.mockImplementation(() => {
       refreshUser({
-        display: 'my name',
+        display: "my name",
       });
       return Promise.resolve({ data: { authenticated: true } });
     });
