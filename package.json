@@ -7,12 +7,12 @@
   "license": "MPL-2.0",
   "homepage": "https://github.com/openmrs/openmrs-esm-login#readme",
   "scripts": {
-    "start": "openmrs debug --importmap @",
+    "start": "openmrs debug --run-project",
+    "debug": "webpack-dev-server",
     "build": "webpack --mode production",
     "lint": "eslint src --ext js,jsx,ts,tsx",
     "prettier": "prettier 'src/**/*' --write",
     "typescript": "tsc",
-    "autodoc": "config-autodoc -e src/root.component.tsx",
     "prepublishOnly": "npm run build",
     "test": "jest --config jest.config.json"
   },
@@ -27,7 +27,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged && concurrently 'npm:lint' 'npm:test' 'npm:typescript' 'npm:autodoc' && git add README.md"
+      "pre-commit": "pretty-quick --staged && concurrently 'npm:lint' 'npm:test' 'npm:typescript' && git add README.md"
     }
   },
   "repository": {
@@ -61,9 +61,9 @@
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
     "@openmrs/config-cli": "^1.2.0",
-    "@openmrs/esm-api": "^3.0.0",
-    "@openmrs/esm-config": "^3.0.0",
-    "@openmrs/esm-error-handling": "^3.0.0",
+    "@openmrs/esm-api": "^3.0.8",
+    "@openmrs/esm-config": "^3.0.8",
+    "@openmrs/esm-error-handling": "^3.0.8",
     "@testing-library/jest-dom": "^5.2.0",
     "@testing-library/react": "^9.5.0",
     "@types/jest": "^25.2.2",
@@ -92,7 +92,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^26.0.1",
     "jest-cli": "^26.0.1",
-    "openmrs": "^3.0.2",
+    "openmrs": "^3.0.8",
     "prettier": "^2.0.2",
     "pretty-quick": "^2.0.1",
     "react": "^16.13.1",
