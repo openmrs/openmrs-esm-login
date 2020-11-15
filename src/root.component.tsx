@@ -1,5 +1,5 @@
 import React from "react";
-import openmrsRootDecorator from "@openmrs/react-root-decorator";
+import { openmrsRootDecorator } from "@openmrs/esm-context";
 import Login from "./login/login.component";
 import ChooseLocation from "./choose-location/choose-location.component";
 import { BrowserRouter, Route } from "react-router-dom";
@@ -42,7 +42,7 @@ defineConfigSchema("@openmrs/esm-login-app", {
 
 const Root: React.FC = () => (
   <CurrentUserContext>
-    <BrowserRouter basename={window["getOpenmrsSpaBase"]()}>
+    <BrowserRouter basename={window.getOpenmrsSpaBase()}>
       <Route exact path="/login" component={Login} />
       <Route exact path="/login/location" component={ChooseLocation} />
     </BrowserRouter>
