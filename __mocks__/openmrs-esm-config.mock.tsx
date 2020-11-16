@@ -1,4 +1,5 @@
 import React from "react";
+import { navigateToUrl } from "single-spa";
 
 export function defineConfigSchema() {}
 
@@ -13,18 +14,18 @@ export const config = {
   },
   logo: {
     src: null,
+    alt: "Logo",
   },
   links: {
-    loginSuccess: {
-      url: "/home",
-      spa: true,
-    },
+    loginSuccess: "${openmrsSpaBase}/home",
   },
 };
 
 export function useConfig() {
   return config;
 }
+
+export const navigate = jest.fn();
 
 export const Type = {
   Array: "Array",

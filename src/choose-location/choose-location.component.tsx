@@ -1,30 +1,11 @@
 import React from "react";
 import Loading from "../loading/loading.component";
 import LocationPicker from "../location-picker/location-picker.component";
-import { History } from "history";
 import { RouteComponentProps } from "react-router-dom";
-import { useConfig } from "@openmrs/esm-config";
+import { navigate, useConfig } from "@openmrs/esm-config";
 import { setSessionLocation, queryLocations } from "./choose-location.resource";
 import { useCurrentUser } from "../CurrentUserContext";
 import { LocationEntry } from "../types";
-
-const absoluteUrlRegex = new RegExp("^(?:[a-z]+:)?//", "i");
-
-declare global {
-  interface Window {
-    openmrsBase: string;
-  }
-}
-
-function navigate(history: History, spa: boolean, url: string) {
-  if (spa) {
-    history.push(url);
-  } else if (!spa && !url.match(absoluteUrlRegex)) {
-    window.location.href = window.openmrsBase + url;
-  } else {
-    window.location.href = url;
-  }
-}
 
 export interface LoginReferrer {
   referrer?: string;
@@ -50,22 +31,13 @@ export const ChooseLocation: React.FC<ChooseLocationProps> = (props) => {
 
       sessionDefined.then(() => {
         if (referrer && referrer !== "/") {
-          props.history.push(referrer);
+          navigate({ to: referrer });
         } else {
-          navigate(
-            props.history,
-            config.links.loginSuccess.spa,
-            config.links.loginSuccess.url
-          );
+          navigate({ to: config.links.loginSuccess });
         }
       });
     },
-    [
-      referrer,
-      config.links.loginSuccess.spa,
-      config.links.loginSuccess.url,
-      props.history,
-    ]
+    [referrer, config.links.loginSuccess]
   );
 
   React.useEffect(() => {

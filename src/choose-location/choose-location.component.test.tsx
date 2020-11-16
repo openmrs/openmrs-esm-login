@@ -1,9 +1,13 @@
+import React from "react";
 import "@testing-library/jest-dom";
 import { act } from "react-dom/test-utils";
-import { cleanup, wait } from "@testing-library/react";
+import { cleanup, wait, screen } from "@testing-library/react";
+import { navigate } from "@openmrs/esm-config";
 import { queryLocations } from "./choose-location.resource";
 import ChooseLocation from "./choose-location.component";
 import renderWithRouter from "../test-helpers/render-with-router";
+
+const navigateMock = navigate as jest.Mock;
 
 const { config } = require("@openmrs/esm-config");
 
@@ -30,7 +34,9 @@ jest.mock("./choose-location.resource.ts", () => ({
 }));
 
 describe(`<ChooseLocation />`, () => {
-  afterEach(cleanup);
+  afterEach(() => {
+    navigateMock.mockClear();
+  });
 
   it(`should redirect back to referring page on successful login when there is only one location`, async () => {
     const locationMock = {
@@ -39,26 +45,26 @@ describe(`<ChooseLocation />`, () => {
       },
     };
     cleanup();
-    const wrapper = renderWithRouter(ChooseLocation, {
+    renderWithRouter(ChooseLocation, {
       location: locationMock,
     });
     await act(wait);
-    expect(wrapper.history.location.pathname).toBe(locationMock.state.referrer);
+    expect(navigate).toHaveBeenCalledWith({ to: locationMock.state.referrer });
   });
 
   it(`should set location and skip location select page if there is exactly one location`, async () => {
     cleanup();
-    const wrapper = renderWithRouter(ChooseLocation, {});
+    renderWithRouter(ChooseLocation, {});
     await act(wait);
-    expect(wrapper.history.location.pathname).toBe("/home");
+    expect(navigate).toHaveBeenCalledWith({ to: "${openmrsSpaBase}/home" });
   });
 
   it(`should set location and skip location select page if there is no location`, async () => {
     cleanup();
     (queryLocations as any).mockImplementationOnce(() => Promise.resolve([]));
-    const wrapper = renderWithRouter(ChooseLocation, {});
+    renderWithRouter(ChooseLocation, {});
     await act(wait);
-    expect(wrapper.history.location.pathname).toBe("/home");
+    expect(navigate).toHaveBeenCalledWith({ to: "${openmrsSpaBase}/home" });
   });
 
   it(`should show the location picker when multiple locations exist`, async () => {
@@ -79,9 +85,9 @@ describe(`<ChooseLocation />`, () => {
         },
       ])
     );
-    const wrapper = renderWithRouter(ChooseLocation, {});
+    renderWithRouter(ChooseLocation, {});
     await act(wait);
-    expect(wrapper.history.location.pathname).toBe("/");
+    expect(navigate).not.toHaveBeenCalled();
   });
 
   it(`should not show the location picker when disabled`, async () => {
@@ -105,14 +111,14 @@ describe(`<ChooseLocation />`, () => {
     );
     const wrapper = renderWithRouter(ChooseLocation, {});
     await act(wait);
-    expect(wrapper.history.location.pathname).toBe("/home");
+    expect(navigate).toHaveBeenCalledWith({ to: "${openmrsSpaBase}/home" });
   });
 
   it(`should redirect to custom path if configured`, async () => {
     cleanup();
-    config.links.loginSuccess.url = "/foo";
+    config.links.loginSuccess = "${openmrsSpaBase}/foo";
     const wrapper = renderWithRouter(ChooseLocation, {});
     await act(wait);
-    expect(wrapper.history.location.pathname).toBe("/foo");
+    expect(navigate).toHaveBeenCalledWith({ to: "${openmrsSpaBase}/foo" });
   });
 });
