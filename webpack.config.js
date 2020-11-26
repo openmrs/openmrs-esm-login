@@ -10,7 +10,7 @@ module.exports = {
     path.resolve(__dirname, "src/index.ts"),
   ],
   output: {
-    filename: "openmrs-esm-login.js",
+    filename: "openmrs-esm-login-app.js",
     libraryTarget: "system",
     path: path.resolve(__dirname, "dist"),
     jsonpFunction: "webpackJsonp_openmrs_esm_login",

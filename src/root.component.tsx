@@ -1,5 +1,4 @@
 import React from "react";
-import { openmrsRootDecorator } from "@openmrs/esm-context";
 import Login from "./login/login.component";
 import ChooseLocation from "./choose-location/choose-location.component";
 import { BrowserRouter, Route } from "react-router-dom";
@@ -40,16 +39,13 @@ defineConfigSchema("@openmrs/esm-login-app", {
   },
 });
 
-const Root: React.FC = () => (
-  <CurrentUserContext>
-    <BrowserRouter basename={window.getOpenmrsSpaBase()}>
-      <Route exact path="/login" component={Login} />
-      <Route exact path="/login/location" component={ChooseLocation} />
-    </BrowserRouter>
-  </CurrentUserContext>
-);
-
-export default openmrsRootDecorator({
-  featureName: "login",
-  moduleName: "@openmrs/esm-login-app",
-})(Root);
+export default function Root() {
+  return (
+    <CurrentUserContext>
+      <BrowserRouter basename={window.getOpenmrsSpaBase()}>
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/login/location" component={ChooseLocation} />
+      </BrowserRouter>
+    </CurrentUserContext>
+  );
+}

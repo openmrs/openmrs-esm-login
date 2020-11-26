@@ -1,7 +1,6 @@
-import React from "react";
 import "@testing-library/jest-dom";
 import { act } from "react-dom/test-utils";
-import { cleanup, wait, screen } from "@testing-library/react";
+import { cleanup, wait } from "@testing-library/react";
 import { navigate } from "@openmrs/esm-config";
 import { queryLocations } from "./choose-location.resource";
 import ChooseLocation from "./choose-location.component";
@@ -9,7 +8,7 @@ import renderWithRouter from "../test-helpers/render-with-router";
 
 const navigateMock = navigate as jest.Mock;
 
-const { config } = require("@openmrs/esm-config");
+const { config } = require("@openmrs/esm-react-utils");
 
 jest.mock("../CurrentUserContext", () => ({
   useCurrentUser() {
