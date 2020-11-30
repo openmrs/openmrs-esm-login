@@ -4,7 +4,6 @@ import { debounce, isEmpty } from "lodash";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { Trans } from "react-i18next";
 import { LocationEntry } from "../types";
-import { useCurrentUser } from "../CurrentUserContext";
 import styles from "../styles.css";
 
 const CardHeader: React.FC = (props) => (
