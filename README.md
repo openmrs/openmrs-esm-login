@@ -1,15 +1,8 @@
-# openmrs-esm-login
+![Node.js CI](https://github.com/openmrs/openmrs-esm-login/workflows/Node.js%20CI/badge.svg)
 
-[![Build Status](https://travis-ci.org/openmrs/openmrs-esm-login.svg?branch=master)](https://travis-ci.org/openmrs/openmrs-esm-login)
+# OpenMRS ESM Login
 
 An [OpenMRS Microfrontend](https://wiki.openmrs.org/display/projects/Frontend+-+SPA+and+Microfrontends).
-
-## What is this?
-
-openmrs-esm-login is an in-browser 
-[javascript module](https://github.com/openmrs/openmrs-rfc-frontend/blob/master/text/0002-modules.md) 
-that is a [single-spa application](https://single-spa.js.org/docs/building-applications.html).
-It is responsible for rendering all UI related to logging in.
 
 ## How do I use it?
 
