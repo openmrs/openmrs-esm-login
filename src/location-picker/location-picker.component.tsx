@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback } from "react";
+import React from "react";
 import { always } from "kremling";
 import { debounce, isEmpty } from "lodash";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
@@ -54,45 +54,52 @@ interface LocationPickerProps {
   currentLocationUuid?: string;
 }
 
-const LocationPicker: React.FC<LocationPickerProps> = (props) => {
+const LocationPicker: React.FC<LocationPickerProps> = ({
+  currentUser,
+  loginLocations,
+  onChangeLocation,
+  searchLocations,
+  hideWelcomeMessage,
+  currentLocationUuid,
+}) => {
   const userDefaultLoginLocation: string = "userDefaultLoginLocationKey";
   const getDefaultUserLoginLocation = (): string => {
     const userLocation = window.localStorage.getItem(
-      `${userDefaultLoginLocation}${props.currentUser}`
+      `${userDefaultLoginLocation}${currentUser}`
     );
-    const isValidLocation = props.loginLocations.some(
+    const isValidLocation = loginLocations.some(
       (location) => location.resource.id === userLocation
     );
     return isValidLocation ? userLocation : "";
   };
   const [locationData, setLocationData] = React.useState<LocationDataState>({
     activeLocation: getDefaultUserLoginLocation() ?? "",
-    locationResult: props.loginLocations,
+    locationResult: loginLocations,
   });
   const [searchTerm, setSearchTerm] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const inputRef = useRef();
+  const inputRef = React.useRef();
 
   const searchTimeout = 300;
 
-  const autoFocusSearchInput = useCallback(
+  const autoFocusSearchInput = React.useCallback(
     (el: HTMLInputElement) => (el ? el.focus() : null),
     []
   );
 
   React.useEffect(() => {
     if (isSubmitting) {
-      props.onChangeLocation(locationData.activeLocation);
+      onChangeLocation(locationData.activeLocation);
       setIsSubmitting(false);
     }
-  }, [isSubmitting, locationData]);
+  }, [isSubmitting, locationData, onChangeLocation]);
 
   React.useEffect(() => {
     const ac = new AbortController();
 
-    if (props.loginLocations.length > 100) {
+    if (loginLocations.length > 100) {
       if (searchTerm) {
-        props.searchLocations(searchTerm).then((locationResult) => {
+        searchLocations(searchTerm).then((locationResult) => {
           changeLocationData({
             locationResult,
           });
@@ -100,12 +107,12 @@ const LocationPicker: React.FC<LocationPickerProps> = (props) => {
       }
     } else if (searchTerm) {
       filterList(searchTerm);
-    } else if (props.loginLocations !== locationData.locationResult) {
-      changeLocationData({ locationResult: props.loginLocations });
+    } else if (loginLocations !== locationData.locationResult) {
+      changeLocationData({ locationResult: loginLocations });
     }
 
     return () => ac.abort();
-  }, [searchTerm, props.loginLocations]);
+  }, [searchTerm, loginLocations]);
 
   const search = debounce((location: string) => {
     clearSelectedLocation();
@@ -114,7 +121,7 @@ const LocationPicker: React.FC<LocationPickerProps> = (props) => {
 
   const filterList = (searchTerm: string) => {
     if (searchTerm) {
-      const updatedList = props.loginLocations.filter((item) => {
+      const updatedList = loginLocations.filter((item) => {
         return (
           item.resource.name.toLowerCase().search(searchTerm.toLowerCase()) !==
           -1
@@ -139,28 +146,28 @@ const LocationPicker: React.FC<LocationPickerProps> = (props) => {
     setIsSubmitting(true);
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (locationData.activeLocation) {
       window.localStorage.setItem(
-        `${userDefaultLoginLocation}${props.currentUser}`,
+        `${userDefaultLoginLocation}${currentUser}`,
         locationData.activeLocation
       );
     }
-  }, [locationData.activeLocation, props.currentUser]);
+  }, [locationData.activeLocation, currentUser]);
 
-  useEffect(() => {
-    if (props.currentLocationUuid && props.hideWelcomeMessage) {
+  React.useEffect(() => {
+    if (currentLocationUuid && hideWelcomeMessage) {
       setLocationData((prevState) => ({
         ...prevState,
         ...{
-          activeLocation: props.currentLocationUuid,
+          activeLocation: currentLocationUuid,
           locationResult: prevState.locationResult,
         },
       }));
     }
-  }, []);
+  }, [currentLocationUuid, hideWelcomeMessage]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (isSubmitting && inputRef.current) {
       let searchInput: HTMLInputElement = inputRef.current;
       searchInput.value = "";
@@ -177,14 +184,14 @@ const LocationPicker: React.FC<LocationPickerProps> = (props) => {
 
   return (
     <div className={`canvas ${styles["container"]}`}>
-      {!props.hideWelcomeMessage && (
+      {!hideWelcomeMessage && (
         <h2 className={styles["welcome-msg"]}>
-          <Trans i18nKey="welcome">Welcome</Trans> {props.currentUser}
+          <Trans i18nKey="welcome">Welcome</Trans> {currentUser}
         </h2>
       )}
       <form onSubmit={handleSubmit}>
         <div className={`${styles["location-card"]} omrs-card`}>
-          {!props.hideWelcomeMessage && (
+          {!hideWelcomeMessage && (
             <CardHeader>
               <Trans i18nKey="location">Location</Trans>
             </CardHeader>
