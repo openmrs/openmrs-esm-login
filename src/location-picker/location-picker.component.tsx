@@ -8,7 +8,7 @@ import styles from "../styles.css";
 
 const CardHeader: React.FC = (props) => (
   <div className={styles["card-header"]}>
-    <h2 className={`omrs-margin-8 omrs-margin-left-12`}>{props.children}</h2>
+    <h3 className={`omrs-margin-8 omrs-margin-left-12`}>{props.children}</h3>
   </div>
 );
 
@@ -178,9 +178,9 @@ const LocationPicker: React.FC<LocationPickerProps> = (props) => {
   return (
     <div className={`canvas ${styles["container"]}`}>
       {!props.hideWelcomeMessage && (
-        <h1 className={styles["welcome-msg"]}>
+        <h2 className={styles["welcome-msg"]}>
           <Trans i18nKey="welcome">Welcome</Trans> {props.currentUser}
-        </h1>
+        </h2>
       )}
       <form onSubmit={handleSubmit}>
         <div className={`${styles["location-card"]} omrs-card`}>

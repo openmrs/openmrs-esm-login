@@ -114,4 +114,5 @@
 
 .welcome-msg {
   text-transform: capitalize;
+  margin: 1rem 0;
 }
