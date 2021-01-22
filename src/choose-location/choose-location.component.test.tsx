@@ -48,7 +48,9 @@ describe(`<ChooseLocation />`, () => {
       location: locationMock,
     });
     await act(wait);
-    expect(navigate).toHaveBeenCalledWith({ to: locationMock.state.referrer });
+    expect(navigate).toHaveBeenCalledWith({
+      to: "${openmrsSpaBase}" + locationMock.state.referrer,
+    });
   });
 
   it(`should set location and skip location select page if there is exactly one location`, async () => {

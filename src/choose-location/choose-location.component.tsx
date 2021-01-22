@@ -32,7 +32,7 @@ export const ChooseLocation: React.FC<ChooseLocationProps> = (props) => {
 
       sessionDefined.then(() => {
         if (referrer && referrer !== "/") {
-          navigate({ to: referrer });
+          navigate({ to: "${openmrsSpaBase}" + referrer });
         } else {
           navigate({ to: config.links.loginSuccess });
         }
