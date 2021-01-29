@@ -1,3 +1,5 @@
+@import "/root.scss";
+
 .container {
   display: flex;
   flex-direction: column;
@@ -5,12 +7,29 @@
   align-items: center;
 }
 
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 23rem;
+  height: 27.5rem;
+  margin: 0 0 0.5rem;
+  padding: 2.5rem;
+  border-radius: 2px;
+  border: solid 1px var(--grey-2);
+  background-color: var(--color-white);
+}
+
 .center {
   text-align: center;
 }
 
+.right{
+  text-align: right;
+}
+
 .logo {
-  margin-bottom: 3rem;
+  margin-bottom: 1rem;
 }
 
 .logo-img {
@@ -33,6 +52,35 @@
 .powered-by-txt {
   text-align: center;
   color: var(--omrs-color-ink-low-contrast);
+}
+
+.need-help-txt {
+  width: 5.125rem;
+  height: 1.375rem;
+  margin: 0 0.0025rem 0 0;
+  font-family: IBMPlexSans;
+  font-size: 1rem;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.38;
+  letter-spacing: normal;
+  color: var(--omrs-color-ink-low-contrast);
+  /* background-color: var(--open-mrs-background-gray); */
+}
+.contact-administrator { 
+  width: 13.375rem;
+  height: 1.375rem;
+  margin: 0 0 0 0.25rem;
+  font-family: IBMPlexSans;
+  font-size: 1rem;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.38;
+  letter-spacing: normal;
+  color: var(--color-blue-60-2);
+  font-family: carbon--font-family('mono');
 }
 
 .powered-by-logo {

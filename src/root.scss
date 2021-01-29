@@ -1,0 +1,13 @@
+@import "~carbon-components/scss/globals/scss/vendor/@carbon/elements/scss/type/styles";
+@import "~carbon-components/src/globals/scss/vendor/@carbon/layout/scss/generated/spacing";
+@import "~carbon-components/src/globals/scss/vendor/@carbon/layout/scss/generated/layout";
+@import "carbon-components/scss/globals/scss/typography.scss";
+@import "node_modules/@ibm/plex/scss/ibm-plex.scss";
+@import "@carbon/type/scss/styles";
+
+$blue-60: #0062ff;
+$color-gray-70: #525252;
+
+$feature-flags: (
+  grid-columns-16: true,
+);

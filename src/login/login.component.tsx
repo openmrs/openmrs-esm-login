@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "../styles.css";
+import { Button, TextInput, Link } from "carbon-components-react";
 import { RouteComponentProps } from "react-router-dom";
 import { always } from "kremling";
 import { Trans } from "react-i18next";
@@ -74,7 +75,7 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
         <div className={styles["center"]}>{logo}</div>
         <form onSubmit={handleSubmit} ref={formRef}>
           <div className="omrs-input-group">
-            <input
+            <TextInput
               id="username"
               className={always("omrs-input-outlined").maybe(
                 "omrs-input-danger",
@@ -82,51 +83,36 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
               )}
               type="text"
               name="username"
+              labelText="Username"
               value={username}
               onChange={(evt) => setUsername(evt.target.value)}
               ref={usernameInputRef}
               autoFocus
               required
             />
-            <label htmlFor="username">
-              <Trans i18nKey="username">Username</Trans>
-            </label>
           </div>
           <div className="omrs-input-group">
-            <input
+            <TextInput.PasswordInput
               id="password"
+              invalidText="A valid value is required"
+              labelText="Password"
               className={always("omrs-input-outlined").maybe(
                 "omrs-input-danger",
                 errorMessage
               )}
-              type={showPassword ? "text" : "password"}
               name="password"
               value={password}
               onChange={(evt) => setPassword(evt.target.value)}
               ref={passwordInputRef}
               required
             />
-            <label htmlFor="password">
-              <Trans i18nKey="password">Password</Trans>
-            </label>
-            <button
-              className={`omrs-unstyled ${styles["icon-btn"]}`}
-              type="button"
+          </div>
+          <div className={styles["right"]}>
+            <Button
               aria-label="Toggle view password text"
               onClick={() => setShowPassword(!showPassword)}
-            >
-              <svg className="omrs-icon" role="img">
-                <use xlinkHref="#omrs-icon-visibility" />
-              </svg>
-            </button>
-          </div>
-          <div className={styles["center"]}>
-            <p className={styles["error-msg"]}>{errorMessage}</p>
-          </div>
-          <div>
-            <button
               className={always(
-                `omrs-margin-top-24 omrs-btn omrs-btn-lg ${styles["submit-btn"]}`
+                `omrs-margin-top-24 omrs-btn omrs-btn-lg  ${styles["submit-btn"]}`
               ).toggle(
                 "omrs-filled-disabled",
                 "omrs-filled-action",
@@ -134,11 +120,25 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
               )}
               type="submit"
               disabled={!password || !username}
+              size="field"
             >
               <Trans i18nKey="login">Login</Trans>
-            </button>
+            </Button>
+          </div>
+          <div className={styles["center"]}>
+            <p className={styles["error-msg"]}>{errorMessage}</p>
           </div>
         </form>
+      </div>
+      <div>
+        <p>
+          <Trans i18nKey="needHelp" className={styles["need-help-txt"]}>
+            Need help ?
+          </Trans>
+          <Link href="#" className={styles["contact-administrator"]}>
+            <Trans i18nKey="contactAdmin">Contact the site administrator</Trans>
+          </Link>
+        </p>
       </div>
       <div className="omrs-margin-top-32">
         <p className={styles["powered-by-txt"]}>
