@@ -3,7 +3,7 @@ import styles from "../styles.css";
 import { Button, TextInput, Link } from "carbon-components-react";
 import { RouteComponentProps } from "react-router-dom";
 import { always } from "kremling";
-import { Trans } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { useConfig } from "@openmrs/esm-react-utils";
 import { performLogin } from "./login.resource";
 import { useCurrentUser } from "../CurrentUserContext";
@@ -25,6 +25,7 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
   const passwordInputRef = React.useRef<HTMLInputElement>(null);
   const usernameInputRef = React.useRef<HTMLInputElement>(null);
   const formRef = React.useRef<HTMLFormElement>(null);
+  const [t, i18n] = useTranslation();
 
   React.useEffect(() => {
     if (user) {
@@ -83,7 +84,7 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
               )}
               type="text"
               name="username"
-              labelText="Username"
+              labelText={t("Username")}
               value={username}
               onChange={(evt) => setUsername(evt.target.value)}
               ref={usernameInputRef}
@@ -94,8 +95,8 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
           <div className="omrs-input-group">
             <TextInput.PasswordInput
               id="password"
-              invalidText="A valid value is required"
-              labelText="Password"
+              invalidText={t("A valid value is required")}
+              labelText={t("Password")}
               className={always("omrs-input-outlined").maybe(
                 "omrs-input-danger",
                 errorMessage
