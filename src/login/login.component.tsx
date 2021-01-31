@@ -130,12 +130,12 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
           </div>
         </form>
       </div>
-      <div>
-        <p>
-          <Trans i18nKey="needHelp" className={styles["need-help-txt"]}>
-            Need help ?
-          </Trans>
-          <Link href="#" className={styles["contact-administrator"]}>
+      <div className={styles["need-help"]}>
+        <p className={styles["need-help-txt"]}>
+          <Trans i18nKey="needHelp">Need help ?</Trans>
+        </p>
+        <p className={styles["contact-administrator"]}>
+          <Link href="#">
             <Trans i18nKey="contactAdmin">Contact the site administrator</Trans>
           </Link>
         </p>
