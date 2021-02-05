@@ -1,3 +1,5 @@
+@import "./root.scss";
+
 .container {
   display: flex;
   flex-direction: column;
@@ -22,7 +24,7 @@
   text-align: center;
 }
 
-.right{
+.right {
   text-align: right;
 }
 
@@ -35,15 +37,12 @@
   max-width: 100%;
 }
 
-.submit-btn {
-  width: 100%;
-}
-
 .icon-btn {
   cursor: pointer;
 }
 
 .error-msg {
+  margin-top: 1rem;
   color: var(--omrs-color-danger);
 }
 
@@ -53,35 +52,20 @@
 }
 
 .need-help {
-  margin-top: 0.5rem;
+  width: 23rem;
 }
 
 .need-help-txt {
-  display:table-cell;
-  width: 6rem;
-  height: 1.375rem;
-  font-size: 1rem;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: normal;
-  line-height: 1.38;
-  letter-spacing: normal;
-  color: var(--omrs-color-ink-low-contrast);
+  @extend .bodyShort01;
+  color: $text-02;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
-.contact-administrator { 
-  display:table-cell;
-  width: 13.375rem;
-  height: 1.375rem;
-  margin: 0 0 0 0.25rem;
-  font-size: 1rem;
-  font-weight: normal;
-  font-stretch: normal;
-  font-style: omrs-type-title ;
-  line-height: 1.38;
-  letter-spacing: normal;
-  color: var(--omrs-color-interaction);
-  font-family: carbon--font-family('mono');
+.contact-administrator-need-help {
+  @extend .bodyShort01;
+  padding-left: 0.5rem;
 }
 
 .powered-by-logo {
@@ -91,28 +75,26 @@
 
 @media only screen and (min-width: 481px) {
   .login-card {
-    margin-top: 2.5%;
-    padding: 3rem;
-    width: 26.375rem;
+    padding: 2.5rem;
+    width: 23rem;
+  }
+
+  .container {
+    height: 100vh;
   }
 }
 
 @media only screen and (max-width: 480px) {
   .login-card {
     margin-top: 2.5%;
+    width: 23rem;
+    padding: 2.5rem;
     border: none;
-    width: 95%;
-    padding: 1rem;
   }
-}
 
-.card-header {
-  background-color: var(--omrs-color-bg-medium-contrast);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--omrs-color-bg-low-contrast);
-  border-radius: 0.25rem 0.25rem 0 0;
+  .container {
+    height: 100vh;
+  }
 }
 
 .card-content {
@@ -128,10 +110,6 @@
 
 .location-submit-btn {
   width: 21.75rem;
-}
-
-.location-card {
-  max-width: 60rem;
 }
 
 .location-radio-group {
@@ -161,7 +139,22 @@
   width: 20.5rem;
 }
 
-.welcome-msg {
-  text-transform: capitalize;
-  margin: 1rem 0;
+.input-group {
+  display: "flex";
+  justify-content: "center";
+  flex-direction: "column";
+  align-items: "center";
+  width: "100%";
+  width: 18rem;
+}
+
+.continueButton {
+  margin-top: 1.5rem;
+  width: 18rem;
+}
+
+.inputStyle {
+  @extend .label01;
+  width: 18rem;
+  height: 3rem;
 }

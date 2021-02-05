@@ -4,7 +4,7 @@ import { debounce, isEmpty } from "lodash";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { Trans } from "react-i18next";
 import { LocationEntry } from "../types";
-import styles from "../styles.css";
+import styles from "./location-picker.component.scss";
 
 const CardHeader: React.FC = (props) => (
   <div className={styles["card-header"]}>
@@ -183,7 +183,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
   };
 
   return (
-    <div className={`canvas ${styles["container"]}`}>
+    <div className={`canvas ${styles["locationPickerContainer"]}`}>
       {!hideWelcomeMessage && (
         <h2 className={styles["welcome-msg"]}>
           <Trans i18nKey="welcome">Welcome</Trans> {currentUser}

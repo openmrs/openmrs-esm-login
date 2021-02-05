@@ -1,5 +1,7 @@
 {
   "login": "Iniciar sesión",
   "password": "Contraseña",
-  "username": "Nombre de usuario"
+  "username": "Nombre de usuario",
+  "continue": "Seguir",
+  "errorMessage": "Nombre de usuario o contraseña incorrecta"
 }

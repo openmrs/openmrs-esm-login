@@ -7,7 +7,7 @@
     "@openmrs/esm-config": "<rootDir>/__mocks__/openmrs-esm-config.mock.tsx",
     "@openmrs/esm-error-handling": "<rootDir>/__mocks__/openmrs-esm-error-handling.mock.tsx",
     "@openmrs/esm-react-utils": "<rootDir>/__mocks__/openmrs-esm-react-utils.mock.tsx",
-    "\\.(css)$": "identity-obj-proxy"
+    "\\.(s?css)$": "identity-obj-proxy"
   },
   "setupFiles": ["<rootDir>/src/setup-tests.js"]
 }
