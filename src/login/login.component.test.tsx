@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import Login from "./login.component";
 import { useState } from "react";
-import { cleanup, fireEvent, wait } from "@testing-library/react";
+import { cleanup, wait } from "@testing-library/react";
 import { performLogin } from "./login.resource";
 import { setSessionLocation } from "../choose-location/choose-location.resource";
 import { useCurrentUser } from "../CurrentUserContext";
@@ -53,17 +53,16 @@ describe(`<Login />`, () => {
     expect(
       wrapper.getByRole("textbox", { name: /username/i })
     ).toBeInTheDocument();
-    fireEvent.change(wrapper.getByRole("textbox", { name: /Username/i }), {
-      target: { value: "" },
-    });
+    userEvent.type(wrapper.getByRole("textbox", { name: /Username/i }), "");
     const continueButton = wrapper.getByRole("button", { name: /Continue/i });
-    fireEvent.click(continueButton);
+    userEvent.click(continueButton);
     expect(wrapper.getByRole("textbox", { name: /username/i })).toHaveFocus();
-
-    fireEvent.change(wrapper.getByRole("textbox", { name: /Username/i }), {
-      target: { value: "yoshi" },
-    });
-    fireEvent.click(continueButton);
+    userEvent.type(
+      wrapper.getByRole("textbox", { name: /Username/i }),
+      "yoshi"
+    );
+    userEvent.click(continueButton);
+    userEvent.type(wrapper.getByLabelText("password"), "yoshi");
     expect(wrapper.getByLabelText(/password/i)).toHaveFocus();
   });
 
@@ -73,14 +72,13 @@ describe(`<Login />`, () => {
     const wrapper = renderWithRouter(Login, { loginLocations: loginLocations });
 
     expect(performLogin).not.toHaveBeenCalled();
-    fireEvent.change(wrapper.getByRole("textbox", { name: /Username/i }), {
-      target: { value: "yoshi" },
-    });
-    fireEvent.click(wrapper.getByRole("button", { name: /Continue/i }));
-    fireEvent.change(wrapper.getByLabelText("password"), {
-      target: { value: "no-tax-fraud" },
-    });
-    fireEvent.click(wrapper.getByRole("button", { name: /submit/i }));
+    userEvent.type(
+      wrapper.getByRole("textbox", { name: /Username/i }),
+      "yoshi"
+    );
+    userEvent.click(wrapper.getByRole("button", { name: /Continue/i }));
+    userEvent.type(wrapper.getByLabelText("password"), "no-tax-fraud");
+    userEvent.click(wrapper.getByRole("button", { name: /submit/i }));
     await wait();
     expect(performLogin).toHaveBeenCalledWith("yoshi", "no-tax-fraud");
   });
@@ -101,14 +99,13 @@ describe(`<Login />`, () => {
 
     const wrapper = renderWithRouter(Login, { loginLocations: loginLocations });
 
-    fireEvent.change(wrapper.getByRole("textbox", { name: /Username/i }), {
-      target: { value: "yoshi" },
-    });
-    fireEvent.click(wrapper.getByRole("button", { name: /Continue/i }));
-    fireEvent.change(wrapper.getByLabelText("password"), {
-      target: { value: "no-tax-fraud" },
-    });
-    fireEvent.click(wrapper.getByRole("button", { name: /submit/i }));
+    userEvent.type(
+      wrapper.getByRole("textbox", { name: /Username/i }),
+      "yoshi"
+    );
+    userEvent.click(wrapper.getByRole("button", { name: /Continue/i }));
+    userEvent.type(wrapper.getByLabelText("password"), "no-tax-fraud");
+    userEvent.click(wrapper.getByRole("button", { name: /submit/i }));
     await wait();
 
     expect(wrapper.history.location.pathname).toBe("/login/location");

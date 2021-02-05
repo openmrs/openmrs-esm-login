@@ -7,9 +7,7 @@ const { peerDependencies } = require("./package.json");
 const cssLoader = {
   loader: "css-loader",
   options: {
-    modules: {
-      localIdentName: "esm-login_[name]__[local]___[hash:base64:5]",
-    },
+    modules: true,
   },
 };
 
