@@ -26,7 +26,7 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
   const passwordInputRef = React.useRef<HTMLInputElement>(null);
   const usernameInputRef = React.useRef<HTMLInputElement>(null);
   const formRef = React.useRef<HTMLFormElement>(null);
-  const [t, i18n] = useTranslation();
+  const [t] = useTranslation();
 
   React.useEffect(() => {
     if (user) {
@@ -37,8 +37,33 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
     }
   }, [user, props.history, props.location]);
 
+  React.useEffect(() => {
+    if (usernameInputRef.current) {
+      usernameInputRef.current.focus();
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (document.activeElement !== usernameInputRef.current) {
+      passwordInputRef.current.focus();
+    }
+  }, [showPassword]);
+
+  function continueLogin() {
+    if (usernameInputRef.current.value.length > 0) {
+      setShowPassword(true);
+    } else {
+      usernameInputRef.current.focus();
+    }
+  }
+
   async function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
+
+    if (!showPassword) {
+      continueLogin();
+      return;
+    }
 
     try {
       const loginRes = await performLogin(username, password);
@@ -54,18 +79,6 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
       resetUserNameAndPassword();
     }
   }
-
-  React.useEffect(() => {
-    if (usernameInputRef.current) {
-      usernameInputRef.current.focus();
-    }
-  }, []);
-
-  React.useEffect(() => {
-    if (document.activeElement !== usernameInputRef.current) {
-      passwordInputRef.current.focus();
-    }
-  }, [showPassword]);
 
   const resetUserNameAndPassword = () => {
     usernameInputRef.current.focus();
@@ -107,13 +120,7 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
                 className={styles.continueButton}
                 renderIcon={ArrowRight24}
                 iconDescription="Next"
-                onClick={() => {
-                  if (usernameInputRef.current.value.length > 0) {
-                    setShowPassword(true);
-                  } else {
-                    usernameInputRef.current.focus();
-                  }
-                }}
+                onClick={continueLogin}
               >
                 {t("continue", "Continue")}
               </Button>
