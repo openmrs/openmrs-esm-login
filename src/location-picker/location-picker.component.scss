@@ -1,0 +1,60 @@
+.locationPickerContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.card-header {
+  background-color: var(--omrs-color-bg-medium-contrast);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--omrs-color-bg-low-contrast);
+  border-radius: 0.25rem 0.25rem 0 0;
+}
+
+.welcome-msg {
+  text-transform: capitalize;
+  margin: 1rem 0;
+}
+
+.location-card {
+  max-width: 60rem;
+}
+
+.center {
+  text-align: center;
+}
+
+.location-submit-btn {
+  width: 21.75rem;
+  max-width: 100%;
+}
+
+.location-radio-group {
+  margin-top: 0.625rem;
+  background-color: var(--omrs-color-bg-high-contrast);
+  list-style: none;
+  display: grid;
+  grid-auto-columns: 23rem;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(20, min-content);
+  margin-left: 0.5rem;
+  position: relative;
+}
+
+.location-radio-group input[type="radio"] {
+  opacity: 0;
+  width: 0;
+}
+
+.location-radio-group label {
+  display: flex;
+  background-color: var(--omrs-color-bg-high-contrast);
+  color: var(--omrs-color-ink-high-contrast);
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--omrs-color-bg-low-contrast);
+  border-radius: 0.25rem;
+  width: 20.5rem;
+}

@@ -4,6 +4,13 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 const { peerDependencies } = require("./package.json");
 
+const cssLoader = {
+  loader: "css-loader",
+  options: {
+    modules: true,
+  },
+};
+
 module.exports = {
   entry: [
     path.resolve(__dirname, "src/set-public-path.ts"),
@@ -31,15 +38,11 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          { loader: "style-loader" },
-          {
-            loader: "css-loader",
-            options: {
-              modules: true,
-            },
-          },
-        ],
+        use: ["style-loader", cssLoader],
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: ["style-loader", cssLoader, "sass-loader"],
       },
     ],
   },

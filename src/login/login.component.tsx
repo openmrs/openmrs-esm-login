@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../styles.css";
+import styles from "../styles.scss";
 import { Button, TextInput, Link } from "carbon-components-react";
 import { RouteComponentProps } from "react-router-dom";
 import { always } from "kremling";
@@ -7,6 +7,7 @@ import { Trans, useTranslation } from "react-i18next";
 import { useConfig } from "@openmrs/esm-react-utils";
 import { performLogin } from "./login.resource";
 import { useCurrentUser } from "../CurrentUserContext";
+import { ArrowRight24 } from "@carbon/icons-react";
 
 export interface LoginReferrer {
   referrer?: string;
@@ -49,15 +50,28 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
       }
     } catch (error) {
       setErrorMessage(error.message);
-      passwordInputRef.current.focus();
+      setShowPassword(false);
+      resetUserNameAndPassword();
     }
   }
+
+  React.useEffect(() => {
+    if (usernameInputRef.current) {
+      usernameInputRef.current.focus();
+    }
+  }, []);
 
   React.useEffect(() => {
     if (document.activeElement !== usernameInputRef.current) {
       passwordInputRef.current.focus();
     }
   }, [showPassword]);
+
+  const resetUserNameAndPassword = () => {
+    usernameInputRef.current.focus();
+    setUsername("");
+    setPassword("");
+  };
 
   const logo = config.logo.src ? (
     <img
@@ -75,70 +89,74 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
       <div className={`omrs-card ${styles["login-card"]}`}>
         <div className={styles["center"]}>{logo}</div>
         <form onSubmit={handleSubmit} ref={formRef}>
-          <div className="omrs-input-group">
-            <TextInput
-              id="username"
-              className={always("omrs-input-outlined").maybe(
-                "omrs-input-danger",
-                errorMessage
-              )}
-              type="text"
-              name="username"
-              labelText={t("Username")}
-              value={username}
-              onChange={(evt) => setUsername(evt.target.value)}
-              ref={usernameInputRef}
-              autoFocus
-              required
-            />
-          </div>
-          <div className="omrs-input-group">
-            <TextInput.PasswordInput
-              id="password"
-              invalidText={t("A valid value is required")}
-              labelText={t("Password")}
-              className={always("omrs-input-outlined").maybe(
-                "omrs-input-danger",
-                errorMessage
-              )}
-              name="password"
-              value={password}
-              onChange={(evt) => setPassword(evt.target.value)}
-              ref={passwordInputRef}
-              required
-            />
-          </div>
-          <div className={styles["right"]}>
-            <Button
-              aria-label="Toggle view password text"
-              onClick={() => setShowPassword(!showPassword)}
-              className={always(
-                `omrs-margin-top-24 omrs-btn omrs-btn-lg  ${styles["submit-btn"]}`
-              ).toggle(
-                "omrs-filled-disabled",
-                "omrs-filled-action",
-                !password || !username
-              )}
-              type="submit"
-              disabled={!password || !username}
-              size="field"
-            >
-              <Trans i18nKey="login">Login</Trans>
-            </Button>
-          </div>
+          {!showPassword && (
+            <div className={styles["input-group"]}>
+              <TextInput
+                id="username"
+                type="text"
+                name="username"
+                labelText={t("username", "UserName")}
+                className={styles.inputStyle}
+                value={username}
+                onChange={(evt) => setUsername(evt.target.value)}
+                ref={usernameInputRef}
+                autoFocus
+                required
+              />
+              <Button
+                className={styles.continueButton}
+                renderIcon={ArrowRight24}
+                iconDescription="Next"
+                onClick={() => {
+                  if (usernameInputRef.current.value.length > 0) {
+                    setShowPassword(true);
+                  } else {
+                    usernameInputRef.current.focus();
+                  }
+                }}
+              >
+                {t("continue", "Continue")}
+              </Button>
+            </div>
+          )}
+          {showPassword && (
+            <div className={styles["input-group"]}>
+              <TextInput.PasswordInput
+                id="password"
+                invalidText={t("A valid value is required")}
+                labelText={t("password")}
+                name="password"
+                className={styles.inputStyle}
+                value={password}
+                onChange={(evt) => setPassword(evt.target.value)}
+                ref={passwordInputRef}
+                required
+                showPasswordLabel="Show password"
+              />
+              <Button
+                aria-label="submit"
+                type="submit"
+                className={styles.continueButton}
+                renderIcon={ArrowRight24}
+                iconDescription="Next"
+              >
+                <Trans i18nKey="login">Log in</Trans>
+              </Button>
+            </div>
+          )}
           <div className={styles["center"]}>
-            <p className={styles["error-msg"]}>{errorMessage}</p>
+            <p className={styles["error-msg"]}>
+              {t("errorMessage", errorMessage)}
+            </p>
           </div>
         </form>
       </div>
       <div className={styles["need-help"]}>
         <p className={styles["need-help-txt"]}>
           <Trans i18nKey="needHelp">Need help ?</Trans>
-        </p>
-        <p className={styles["contact-administrator"]}>
-          <Link href="#">
-            <Trans i18nKey="contactAdmin">Contact the site administrator</Trans>
-          </Link>
+          <Button kind="ghost">
+            {t("contactAdmin", "Contact the site administrator")}
+          </Button>
         </p>
       </div>
       <div className="omrs-margin-top-32">

@@ -1,11 +1,12 @@
 import "@testing-library/jest-dom";
 import Login from "./login.component";
 import { useState } from "react";
-import { cleanup, fireEvent, wait } from "@testing-library/react";
+import { cleanup, wait } from "@testing-library/react";
 import { performLogin } from "./login.resource";
 import { setSessionLocation } from "../choose-location/choose-location.resource";
 import { useCurrentUser } from "../CurrentUserContext";
 import renderWithRouter from "../test-helpers/render-with-router";
+import userEvent from "@testing-library/user-event";
 
 const mockedLogin = performLogin as jest.Mock;
 
@@ -42,23 +43,27 @@ describe(`<Login />`, () => {
   it(`renders a login form`, () => {
     const wrapper = renderWithRouter(Login, { loginLocations: loginLocations });
 
-    wrapper.getByLabelText("Username");
-    wrapper.getByLabelText("Password");
-    wrapper.getByText("Login", { selector: "button" });
+    wrapper.getByRole("textbox", { name: /Username/i });
+    wrapper.getByRole("button", { name: /Continue/i });
   });
 
-  it(`disables/enables the submit button when input is invalid/valid`, () => {
+  it(`should return user focus to username input when input is invalid`, () => {
     const wrapper = renderWithRouter(Login, { loginLocations: loginLocations });
 
-    expect(wrapper.getByText("Login")).toHaveAttribute("disabled");
-    fireEvent.change(wrapper.getByLabelText("Username"), {
-      target: { value: "yoshi" },
-    });
-    expect(wrapper.getByText("Login")).toHaveAttribute("disabled");
-    fireEvent.change(wrapper.getByLabelText("Password"), {
-      target: { value: "no-tax-fraud" },
-    });
-    expect(wrapper.getByText("Login")).not.toHaveAttribute("disabled");
+    expect(
+      wrapper.getByRole("textbox", { name: /username/i })
+    ).toBeInTheDocument();
+    userEvent.type(wrapper.getByRole("textbox", { name: /Username/i }), "");
+    const continueButton = wrapper.getByRole("button", { name: /Continue/i });
+    userEvent.click(continueButton);
+    expect(wrapper.getByRole("textbox", { name: /username/i })).toHaveFocus();
+    userEvent.type(
+      wrapper.getByRole("textbox", { name: /Username/i }),
+      "yoshi"
+    );
+    userEvent.click(continueButton);
+    userEvent.type(wrapper.getByLabelText("password"), "yoshi");
+    expect(wrapper.getByLabelText(/password/i)).toHaveFocus();
   });
 
   it(`makes an API request when you submit the form`, async () => {
@@ -67,15 +72,15 @@ describe(`<Login />`, () => {
     const wrapper = renderWithRouter(Login, { loginLocations: loginLocations });
 
     expect(performLogin).not.toHaveBeenCalled();
-    fireEvent.change(wrapper.getByLabelText("Username"), {
-      target: { value: "yoshi" },
-    });
-    fireEvent.change(wrapper.getByLabelText("Password"), {
-      target: { value: "no-tax-fraud" },
-    });
-    fireEvent.click(wrapper.getByText("Login"));
+    userEvent.type(
+      wrapper.getByRole("textbox", { name: /Username/i }),
+      "yoshi"
+    );
+    userEvent.click(wrapper.getByRole("button", { name: /Continue/i }));
+    userEvent.type(wrapper.getByLabelText("password"), "no-tax-fraud");
+    userEvent.click(wrapper.getByRole("button", { name: /submit/i }));
     await wait();
-    expect(performLogin).toHaveBeenCalled();
+    expect(performLogin).toHaveBeenCalledWith("yoshi", "no-tax-fraud");
   });
 
   it(`send the user to the location select page on login if there is more than one location`, async () => {
@@ -94,13 +99,13 @@ describe(`<Login />`, () => {
 
     const wrapper = renderWithRouter(Login, { loginLocations: loginLocations });
 
-    fireEvent.change(wrapper.getByLabelText("Username"), {
-      target: { value: "yoshi" },
-    });
-    fireEvent.change(wrapper.getByLabelText("Password"), {
-      target: { value: "no-tax-fraud" },
-    });
-    fireEvent.click(wrapper.getByText("Login"));
+    userEvent.type(
+      wrapper.getByRole("textbox", { name: /Username/i }),
+      "yoshi"
+    );
+    userEvent.click(wrapper.getByRole("button", { name: /Continue/i }));
+    userEvent.type(wrapper.getByLabelText("password"), "no-tax-fraud");
+    userEvent.click(wrapper.getByRole("button", { name: /submit/i }));
     await wait();
 
     expect(wrapper.history.location.pathname).toBe("/login/location");
