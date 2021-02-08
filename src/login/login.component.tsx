@@ -160,7 +160,7 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
       </div>
       <div className={styles["need-help"]}>
         <p className={styles["need-help-txt"]}>
-          <Trans i18nKey="needHelp">Need help ?</Trans>
+          <Trans i18nKey="needHelp">Need help?</Trans>
           <Button kind="ghost">
             {t("contactAdmin", "Contact the site administrator")}
           </Button>
