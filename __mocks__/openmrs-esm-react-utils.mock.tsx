@@ -1,6 +1,6 @@
 import React from "react";
 
-export const openmrsRootDecorator = jest
+export const openmrsComponentDecorator = jest
   .fn()
   .mockImplementation(() => (f) => f);
 
@@ -21,4 +21,6 @@ export function useConfig() {
   return config;
 }
 
-export const ModuleNameContext = React.createContext("fake-module-config");
+export const ComponentContext = React.createContext({
+  moduleName: "fake-module-config",
+});

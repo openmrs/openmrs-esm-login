@@ -40,9 +40,8 @@
     "url": "https://github.com/openmrs/openmrs-esm-login/issues"
   },
   "dependencies": {
-    "carbon-components-react": "^7.27.0",
+    "carbon-components-react": "^7.25.0",
     "@carbon/icons-react": "^10.25.0",
-    "kremling": "^2.0.3",
     "systemjs-webpack-interop": "^2.0.0"
   },
   "peerDependencies": {

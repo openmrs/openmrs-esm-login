@@ -1,5 +1,4 @@
 import React from "react";
-import { always } from "kremling";
 import { debounce, isEmpty } from "lodash";
 import { createErrorHandler } from "@openmrs/esm-error-handling";
 import { Trans } from "react-i18next";
@@ -230,13 +229,13 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
         </div>
         <div className={styles["center"]}>
           <button
-            className={always(
-              `omrs-margin-16 omrs-btn omrs-rounded ${styles["location-submit-btn"]}`
-            ).toggle(
-              "omrs-filled-disabled",
-              "omrs-filled-action",
-              !locationData.activeLocation
-            )}
+            className={`omrs-margin-16 omrs-btn omrs-rounded ${
+              styles["location-submit-btn"]
+            } ${
+              locationData.activeLocation
+                ? "omrs-filled-action"
+                : "omrs-filled-disabled"
+            }`}
             type="submit"
             disabled={!locationData.activeLocation}
           >
