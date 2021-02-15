@@ -2,7 +2,7 @@ import React from "react";
 import Loading from "../loading/loading.component";
 import LocationPicker from "../location-picker/location-picker.component";
 import { RouteComponentProps } from "react-router-dom";
-import { navigate,useConfig } from "@openmrs/esm-framework";
+import { navigate, useConfig } from "@openmrs/esm-framework";
 import { setSessionLocation, queryLocations } from "./choose-location.resource";
 import { useCurrentUser } from "../CurrentUserContext";
 import { LocationEntry } from "../types";
