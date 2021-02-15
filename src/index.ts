@@ -1,5 +1,9 @@
-import { getAsyncLifecycle } from "@openmrs/esm-react-utils";
-import { defineConfigSchema, validators, Type } from "@openmrs/esm-config";
+import {
+  getAsyncLifecycle,
+  defineConfigSchema,
+  validators,
+  Type,
+} from "@openmrs/esm-framework";
 import { backendDependencies } from "./openmrs-backend-dependencies";
 
 const importTranslation = require.context(

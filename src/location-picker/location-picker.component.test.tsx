@@ -13,9 +13,12 @@ const loginLocations = {
   },
 };
 
-jest.mock("lodash", () => ({
-  debounce: jest.fn((fn) => fn),
-  isEmpty: jest.fn((arr) => arr.length === 0),
+jest.mock("lodash-es/debounce", () => ({
+  default: jest.fn((fn) => fn),
+}));
+
+jest.mock("lodash-es/isEmpty", () => ({
+  default: jest.fn((arr) => arr.length === 0),
 }));
 
 describe(`<LocationPicker />`, () => {

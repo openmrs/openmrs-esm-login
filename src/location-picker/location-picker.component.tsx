@@ -1,6 +1,7 @@
 import React from "react";
-import { debounce, isEmpty } from "lodash";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
+import debounce from "lodash-es/debounce";
+import isEmpty from "lodash-es/isEmpty";
+import { createErrorHandler } from "@openmrs/esm-framework";
 import { Trans } from "react-i18next";
 import { LocationEntry } from "../types";
 import styles from "./location-picker.component.scss";

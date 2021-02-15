@@ -5,7 +5,7 @@ import Button from "carbon-components-react/es/components/Button";
 import TextInput from "carbon-components-react/es/components/TextInput";
 import { RouteComponentProps } from "react-router-dom";
 import { Trans, useTranslation } from "react-i18next";
-import { useConfig } from "@openmrs/esm-react-utils";
+import { useConfig } from "@openmrs/esm-framework";
 import { performLogin } from "./login.resource";
 import { useCurrentUser } from "../CurrentUserContext";
 
