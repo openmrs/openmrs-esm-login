@@ -59,6 +59,7 @@
     "@babel/preset-env": "^7.9.0",
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
+    "@babel/runtime": "^7.12.13",
     "@openmrs/esm-framework": "next",
     "@testing-library/dom": "^7.29.4",
     "@testing-library/jest-dom": "^5.2.0",
