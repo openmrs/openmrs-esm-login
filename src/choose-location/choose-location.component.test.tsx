@@ -8,7 +8,7 @@ import renderWithRouter from "../test-helpers/render-with-router";
 
 const navigateMock = navigate as jest.Mock;
 
-const { config } = require("@openmrs/esm-react-utils");
+const { config } = require("@openmrs/esm-framework");
 
 jest.mock("../CurrentUserContext", () => ({
   useCurrentUser() {

@@ -1,10 +1,10 @@
 import React from "react";
 import debounce from "lodash-es/debounce";
 import isEmpty from "lodash-es/isEmpty";
+import styles from "./location-picker.component.scss";
 import { createErrorHandler } from "@openmrs/esm-framework";
 import { Trans } from "react-i18next";
 import { LocationEntry } from "../types";
-import styles from "./location-picker.component.scss";
 
 const CardHeader: React.FC = (props) => (
   <div className={styles["card-header"]}>
