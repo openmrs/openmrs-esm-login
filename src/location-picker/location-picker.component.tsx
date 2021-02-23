@@ -2,8 +2,12 @@ import React from "react";
 import debounce from "lodash-es/debounce";
 import isEmpty from "lodash-es/isEmpty";
 import styles from "./location-picker.component.scss";
+import Search from "carbon-components-react/es/components/Search";
+import RadioButtonGroup from "carbon-components-react/es/components/RadioButtonGroup";
+import RadioButton from "carbon-components-react/es/components/RadioButton";
+import Button from "carbon-components-react/es/components/Button";
 import { createErrorHandler } from "@openmrs/esm-framework";
-import { Trans } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { LocationEntry } from "../types";
 
 const CardHeader: React.FC = (props) => (
@@ -44,7 +48,6 @@ interface LocationDataState {
   activeLocation: string;
   locationResult: Array<LocationEntry>;
 }
-
 interface LocationPickerProps {
   currentUser: string;
   loginLocations: Array<LocationEntry>;
@@ -62,6 +65,8 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
   hideWelcomeMessage,
   currentLocationUuid,
 }) => {
+  const pageSize = 8;
+  const { t } = useTranslation();
   const userDefaultLoginLocation: string = "userDefaultLoginLocationKey";
   const getDefaultUserLoginLocation = (): string => {
     const userLocation = window.localStorage.getItem(
@@ -81,11 +86,6 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
   const inputRef = React.useRef();
 
   const searchTimeout = 300;
-
-  const autoFocusSearchInput = React.useCallback(
-    (el: HTMLInputElement) => (el ? el.focus() : null),
-    []
-  );
 
   React.useEffect(() => {
     if (isSubmitting) {
@@ -183,65 +183,84 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
   };
 
   return (
-    <div className={`canvas ${styles["locationPickerContainer"]}`}>
-      {!hideWelcomeMessage && (
-        <h2 className={styles["welcome-msg"]}>
-          <Trans i18nKey="welcome">Welcome</Trans> {currentUser}
-        </h2>
-      )}
+    <div className={styles["locationPickerContainer"]}>
       <form onSubmit={handleSubmit}>
-        <div className={`${styles["location-card"]} omrs-card`}>
-          {!hideWelcomeMessage && (
-            <CardHeader>
-              <Trans i18nKey="location">Location</Trans>
-            </CardHeader>
-          )}
-          <div className="omrs-input-group omrs-padding-12">
-            <input
-              className="omrs-input-underlined"
-              placeholder="Search for location"
-              aria-label="Search for location"
+        <div className={`${styles["location-card"]}`}>
+          <div className={styles["welcomeContainer"]}>
+            <p className={styles["welcomeTitle"]}>
+              {t("welcome", "Welcome")} {currentUser}
+            </p>
+            <p className={styles["welcomeMessage"]}>
+              {t(
+                "selectYourLocation",
+                "Select your location from the list below. Use the search bar to search for your location."
+              )}
+            </p>
+          </div>
+          <div>
+            <Search
+              labelText="Search for location"
+              id="search-1"
+              placeHolderText={t("searchForLocation", "Search for a location")}
               onChange={(ev) => search(ev.target.value)}
-              ref={autoFocusSearchInput}
+              autoFocus={true}
+              name="searchForLocation"
             />
           </div>
-          {!isEmpty(locationData.locationResult) && (
-            <div className={styles["location-radio-group"]}>
-              {locationData.locationResult.map((entry) => (
-                <RadioInput
-                  key={entry.resource.id}
-                  current={locationData.activeLocation}
-                  option={entry}
-                  changeLocationData={changeLocationData}
-                />
-              ))}
-            </div>
-          )}
-          {locationData.locationResult.length === 0 && (
-            <p className="omrs-type-body-regular omrs-padding-8">
-              <Trans i18nKey="locationNotFound">
-                Sorry, no location has been found
-              </Trans>
+          <div className={styles["searchResults"]}>
+            <p>
+              {searchTerm
+                ? `${locationData.locationResult.length} ${
+                    locationData.locationResult.length > 1
+                      ? t("matches", "matches")
+                      : t("match", "match")
+                  } ${t("found", "found")}`
+                : `${t("showing", "Showing")} ${pageSize} ${t("of", "of")} ${
+                    locationData.locationResult.length
+                  } ${t("locations", "locations")}`}
             </p>
-          )}
-          <div className={styles["center"]}>
-            <p className={styles["error-msg"]} />
           </div>
-        </div>
-        <div className={styles["center"]}>
-          <button
-            className={`omrs-margin-16 omrs-btn omrs-rounded ${
-              styles["location-submit-btn"]
-            } ${
-              locationData.activeLocation
-                ? "omrs-filled-action"
-                : "omrs-filled-disabled"
-            }`}
-            type="submit"
-            disabled={!locationData.activeLocation}
-          >
-            <Trans i18nKey="confirm">Confirm</Trans>
-          </button>
+          <div className={styles["locationResultsContainer"]}>
+            {!isEmpty(locationData.locationResult) && (
+              <RadioButtonGroup
+                valueSelected={locationData.activeLocation}
+                orientation="vertical"
+                name={locationData.activeLocation}
+                onChange={(ev) => {
+                  changeLocationData({ activeLocation: ev.toString() });
+                }}
+              >
+                {locationData.locationResult.slice(0, pageSize).map((entry) => (
+                  <RadioButton
+                    className={styles["locationRadioButton"]}
+                    key={entry.resource.id}
+                    id={entry.resource.name}
+                    labelText={entry.resource.name}
+                    value={entry.resource.id}
+                  />
+                ))}
+              </RadioButtonGroup>
+            )}
+            {locationData.locationResult.length === 0 && (
+              <p className={styles["locationNotFound"]}>
+                <Trans i18nKey="locationNotFound">
+                  Sorry, no location has been found
+                </Trans>
+              </p>
+            )}
+            <div className={styles["center"]}>
+              <p className={styles["error-msg"]} />
+            </div>
+          </div>
+          <div className={styles["confirmButton"]}>
+            <Button
+              kind="primary"
+              type="submit"
+              disabled={!locationData.activeLocation}
+            >
+              <Trans i18nKey="confirm">Confirm</Trans>
+            </Button>
+          </div>
         </div>
       </form>
     </div>

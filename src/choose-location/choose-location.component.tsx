@@ -1,5 +1,5 @@
 import React from "react";
-import Loading from "../loading/loading.component";
+import LoadingIcon from "../loading/loading.component";
 import LocationPicker from "../location-picker/location-picker.component";
 import { RouteComponentProps } from "react-router-dom";
 import { navigate, useConfig } from "@openmrs/esm-framework";
@@ -67,7 +67,7 @@ export const ChooseLocation: React.FC<ChooseLocationProps> = (props) => {
     );
   }
 
-  return <Loading />;
+  return <LoadingIcon />;
 };
 
 export default ChooseLocation;
