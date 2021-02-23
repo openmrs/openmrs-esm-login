@@ -1,13 +1,49 @@
 import React from "react";
-import { debounce, isEmpty } from "lodash";
-import { createErrorHandler } from "@openmrs/esm-error-handling";
-import { Trans, useTranslation } from "react-i18next";
-import { LocationEntry } from "../types";
+import debounce from "lodash-es/debounce";
+import isEmpty from "lodash-es/isEmpty";
 import styles from "./location-picker.component.scss";
 import Search from "carbon-components-react/es/components/Search";
 import RadioButtonGroup from "carbon-components-react/es/components/RadioButtonGroup";
 import RadioButton from "carbon-components-react/es/components/RadioButton";
 import Button from "carbon-components-react/es/components/Button";
+import { createErrorHandler } from "@openmrs/esm-framework";
+import { Trans, useTranslation } from "react-i18next";
+import { LocationEntry } from "../types";
+
+const CardHeader: React.FC = (props) => (
+  <div className={styles["card-header"]}>
+    <h3 className={`omrs-margin-8 omrs-margin-left-12`}>{props.children}</h3>
+  </div>
+);
+
+interface RadioInputProps {
+  option: LocationEntry;
+  current: string;
+  changeLocationData: (data: Partial<LocationDataState>) => void;
+}
+
+const RadioInput: React.FC<RadioInputProps> = ({
+  option,
+  current,
+  changeLocationData,
+}) => (
+  <div className="omrs-radio-button">
+    <input
+      id={option.resource.id}
+      type="radio"
+      name="location"
+      value={option.resource.id}
+      checked={current === option.resource.id}
+      onChange={(evt) =>
+        changeLocationData({ activeLocation: evt.target.value })
+      }
+    />
+    <label htmlFor={option.resource.id} className="omrs-padding-4">
+      {option.resource.name}
+    </label>
+  </div>
+);
+
 interface LocationDataState {
   activeLocation: string;
   locationResult: Array<LocationEntry>;

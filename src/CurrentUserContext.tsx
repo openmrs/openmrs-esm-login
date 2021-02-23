@@ -1,5 +1,5 @@
 import * as React from "react";
-import { getCurrentUser } from "@openmrs/esm-api";
+import { getCurrentUser } from "@openmrs/esm-framework";
 
 const CurrentUser = React.createContext<User>({
   current: undefined,

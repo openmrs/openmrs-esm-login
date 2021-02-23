@@ -1,13 +1,13 @@
 import React from "react";
 import styles from "../styles.scss";
-import { Button, TextInput, Link } from "carbon-components-react";
+import ArrowRight24 from "@carbon/icons-react/es/arrow--right/24";
+import Button from "carbon-components-react/es/components/Button";
+import TextInput from "carbon-components-react/es/components/TextInput";
 import { RouteComponentProps } from "react-router-dom";
-import { always } from "kremling";
 import { Trans, useTranslation } from "react-i18next";
-import { useConfig } from "@openmrs/esm-react-utils";
+import { useConfig } from "@openmrs/esm-framework";
 import { performLogin } from "./login.resource";
 import { useCurrentUser } from "../CurrentUserContext";
-import { ArrowRight24 } from "@carbon/icons-react";
 
 export interface LoginReferrer {
   referrer?: string;

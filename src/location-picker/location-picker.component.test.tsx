@@ -1,8 +1,8 @@
 import "@testing-library/jest-dom";
 import React from "react";
+import LocationPicker from "./location-picker.component";
 import { act } from "react-dom/test-utils";
 import { cleanup, fireEvent, render, wait } from "@testing-library/react";
-import LocationPicker from "./location-picker.component";
 
 const loginLocations = {
   data: {
@@ -12,11 +12,6 @@ const loginLocations = {
     ],
   },
 };
-
-jest.mock("lodash", () => ({
-  debounce: jest.fn((fn) => fn),
-  isEmpty: jest.fn((arr) => arr.length === 0),
-}));
 
 describe(`<LocationPicker />`, () => {
   let searchInput,
