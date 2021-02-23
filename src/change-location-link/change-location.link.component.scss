@@ -1,0 +1,11 @@
+@import "../root.scss";
+
+.changeLocationLink {
+  color: $field-01;
+  background-color: $brand-02;
+}
+
+.changeLocationLink :hover {
+  color: $field-01;
+  background-color: $brand-01;
+}

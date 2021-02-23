@@ -67,6 +67,14 @@ function setupOpenMRS() {
           options
         ),
       },
+      {
+        id: "location-changer",
+        slot: "location-changer",
+        load: getAsyncLifecycle(
+          () => import("./change-location-link/change-location-link.component"),
+          options
+        ),
+      },
     ],
   };
 }
