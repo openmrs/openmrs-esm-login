@@ -156,21 +156,18 @@ describe(`<LocationPicker />`, () => {
   });
 
   it("search term input should have autofocus on render", async () => {
-    expect(wrapper.getByPlaceholderText(/Search for location/)).toEqual(
+    expect(wrapper.getByPlaceholderText(/searchForLocation/)).toEqual(
       document.activeElement
     );
   });
 
   it("should deselect active location when user searches for a location", async () => {
-    const locationRadioButton: HTMLElement = await wrapper.findByLabelText(
-      /Earth/
-    );
+    const locationRadioButton: HTMLElement = await wrapper.getByRole("radio", {
+      name: /Earth/,
+    });
     fireEvent.click(locationRadioButton);
     expect(locationRadioButton).toHaveProperty("checked", true);
-    const searchInput: HTMLElement = await wrapper.findByPlaceholderText(
-      /Search for location/
-    );
-    fireEvent.change(searchInput, { target: { value: "Mar" } });
+    fireEvent.change(searchInput, { target: { value: "Mars" } });
     expect(locationRadioButton).toHaveProperty("checked", false);
   });
 
@@ -189,9 +186,9 @@ describe(`<LocationPicker />`, () => {
     expect(
       window.localStorage.getItem("userDefaultLoginLocationKeyDemo")
     ).toEqual("111");
-    const locationRadioButton: HTMLElement = await wrapper.findByLabelText(
-      /Earth/
-    );
+    const locationRadioButton: HTMLElement = await wrapper.getByRole("radio", {
+      name: /Earth/,
+    });
     expect(locationRadioButton).toHaveProperty("checked", true);
   });
 
