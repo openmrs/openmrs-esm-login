@@ -3,23 +3,30 @@ import Button from "carbon-components-react/es/components/Button";
 import { useTranslation } from "react-i18next";
 import { BrowserRouter, Redirect } from "react-router-dom";
 import styles from "./change-location.link.component.scss";
+import Location20 from "@carbon/icons-react/es/location/20";
 const openmrsSpaBase = window["getOpenmrsSpaBase"]();
 
 interface ChangeLocationLinkProps {
   referer?: string;
+  currentLocation: string;
 }
 
-const ChangeLocationLink: React.FC<ChangeLocationLinkProps> = ({ referer }) => {
+const ChangeLocationLink: React.FC<ChangeLocationLinkProps> = ({
+  referer,
+  currentLocation,
+}) => {
   const { t } = useTranslation();
-  const [navigate, setNavigate] = React.useState(false);
+  const [triggerLocationChange, setTriggerLocationChange] = React.useState(
+    false
+  );
 
   const changeLocation = () => {
-    setNavigate((prevState) => !prevState);
+    setTriggerLocationChange((prevState) => !prevState);
   };
 
   return (
     <BrowserRouter>
-      {navigate ? (
+      {triggerLocationChange ? (
         <Redirect
           // @ts-ignore
           to={{
@@ -32,9 +39,18 @@ const ChangeLocationLink: React.FC<ChangeLocationLinkProps> = ({ referer }) => {
           }}
         />
       ) : (
-        <Button className={styles.changeLocationLink} onClick={changeLocation}>
-          {t("change", "Change")}
-        </Button>
+        <div className={styles.changeLocationLinkContainer}>
+          <Location20 />
+          <div>
+            {currentLocation}
+            <Button
+              className={styles.changeLocationLink}
+              onClick={changeLocation}
+            >
+              {t("change", "Change")}
+            </Button>
+          </div>
+        </div>
       )}
     </BrowserRouter>
   );
