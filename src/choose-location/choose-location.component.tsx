@@ -1,7 +1,7 @@
 import React from "react";
 import LoadingIcon from "../loading/loading.component";
 import LocationPicker from "../location-picker/location-picker.component";
-import { RouteComponentProps, useParams } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import { navigate, useConfig } from "@openmrs/esm-framework";
 import { setSessionLocation, queryLocations } from "./choose-location.resource";
 import { useCurrentUser } from "../CurrentUserContext";
@@ -43,7 +43,7 @@ export const ChooseLocation: React.FC<ChooseLocationProps> = (props) => {
         }
       });
     },
-    [referrer, config.links.loginSuccess]
+    [referrer, config.links.loginSuccess, returnToUrl]
   );
 
   React.useEffect(() => {
