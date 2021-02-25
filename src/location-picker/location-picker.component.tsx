@@ -201,7 +201,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
             <Search
               labelText="Search for location"
               id="search-1"
-              placeHolderText={t("searchForLocation", "Search for a location")}
+              placeholder={t("searchForLocation", "Search for a location")}
               onChange={(ev) => search(ev.target.value)}
               autoFocus={true}
               name="searchForLocation"
