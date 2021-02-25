@@ -1,7 +1,7 @@
 import React from "react";
 import LoadingIcon from "../loading/loading.component";
 import LocationPicker from "../location-picker/location-picker.component";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, useParams } from "react-router-dom";
 import { navigate, useConfig } from "@openmrs/esm-framework";
 import { setSessionLocation, queryLocations } from "./choose-location.resource";
 import { useCurrentUser } from "../CurrentUserContext";
@@ -15,6 +15,9 @@ export interface ChooseLocationProps
   extends RouteComponentProps<{}, undefined, LoginReferrer> {}
 
 export const ChooseLocation: React.FC<ChooseLocationProps> = (props) => {
+  const returnToUrl = new URLSearchParams(props?.location?.search).get(
+    "returnToUrl"
+  );
   const referrer = props.location?.state?.referrer;
   const config = useConfig();
   const user = useCurrentUser();
@@ -32,6 +35,9 @@ export const ChooseLocation: React.FC<ChooseLocationProps> = (props) => {
       sessionDefined.then(() => {
         if (referrer && referrer !== "/") {
           navigate({ to: "${openmrsSpaBase}" + referrer });
+        }
+        if (returnToUrl && returnToUrl !== "/") {
+          navigate({ to: returnToUrl });
         } else {
           navigate({ to: config.links.loginSuccess });
         }

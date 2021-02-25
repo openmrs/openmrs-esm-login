@@ -122,4 +122,18 @@ describe(`<ChooseLocation />`, () => {
     await act(wait);
     expect(navigate).toHaveBeenCalledWith({ to: "${openmrsSpaBase}/foo" });
   });
+
+  it(`should redirect back to returnUrl when provided`, async () => {
+    const locationMock = {
+      search: "?returnToUrl=/openmrs/spa/home",
+    };
+    cleanup();
+    renderWithRouter(ChooseLocation, {
+      location: locationMock,
+    });
+    await act(wait);
+    expect(navigate).toHaveBeenCalledWith({
+      to: "/openmrs/spa/home",
+    });
+  });
 });
