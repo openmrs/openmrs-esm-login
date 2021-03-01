@@ -151,9 +151,7 @@ describe(`<LocationPicker />`, () => {
   });
 
   it("search term input should have autofocus on render", async () => {
-    expect(wrapper.getByPlaceholderText(/searchForLocation/)).toEqual(
-      document.activeElement
-    );
+    expect(searchInput).toEqual(document.activeElement);
   });
 
   it("should deselect active location when user searches for a location", async () => {

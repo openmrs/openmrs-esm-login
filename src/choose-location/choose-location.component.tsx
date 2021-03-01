@@ -15,6 +15,9 @@ export interface ChooseLocationProps
   extends RouteComponentProps<{}, undefined, LoginReferrer> {}
 
 export const ChooseLocation: React.FC<ChooseLocationProps> = (props) => {
+  const returnToUrl = new URLSearchParams(props?.location?.search).get(
+    "returnToUrl"
+  );
   const referrer = props.location?.state?.referrer;
   const config = useConfig();
   const user = useCurrentUser();
@@ -32,12 +35,15 @@ export const ChooseLocation: React.FC<ChooseLocationProps> = (props) => {
       sessionDefined.then(() => {
         if (referrer && referrer !== "/") {
           navigate({ to: "${openmrsSpaBase}" + referrer });
+        }
+        if (returnToUrl && returnToUrl !== "/") {
+          navigate({ to: returnToUrl });
         } else {
           navigate({ to: config.links.loginSuccess });
         }
       });
     },
-    [referrer, config.links.loginSuccess]
+    [referrer, config.links.loginSuccess, returnToUrl]
   );
 
   React.useEffect(() => {
