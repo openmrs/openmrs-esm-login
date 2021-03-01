@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next";
 import styles from "./change-location.link.component.scss";
 import Location20 from "@carbon/icons-react/es/location/20";
 import { navigate } from "@openmrs/esm-framework";
-const openmrsSpaBase = window["getOpenmrsSpaBase"]();
 
 interface ChangeLocationLinkProps {
   referer?: string;
@@ -18,7 +17,9 @@ const ChangeLocationLink: React.FC<ChangeLocationLinkProps> = ({
   const { t } = useTranslation();
 
   const changeLocation = () => {
-    navigate({ to: `${openmrsSpaBase}login/location?returnToUrl=${referer}` });
+    navigate({
+      to: `\${openmrsSpaBase}/login/location?returnToUrl=${referer}`,
+    });
   };
 
   return (

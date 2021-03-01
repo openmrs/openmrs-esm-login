@@ -26,7 +26,7 @@ describe("<ChangeLocationLink/>", () => {
     });
     fireEvent.click(changeLocationButton);
     expect(navigate).toHaveBeenCalledWith({
-      to: `/openmrs/spa/login/location?returnToUrl=${mockChangeLocationProps.referer}`,
+      to: "${openmrsSpaBase}/login/location?returnToUrl=/openmrs/spa/home",
     });
   });
 });
