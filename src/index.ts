@@ -69,7 +69,7 @@ function setupOpenMRS() {
       },
       {
         id: "location-changer",
-        slot: "location-changer",
+        slot: "user-panel-switcher",
         load: getAsyncLifecycle(
           () => import("./change-location-link/change-location-link.component"),
           options
