@@ -27,9 +27,7 @@ const ChangeLocationLink: React.FC<ChangeLocationLinkProps> = ({
       <Location20 />
       <div>
         {currentLocation}
-        <Button className={styles.changeLocationLink} onClick={changeLocation}>
-          {t("change", "Change")}
-        </Button>
+        <Button onClick={changeLocation}>{t("change", "Change")}</Button>
       </div>
     </div>
   );

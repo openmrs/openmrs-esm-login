@@ -15,9 +15,28 @@
   margin: 0rem 0.75rem;
   fill: $field-01;
 }
+
+.changeLocationLinkContainer div {
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  align-items: center;
+}
+
+.changeLocationLinkContainer button {
+  background-color: #004144;
+  padding: 0rem 0.75rem;
+  color: $inverse-link;
+}
+
+.changeLocationLinkContainer button :hover {
+  background-color: #004144;
+  color: $inverse-link;
+}
+
 .changeLocationLink {
   color: $field-01;
-  background-color: $brand-02;
+  width: fit-content;
 }
 
 .changeLocationLink :hover {
