@@ -2,7 +2,13 @@ import "@testing-library/jest-dom";
 import React from "react";
 import LocationPicker from "./location-picker.component";
 import { act } from "react-dom/test-utils";
-import { cleanup, fireEvent, render, wait } from "@testing-library/react";
+import {
+  cleanup,
+  fireEvent,
+  render,
+  wait,
+  screen,
+} from "@testing-library/react";
 
 const loginLocations = {
   data: {
@@ -195,5 +201,28 @@ describe(`<LocationPicker />`, () => {
       "userDefaultLoginLocationKey",
       "111"
     );
+  });
+
+  it("should display the correct pageSize", async () => {
+    expect(screen.getByText(/Showing 2 of 2 locations/i)).toBeInTheDocument();
+    cleanup();
+    const loginLocations: any = {
+      data: {
+        entry: [
+          { resource: { id: "111", name: "Earth" } },
+          { resource: { id: "222", name: "Mars" } },
+          { resource: { id: "333", name: "Mercury" } },
+        ],
+      },
+    };
+    const wrapper = render(
+      <LocationPicker
+        loginLocations={loginLocations.data.entry}
+        onChangeLocation={onChangeLocation}
+        searchLocations={searchLocations}
+        currentUser=""
+      />
+    );
+    expect(wrapper.getByText(/Showing 3 of 3 locations/i)).toBeInTheDocument();
   });
 });

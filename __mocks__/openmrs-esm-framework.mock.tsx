@@ -49,6 +49,9 @@ export const config = {
   links: {
     loginSuccess: "${openmrsSpaBase}/home",
   },
+  chooseLocationPagesize: {
+    pageSize: 3,
+  },
 };
 
 export function useConfig() {

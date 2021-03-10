@@ -1,9 +1,5 @@
-import {
-  getAsyncLifecycle,
-  defineConfigSchema,
-  validators,
-  Type,
-} from "@openmrs/esm-framework";
+import { getAsyncLifecycle, defineConfigSchema } from "@openmrs/esm-framework";
+import { configSchema } from "./config-schema";
 import { backendDependencies } from "./openmrs-backend-dependencies";
 
 const importTranslation = require.context(
@@ -21,39 +17,7 @@ function setupOpenMRS() {
     moduleName,
   };
 
-  defineConfigSchema(moduleName, {
-    chooseLocation: {
-      enabled: {
-        _type: Type.Boolean,
-        _default: true,
-        _description:
-          "Whether to show a 'Choose Location' screen after login. " +
-          "If true, the user will be taken to the loginSuccess URL after they " +
-          "choose a location.",
-      },
-    },
-    links: {
-      loginSuccess: {
-        _type: Type.String,
-        _description: "Where to take the user after they are logged in.",
-        _default: "${openmrsSpaBase}/home",
-        _validators: [validators.isUrl],
-      },
-    },
-    logo: {
-      src: {
-        _type: Type.String,
-        _default: null,
-        _description:
-          "A path or URL to an image. Defaults to the OpenMRS SVG sprite.",
-      },
-      alt: {
-        _type: Type.String,
-        _default: "Logo",
-        _description: "Alt text, shown on hover",
-      },
-    },
-  });
+  defineConfigSchema(moduleName, configSchema);
 
   return {
     lifecycle: getAsyncLifecycle(() => import("./root.component"), options),
