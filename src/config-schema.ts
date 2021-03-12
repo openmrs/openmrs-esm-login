@@ -10,9 +10,7 @@ export const configSchema = {
         "If true, the user will be taken to the loginSuccess URL after they " +
         "choose a location.",
     },
-  },
-  chooseLocationPagesize: {
-    pageSize: {
+    numberToShow: {
       _type: Type.Number,
       _default: 8,
       _description: "The number of locations displayed on location picker",

@@ -32,7 +32,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
   currentLocationUuid,
 }) => {
   const config = useConfig();
-  const { chooseLocationPagesize } = config;
+  const { chooseLocation } = config;
   const { t } = useTranslation();
   const userDefaultLoginLocation: string = "userDefaultLoginLocationKey";
   const getDefaultUserLoginLocation = (): string => {
@@ -51,7 +51,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
   const [searchTerm, setSearchTerm] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [pageSize, setPageSize] = React.useState<number>(
-    chooseLocationPagesize.pageSize
+    chooseLocation.numberToShow
   );
   const inputRef = React.useRef();
 
@@ -155,7 +155,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
   React.useEffect(() => {
     locationData.locationResult.length < pageSize
       ? setPageSize(locationData.locationResult.length)
-      : setPageSize(chooseLocationPagesize.pageSize);
+      : setPageSize(chooseLocation.numberToShow);
   }, [locationData.locationResult.length]);
 
   return (

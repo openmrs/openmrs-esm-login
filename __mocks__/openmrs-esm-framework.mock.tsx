@@ -41,6 +41,7 @@ export const openmrsComponentDecorator = jest
 export const config = {
   chooseLocation: {
     enabled: true,
+    numberToShow: 3,
   },
   logo: {
     src: null,
@@ -48,9 +49,6 @@ export const config = {
   },
   links: {
     loginSuccess: "${openmrsSpaBase}/home",
-  },
-  chooseLocationPagesize: {
-    pageSize: 3,
   },
 };
 
