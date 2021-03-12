@@ -5,7 +5,7 @@ import { Trans, useTranslation } from "react-i18next";
 import { LocationEntry } from "../types";
 import styles from "./location-picker.component.scss";
 import Search from "carbon-components-react/es/components/Search";
-import { createErrorHandler } from "@openmrs/esm-framework";
+import { createErrorHandler, useConfig } from "@openmrs/esm-framework";
 import RadioButtonGroup from "carbon-components-react/es/components/RadioButtonGroup";
 import RadioButton from "carbon-components-react/es/components/RadioButton";
 import Button from "carbon-components-react/es/components/Button";
@@ -31,7 +31,8 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
   hideWelcomeMessage,
   currentLocationUuid,
 }) => {
-  const pageSize = 8;
+  const config = useConfig();
+  const { chooseLocation } = config;
   const { t } = useTranslation();
   const userDefaultLoginLocation: string = "userDefaultLoginLocationKey";
   const getDefaultUserLoginLocation = (): string => {
@@ -49,6 +50,9 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
   });
   const [searchTerm, setSearchTerm] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [pageSize, setPageSize] = React.useState<number>(
+    chooseLocation.numberToShow
+  );
   const inputRef = React.useRef();
 
   const searchTimeout = 300;
@@ -147,6 +151,12 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
       locationResult: prevState.locationResult,
     }));
   };
+
+  React.useEffect(() => {
+    locationData.locationResult.length < pageSize
+      ? setPageSize(locationData.locationResult.length)
+      : setPageSize(chooseLocation.numberToShow);
+  }, [locationData.locationResult.length]);
 
   return (
     <div className={styles["locationPickerContainer"]}>
