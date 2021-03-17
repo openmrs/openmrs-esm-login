@@ -187,9 +187,9 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
             <p>
               {searchTerm
                 ? `${locationData.locationResult.length} ${
-                    locationData.locationResult.length > 1
-                      ? t("matches", "matches")
-                      : t("match", "match")
+                    locationData.locationResult.length === 1
+                      ? t("match", "match")
+                      : t("matches", "matches")
                   } ${t("found", "found")}`
                 : `${t("showing", "Showing")} ${pageSize} ${t("of", "of")} ${
                     locationData.locationResult.length
@@ -220,7 +220,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
             {locationData.locationResult.length === 0 && (
               <p className={styles["locationNotFound"]}>
                 <Trans i18nKey="locationNotFound">
-                  Sorry, no location has been found
+                  Sorry, no matching location was found
                 </Trans>
               </p>
             )}
