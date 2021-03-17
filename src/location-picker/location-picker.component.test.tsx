@@ -170,12 +170,12 @@ describe(`<LocationPicker />`, () => {
     expect(locationRadioButton).toHaveProperty("checked", false);
   });
 
-  it("shows no location found", async () => {
+  it("shows error message when no matching locations can be found", async () => {
     fireEvent.change(searchInput, { target: { value: "doof" } });
 
     await wait(() => {
       expect(
-        wrapper.getByText("Sorry, no location has been found")
+        wrapper.getByText("Sorry, no matching location was found")
       ).not.toBeNull();
     });
     expect(submitButton).toHaveAttribute("disabled");
