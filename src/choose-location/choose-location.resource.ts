@@ -16,9 +16,9 @@ export function setSessionLocation(
   locationUuid: string,
   abortController: AbortController
 ): Promise<any> {
-  return openmrsFetch("/ws/rest/v1/appui/session", {
+  return openmrsFetch("/ws/rest/v1/session", {
     method: "POST",
-    body: { location: locationUuid },
+    body: { sessionLocation: locationUuid },
     headers: {
       "Content-Type": "application/json",
     },
