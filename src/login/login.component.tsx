@@ -113,11 +113,11 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
                 value={username}
                 onChange={(evt) => setUsername(evt.target.value)}
                 ref={usernameInputRef}
-                autocomplete="username"
                 autoFocus
                 required
               />
               <TextInput
+                value={0}
                 id="password-hidden"
                 style={{ height: 0, border: 0 }}
                 type="password"
@@ -150,7 +150,6 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
                 name="password"
                 className={styles.inputStyle}
                 value={password}
-                autocomplete="current-password"
                 onChange={(evt) => setPassword(evt.target.value)}
                 ref={passwordInputRef}
                 required
