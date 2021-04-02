@@ -116,13 +116,14 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
                 autoFocus
                 required
               />
-              <TextInput
-                value={0}
+
+              <input
                 id="password-hidden"
-                style={{ height: 0, border: 0 }}
+                style={{ height: 0, width: 0, border: 0 }}
                 type="password"
                 name="password-hidden"
               />
+
               <Button
                 className={styles.continueButton}
                 renderIcon={ArrowRight24}
@@ -135,14 +136,15 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
           )}
           {showPassword && (
             <div className={styles["input-group"]}>
-              <TextInput
+              <input
                 id="username-hidden"
                 type="text"
                 name="username-hidden"
-                style={{ height: 0, border: 0 }}
+                style={{ height: 0, width: 0, border: 0 }}
                 value={username}
                 required
               />
+
               <TextInput.PasswordInput
                 id="password"
                 invalidText={t("A valid value is required")}
