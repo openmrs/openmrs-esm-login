@@ -113,8 +113,15 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
                 value={username}
                 onChange={(evt) => setUsername(evt.target.value)}
                 ref={usernameInputRef}
+                autocomplete="username"
                 autoFocus
                 required
+              />
+              <TextInput
+                id="password-hidden"
+                style={{ height: 0, border: 0 }}
+                type="password"
+                name="password-hidden"
               />
               <Button
                 className={styles.continueButton}
@@ -128,6 +135,14 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
           )}
           {showPassword && (
             <div className={styles["input-group"]}>
+              <TextInput
+                id="username-hidden"
+                type="text"
+                name="username-hidden"
+                style={{ height: 0, border: 0 }}
+                value={username}
+                required
+              />
               <TextInput.PasswordInput
                 id="password"
                 invalidText={t("A valid value is required")}
@@ -135,11 +150,13 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
                 name="password"
                 className={styles.inputStyle}
                 value={password}
+                autocomplete="current-password"
                 onChange={(evt) => setPassword(evt.target.value)}
                 ref={passwordInputRef}
                 required
                 showPasswordLabel="Show password"
               />
+
               <Button
                 aria-label="submit"
                 type="submit"
