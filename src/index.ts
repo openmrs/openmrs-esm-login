@@ -15,8 +15,12 @@ function setupOpenMRS() {
   defineConfigSchema(moduleName, configSchema);
 
   return {
-    lifecycle: getAsyncLifecycle(() => import('./root.component'), options),
-    activate: 'login',
+    pages: [
+      {
+        load: getAsyncLifecycle(() => import('./root.component'), options),
+        route: 'login',
+      },
+    ],
     extensions: [
       {
         id: 'location-picker',
