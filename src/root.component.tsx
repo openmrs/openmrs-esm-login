@@ -7,7 +7,7 @@ import { CurrentUserContext } from './CurrentUserContext';
 export default function Root() {
   return (
     <CurrentUserContext>
-      <BrowserRouter basename={window.getOpenmrsSpaBase()}>
+      <BrowserRouter basename={window.spaBase}>
         <Route exact path="/login" component={Login} />
         <Route exact path="/login/location" component={ChooseLocation} />
       </BrowserRouter>

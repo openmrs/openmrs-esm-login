@@ -4,10 +4,12 @@ import ArrowRight24 from '@carbon/icons-react/es/arrow--right/24';
 import Button from 'carbon-components-react/es/components/Button';
 import TextInput from 'carbon-components-react/es/components/TextInput';
 import { RouteComponentProps } from 'react-router-dom';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useConfig } from '@openmrs/esm-framework';
 import { performLogin } from './login.resource';
 import { useCurrentUser } from '../CurrentUserContext';
+
+const hidden: React.CSSProperties = { height: 0, width: 0, border: 0, padding: 0 };
 
 export interface LoginReferrer {
   referrer?: string;
@@ -34,53 +36,66 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
   }, [user, props.history, props.location]);
 
   React.useEffect(() => {
-    if (usernameInputRef.current) {
-      usernameInputRef.current.focus();
-    }
-  }, []);
+    const field = showPassword ? passwordInputRef.current : usernameInputRef.current;
 
-  React.useEffect(() => {
-    if (document.activeElement !== usernameInputRef.current) {
-      passwordInputRef.current.focus();
+    if (field) {
+      field.focus();
     }
   }, [showPassword]);
 
-  function continueLogin() {
-    if (usernameInputRef.current.value.length > 0) {
+  const continueLogin = React.useCallback(() => {
+    const field = usernameInputRef.current;
+
+    if (field.value.length > 0) {
       setShowPassword(true);
     } else {
-      usernameInputRef.current.focus();
+      field.focus();
     }
-  }
+  }, []);
 
-  async function handleSubmit(evt: React.FormEvent<HTMLFormElement>) {
-    evt.preventDefault();
+  const changeUsername = React.useCallback(
+    (evt: React.ChangeEvent<HTMLInputElement>) => setUsername(evt.target.value),
+    [],
+  );
 
-    if (!showPassword) {
-      continueLogin();
-      return;
-    }
+  const changePassword = React.useCallback(
+    (evt: React.ChangeEvent<HTMLInputElement>) => setPassword(evt.target.value),
+    [],
+  );
 
-    try {
-      const loginRes = await performLogin(username, password);
-      const authData = loginRes.data;
-      const valid = authData && authData.authenticated;
-
-      if (!valid) {
-        throw new Error('Incorrect username or password');
-      }
-    } catch (error) {
-      setErrorMessage(error.message);
-      setShowPassword(false);
-      resetUserNameAndPassword();
-    }
-  }
-
-  const resetUserNameAndPassword = () => {
-    usernameInputRef.current.focus();
+  const resetUserNameAndPassword = React.useCallback(() => {
     setUsername('');
     setPassword('');
-  };
+  }, []);
+
+  const handleSubmit = React.useCallback(
+    async (evt: React.FormEvent<HTMLFormElement>) => {
+      evt.preventDefault();
+      evt.stopPropagation();
+
+      if (!showPassword) {
+        continueLogin();
+        return false;
+      }
+
+      try {
+        const loginRes = await performLogin(username, password);
+        const authData = loginRes.data;
+        const valid = authData && authData.authenticated;
+
+        if (!valid) {
+          throw new Error('Incorrect username or password');
+        }
+      } catch (error) {
+        setErrorMessage(error.message);
+        setShowPassword(false);
+        resetUserNameAndPassword();
+      }
+
+      return false;
+    },
+    [continueLogin, resetUserNameAndPassword, showPassword, username, password],
+  );
 
   const logo = config.logo.src ? (
     <img src={config.logo.src} alt={config.logo.alt} className={styles['logo-img']} />
@@ -103,22 +118,25 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
                 labelText={t('username', 'UserName')}
                 className={styles.inputStyle}
                 value={username}
-                onChange={(evt) => setUsername(evt.target.value)}
+                onChange={changeUsername}
                 ref={usernameInputRef}
                 autoFocus
                 required
               />
 
               <input
-                id="password-hidden"
-                style={{ height: 0, width: 0, border: 0 }}
+                id="password"
+                style={hidden}
                 type="password"
-                name="password-hidden"
+                name="password"
+                value={password}
+                onChange={changePassword}
               />
 
               <Button
                 className={styles.continueButton}
                 renderIcon={ArrowRight24}
+                type="submit"
                 iconDescription="Next"
                 onClick={continueLogin}>
                 {t('continue', 'Continue')}
@@ -128,11 +146,12 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
           {showPassword && (
             <div className={styles['input-group']}>
               <input
-                id="username-hidden"
+                id="username"
                 type="text"
-                name="username-hidden"
-                style={{ height: 0, width: 0, border: 0 }}
+                name="username"
+                style={hidden}
                 value={username}
+                onChange={changeUsername}
                 required
               />
 
@@ -143,7 +162,7 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
                 name="password"
                 className={styles.inputStyle}
                 value={password}
-                onChange={(evt) => setPassword(evt.target.value)}
+                onChange={changePassword}
                 ref={passwordInputRef}
                 required
                 showPasswordLabel="Show password"
@@ -155,7 +174,7 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
                 className={styles.continueButton}
                 renderIcon={ArrowRight24}
                 iconDescription="Next">
-                <Trans i18nKey="login">Log in</Trans>
+                {t('login', 'Log in')}
               </Button>
             </div>
           )}
@@ -166,14 +185,12 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
       </div>
       <div className={styles['need-help']}>
         <p className={styles['need-help-txt']}>
-          <Trans i18nKey="needHelp">Need help?</Trans>
+          {t('needHelp', 'Need help?')}
           <Button kind="ghost">{t('contactAdmin', 'Contact the site administrator')}</Button>
         </p>
       </div>
       <div className="omrs-margin-top-32">
-        <p className={styles['powered-by-txt']}>
-          <Trans i18nKey="poweredBy">Powered by</Trans>
-        </p>
+        <p className={styles['powered-by-txt']}>{t('poweredBy', 'Powered by')}</p>
         <div>
           <svg role="img" className={styles['powered-by-logo']}>
             <use xlinkHref="#omrs-logo-partial-mono"></use>
