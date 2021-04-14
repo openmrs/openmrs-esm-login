@@ -1,54 +1,47 @@
-import React from "react";
-import LoadingIcon from "../loading/loading.component";
-import LocationPicker from "../location-picker/location-picker.component";
-import { RouteComponentProps } from "react-router-dom";
-import { navigate, useConfig } from "@openmrs/esm-framework";
-import { setSessionLocation, queryLocations } from "./choose-location.resource";
-import { useCurrentUser } from "../CurrentUserContext";
-import { LocationEntry } from "../types";
+import React from 'react';
+import LoadingIcon from '../loading/loading.component';
+import LocationPicker from '../location-picker/location-picker.component';
+import { RouteComponentProps } from 'react-router-dom';
+import { navigate, useConfig } from '@openmrs/esm-framework';
+import { setSessionLocation, queryLocations } from './choose-location.resource';
+import { useCurrentUser } from '../CurrentUserContext';
+import { LocationEntry } from '../types';
 
 export interface LoginReferrer {
   referrer?: string;
 }
 
-export interface ChooseLocationProps
-  extends RouteComponentProps<{}, undefined, LoginReferrer> {}
+export interface ChooseLocationProps extends RouteComponentProps<{}, undefined, LoginReferrer> {}
 
 export const ChooseLocation: React.FC<ChooseLocationProps> = (props) => {
-  const returnToUrl = new URLSearchParams(props?.location?.search).get(
-    "returnToUrl"
-  );
+  const returnToUrl = new URLSearchParams(props?.location?.search).get('returnToUrl');
   const referrer = props.location?.state?.referrer;
   const config = useConfig();
   const user = useCurrentUser();
-  const [loginLocations, setLoginLocations] = React.useState<
-    Array<LocationEntry>
-  >(null);
+  const [loginLocations, setLoginLocations] = React.useState<Array<LocationEntry>>(null);
   const [isLoading, setIsLoading] = React.useState(true);
 
   const changeLocation = React.useCallback(
     (locationUuid?: string) => {
-      const sessionDefined = locationUuid
-        ? setSessionLocation(locationUuid, new AbortController())
-        : Promise.resolve();
+      const sessionDefined = locationUuid ? setSessionLocation(locationUuid, new AbortController()) : Promise.resolve();
 
       sessionDefined.then(() => {
-        if (referrer && referrer !== "/") {
-          navigate({ to: "${openmrsSpaBase}" + referrer });
+        if (referrer && referrer !== '/') {
+          navigate({ to: '${openmrsSpaBase}' + referrer });
         }
-        if (returnToUrl && returnToUrl !== "/") {
+        if (returnToUrl && returnToUrl !== '/') {
           navigate({ to: returnToUrl });
         } else {
           navigate({ to: config.links.loginSuccess });
         }
       });
     },
-    [referrer, config.links.loginSuccess, returnToUrl]
+    [referrer, config.links.loginSuccess, returnToUrl],
   );
 
   React.useEffect(() => {
     const ac = new AbortController();
-    queryLocations("", ac).then((locations) => setLoginLocations(locations));
+    queryLocations('', ac).then((locations) => setLoginLocations(locations));
     return () => ac.abort();
   }, []);
 

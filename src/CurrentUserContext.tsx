@@ -1,5 +1,5 @@
-import * as React from "react";
-import { getCurrentUser } from "@openmrs/esm-framework";
+import React from 'react';
+import { getCurrentUser } from '@openmrs/esm-framework';
 
 const CurrentUser = React.createContext<User>({
   current: undefined,
@@ -55,7 +55,7 @@ export const CurrentUserContext: React.FC = ({ children }) => {
           current,
         })),
     }),
-    [user]
+    [user],
   );
 
   React.useEffect(() => {
@@ -65,14 +65,10 @@ export const CurrentUserContext: React.FC = ({ children }) => {
       setUser({
         current: user,
         loading: false,
-      })
+      }),
     );
     return () => sub.unsubscribe();
   }, []);
 
-  return (
-    <CurrentUser.Provider value={value}>
-      {!user.loading && children}
-    </CurrentUser.Provider>
-  );
+  return <CurrentUser.Provider value={value}>{!user.loading && children}</CurrentUser.Provider>;
 };
