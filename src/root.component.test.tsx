@@ -1,6 +1,6 @@
-import React from "react";
-import { render, cleanup } from "@testing-library/react";
-import Root from "./root.component";
+import React from 'react';
+import { render, cleanup } from '@testing-library/react';
+import Root from './root.component';
 
 describe(`<Root />`, () => {
   afterEach(cleanup);
