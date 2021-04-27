@@ -46,6 +46,7 @@ describe(`<ChooseLocation />`, () => {
     cleanup();
     renderWithRouter(ChooseLocation, {
       location: locationMock,
+      isLoginEnabled: true,
     });
     await act(wait);
     expect(navigate).toHaveBeenCalledWith({
@@ -55,7 +56,7 @@ describe(`<ChooseLocation />`, () => {
 
   it(`should set location and skip location select page if there is exactly one location`, async () => {
     cleanup();
-    renderWithRouter(ChooseLocation, {});
+    renderWithRouter(ChooseLocation, { isLoginEnabled: true });
     await act(wait);
     expect(navigate).toHaveBeenCalledWith({ to: '${openmrsSpaBase}/home' });
   });
@@ -63,7 +64,7 @@ describe(`<ChooseLocation />`, () => {
   it(`should set location and skip location select page if there is no location`, async () => {
     cleanup();
     (queryLocations as any).mockImplementationOnce(() => Promise.resolve([]));
-    renderWithRouter(ChooseLocation, {});
+    renderWithRouter(ChooseLocation, { isLoginEnabled: true });
     await act(wait);
     expect(navigate).toHaveBeenCalledWith({ to: '${openmrsSpaBase}/home' });
   });
@@ -86,7 +87,7 @@ describe(`<ChooseLocation />`, () => {
         },
       ]),
     );
-    renderWithRouter(ChooseLocation, {});
+    renderWithRouter(ChooseLocation, { isLoginEnabled: true });
     await act(wait);
     expect(navigate).not.toHaveBeenCalled();
   });
@@ -110,7 +111,7 @@ describe(`<ChooseLocation />`, () => {
         },
       ]),
     );
-    const wrapper = renderWithRouter(ChooseLocation, {});
+    const wrapper = renderWithRouter(ChooseLocation, { isLoginEnabled: true });
     await act(wait);
     expect(navigate).toHaveBeenCalledWith({ to: '${openmrsSpaBase}/home' });
   });
@@ -118,7 +119,7 @@ describe(`<ChooseLocation />`, () => {
   it(`should redirect to custom path if configured`, async () => {
     cleanup();
     config.links.loginSuccess = '${openmrsSpaBase}/foo';
-    const wrapper = renderWithRouter(ChooseLocation, {});
+    const wrapper = renderWithRouter(ChooseLocation, { isLoginEnabled: true });
     await act(wait);
     expect(navigate).toHaveBeenCalledWith({ to: '${openmrsSpaBase}/foo' });
   });
@@ -130,6 +131,7 @@ describe(`<ChooseLocation />`, () => {
     cleanup();
     renderWithRouter(ChooseLocation, {
       location: locationMock,
+      isLoginEnabled: true,
     });
     await act(wait);
     expect(navigate).toHaveBeenCalledWith({
