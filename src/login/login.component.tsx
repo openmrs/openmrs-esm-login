@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useConfig } from '@openmrs/esm-framework';
 import { performLogin } from './login.resource';
 import { useCurrentUser } from '../CurrentUserContext';
+import { StaticContext } from 'react-router';
 
 const hidden: React.CSSProperties = { height: 0, width: 0, border: 0, padding: 0 };
 
@@ -15,9 +16,11 @@ export interface LoginReferrer {
   referrer?: string;
 }
 
-export interface LoginProps extends RouteComponentProps<{}, undefined, LoginReferrer> {}
+export interface LoginProps extends RouteComponentProps<{}, StaticContext, LoginReferrer> {
+  isLoginEnabled: boolean;
+}
 
-const Login: React.FC<LoginProps> = (props: LoginProps) => {
+const Login: React.FC<LoginProps> = ({ history, location, isLoginEnabled }) => {
   const config = useConfig();
   const user = useCurrentUser();
   const [username, setUsername] = React.useState('');
@@ -31,9 +34,9 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
 
   React.useEffect(() => {
     if (user) {
-      props.history.push('/login/location', props.location ? props.location.state : undefined);
+      history.push('/login/location', location ? location.state : undefined);
     }
-  }, [user, props.history, props.location]);
+  }, [user, history, location]);
 
   React.useEffect(() => {
     const field = showPassword ? passwordInputRef.current : usernameInputRef.current;
@@ -138,7 +141,8 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
                 renderIcon={ArrowRight24}
                 type="submit"
                 iconDescription="Next"
-                onClick={continueLogin}>
+                onClick={continueLogin}
+                disabled={!isLoginEnabled}>
                 {t('continue', 'Continue')}
               </Button>
             </div>
@@ -173,7 +177,8 @@ const Login: React.FC<LoginProps> = (props: LoginProps) => {
                 type="submit"
                 className={styles.continueButton}
                 renderIcon={ArrowRight24}
-                iconDescription="Next">
+                iconDescription="Next"
+                disabled={!isLoginEnabled}>
                 {t('login', 'Log in')}
               </Button>
             </div>

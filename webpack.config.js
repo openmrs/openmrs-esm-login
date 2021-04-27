@@ -1,27 +1,26 @@
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const { resolve } = require("path");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const { resolve } = require('path');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const { StatsWriterPlugin } = require('webpack-stats-plugin');
 
-const { peerDependencies } = require("./package.json");
+const { peerDependencies } = require('./package.json');
 
+const filename = 'openmrs-esm-login-app.js';
 const cssLoader = {
-  loader: "css-loader",
+  loader: 'css-loader',
   options: {
     modules: true,
   },
 };
 
 module.exports = (env) => ({
-  entry: [
-    resolve(__dirname, "src/set-public-path.ts"),
-    resolve(__dirname, "src/index.ts"),
-  ],
+  entry: [resolve(__dirname, 'src/set-public-path.ts'), resolve(__dirname, 'src/index.ts')],
   output: {
-    filename: "openmrs-esm-login-app.js",
-    libraryTarget: "system",
-    path: resolve(__dirname, "dist"),
-    jsonpFunction: "webpackJsonp_openmrs_esm_login",
+    filename,
+    libraryTarget: 'system',
+    path: resolve(__dirname, 'dist'),
+    jsonpFunction: 'webpackJsonp_openmrs_esm_login',
   },
   module: {
     rules: [
@@ -34,23 +33,23 @@ module.exports = (env) => ({
         test: /\.m?(js|ts|tsx)$/,
         exclude: /(node_modules|bower_components)/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
         },
       },
       {
         test: /\.css$/,
-        use: ["style-loader", cssLoader],
+        use: ['style-loader', cssLoader],
       },
       {
         test: /\.s[ac]ss$/i,
-        use: ["style-loader", cssLoader, "sass-loader"],
+        use: ['style-loader', cssLoader, 'sass-loader'],
       },
     ],
   },
-  devtool: "sourcemap",
+  devtool: 'sourcemap',
   devServer: {
     headers: {
-      "Access-Control-Allow-Origin": "*",
+      'Access-Control-Allow-Origin': '*',
     },
     disableHostCheck: true,
   },
@@ -59,10 +58,17 @@ module.exports = (env) => ({
     new ForkTsCheckerWebpackPlugin(),
     new CleanWebpackPlugin(),
     new BundleAnalyzerPlugin({
-      analyzerMode: env && env.analyze ? "server" : "disabled",
+      analyzerMode: env && env.analyze ? 'server' : 'disabled',
+    }),
+    new StatsWriterPlugin({
+      filename: `${filename}.buildmanifest.json`,
+      stats: {
+        all: false,
+        chunks: true,
+      },
     }),
   ],
   resolve: {
-    extensions: [".tsx", ".ts", ".jsx", ".js"],
+    extensions: ['.tsx', '.ts', '.jsx', '.js'],
   },
 });

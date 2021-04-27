@@ -21,6 +21,7 @@ interface LocationPickerProps {
   searchLocations(query: string): Promise<Array<LocationEntry>>;
   hideWelcomeMessage?: boolean;
   currentLocationUuid?: string;
+  isLoginEnabled: boolean;
 }
 
 const LocationPicker: React.FC<LocationPickerProps> = ({
@@ -30,6 +31,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
   searchLocations,
   hideWelcomeMessage,
   currentLocationUuid,
+  isLoginEnabled,
 }) => {
   const config = useConfig();
   const { chooseLocation } = config;
@@ -213,7 +215,7 @@ const LocationPicker: React.FC<LocationPickerProps> = ({
             </div>
           </div>
           <div className={styles['confirmButton']}>
-            <Button kind="primary" type="submit" disabled={!locationData.activeLocation}>
+            <Button kind="primary" type="submit" disabled={!locationData.activeLocation || !isLoginEnabled}>
               <Trans i18nKey="confirm">Confirm</Trans>
             </Button>
           </div>

@@ -5,6 +5,6 @@ import Root from './root.component';
 describe(`<Root />`, () => {
   afterEach(cleanup);
   it(`renders without dying`, () => {
-    render(<Root />);
+    render(<Root isLoginEnabled={true} />);
   });
 });

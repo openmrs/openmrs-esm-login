@@ -34,6 +34,7 @@ describe(`<LocationPicker />`, () => {
         onChangeLocation={onChangeLocation}
         searchLocations={searchLocations}
         currentUser=""
+        isLoginEnabled={true}
       />,
     );
 
@@ -52,6 +53,7 @@ describe(`<LocationPicker />`, () => {
         onChangeLocation={onChangeLocation}
         searchLocations={searchLocations}
         currentUser=""
+        isLoginEnabled={true}
       />,
     );
 
@@ -197,6 +199,7 @@ describe(`<LocationPicker />`, () => {
         onChangeLocation={onChangeLocation}
         searchLocations={searchLocations}
         currentUser=""
+        isLoginEnabled={true}
       />,
     );
     expect(wrapper.getByText(/Showing 3 of 3 locations/i)).toBeInTheDocument();

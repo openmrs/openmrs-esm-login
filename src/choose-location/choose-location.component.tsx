@@ -6,16 +6,19 @@ import { navigate, useConfig } from '@openmrs/esm-framework';
 import { setSessionLocation, queryLocations } from './choose-location.resource';
 import { useCurrentUser } from '../CurrentUserContext';
 import { LocationEntry } from '../types';
+import { StaticContext } from 'react-router';
 
 export interface LoginReferrer {
   referrer?: string;
 }
 
-export interface ChooseLocationProps extends RouteComponentProps<{}, undefined, LoginReferrer> {}
+export interface ChooseLocationProps extends RouteComponentProps<{}, StaticContext, LoginReferrer> {
+  isLoginEnabled: boolean;
+}
 
-export const ChooseLocation: React.FC<ChooseLocationProps> = (props) => {
-  const returnToUrl = new URLSearchParams(props?.location?.search).get('returnToUrl');
-  const referrer = props.location?.state?.referrer;
+export const ChooseLocation: React.FC<ChooseLocationProps> = ({ location, isLoginEnabled }) => {
+  const returnToUrl = new URLSearchParams(location?.search).get('returnToUrl');
+  const referrer = location?.state?.referrer;
   const config = useConfig();
   const user = useCurrentUser();
   const [loginLocations, setLoginLocations] = React.useState<Array<LocationEntry>>(null);
@@ -40,10 +43,12 @@ export const ChooseLocation: React.FC<ChooseLocationProps> = (props) => {
   );
 
   React.useEffect(() => {
-    const ac = new AbortController();
-    queryLocations('', ac).then((locations) => setLoginLocations(locations));
-    return () => ac.abort();
-  }, []);
+    if (isLoginEnabled) {
+      const ac = new AbortController();
+      queryLocations('', ac).then((locations) => setLoginLocations(locations));
+      return () => ac.abort();
+    }
+  }, [isLoginEnabled]);
 
   React.useEffect(() => {
     if (loginLocations) {
@@ -55,13 +60,14 @@ export const ChooseLocation: React.FC<ChooseLocationProps> = (props) => {
     }
   }, [loginLocations, user, changeLocation, config.chooseLocation.enabled]);
 
-  if (!isLoading) {
+  if (!isLoading || !isLoginEnabled) {
     return (
       <LocationPicker
         currentUser={user.display}
-        loginLocations={loginLocations}
+        loginLocations={loginLocations ?? []}
         onChangeLocation={changeLocation}
         searchLocations={queryLocations}
+        isLoginEnabled={isLoginEnabled}
       />
     );
   }
