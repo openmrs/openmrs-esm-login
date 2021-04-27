@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useConfig } from '@openmrs/esm-framework';
 import { performLogin } from './login.resource';
 import { useCurrentUser } from '../CurrentUserContext';
-import { StaticContext } from 'react-router';
+import type { StaticContext } from 'react-router';
 
 const hidden: React.CSSProperties = { height: 0, width: 0, border: 0, padding: 0 };
 

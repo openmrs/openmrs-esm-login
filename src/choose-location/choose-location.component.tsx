@@ -6,7 +6,7 @@ import { navigate, useConfig } from '@openmrs/esm-framework';
 import { setSessionLocation, queryLocations } from './choose-location.resource';
 import { useCurrentUser } from '../CurrentUserContext';
 import { LocationEntry } from '../types';
-import { StaticContext } from 'react-router';
+import type { StaticContext } from 'react-router';
 
 export interface LoginReferrer {
   referrer?: string;
