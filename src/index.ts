@@ -35,6 +35,7 @@ function setupOpenMRS() {
       {
         id: 'location-picker',
         slot: 'location-picker',
+        load: getAsyncLifecycle(() => import('./location-picker/location-picker.component'), options),
         ...sharedOnlineOfflineProps,
       },
       {
