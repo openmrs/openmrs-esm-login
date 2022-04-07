@@ -1,6 +1,10 @@
-![Node.js CI](https://github.com/openmrs/openmrs-esm-login/workflows/Node.js%20CI/badge.svg)
+# Deprecated
 
-# OpenMRS ESM Login
+This repository has been moved to [openmrs-esm-core](https://github.com/openmrs/openmrs-esm-core/tree/master/packages/apps/esm-login-app).
+
+## Old documentation for OpenMRS ESM Login
+
+![Node.js CI](https://github.com/openmrs/openmrs-esm-login/workflows/Node.js%20CI/badge.svg)
 
 An [OpenMRS Microfrontend](https://wiki.openmrs.org/display/projects/Frontend+-+SPA+and+Microfrontends).
 
